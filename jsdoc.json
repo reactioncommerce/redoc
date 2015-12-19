@@ -1,0 +1,16 @@
+{
+  "debug": false,
+  "nodePath": "",
+  "docsPath": "../jsdocs",
+  "meteorPort": 3333,
+  "initMeteor": true,
+  "updateMeteor": true,
+  "preamble": true,
+  "projectRepo": "https://github.com/reactioncommerce/reaction/tree/development",
+  "docsConfig": {
+    "title": "Reaction Project Docs",
+    "metas": {
+      "description": "Documentation for Reaction Commmerce."
+    }
+  }
+}

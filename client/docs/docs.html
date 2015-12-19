@@ -1,0 +1,47 @@
+<template name="docs">
+
+  <div class="docs-navigation">
+      <ul>
+        {{#each docTOC}}
+          <li class="{{isSelectedDoc}}">
+            <a class="{{class}}" href="{{alias}}">{{label}}</a>
+          </li>
+        {{/each}}
+      </ul>
+  </div>
+
+  <div class="docs-content">
+    <div class="section page--guide  guide">
+      <div class="guide--content text-container">
+        {{#if docPageContent}}
+          <div class="markdown">
+            {{#markdown}}{{docPageContent}}{{/markdown}}
+          </div>
+        {{else}}
+          {{> docSpinner}}
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="docSpinner">
+  <div class="doc-spinner">
+    <p class="lead">Hmmm.. just a second, looking for fresh docs.</p>
+  </div>
+</template>
+
+<template name="docPrevNextButtons">
+  <div class="row text-center  guide--page-direction">
+    {{#unless isFirst displayDocs}}
+      <button class="btn  btn-primary" id="prev-doc">
+        <span>&#8592;</span>
+        Previous</button>
+    {{/unless}}
+    {{#unless isLast displayDocs}}
+      <button class="btn  btn-primary" id="next-doc">Next
+        <span>&#8594;</span>
+      </button>
+    {{/unless}}
+  </div>
+</template>
