@@ -9,12 +9,8 @@ Template.docs.helpers({
   },
 
   docPageContent: function () {
-    let params = {
-      repo: FlowRouter.getParam("repo"),
-      branch: FlowRouter.getParam("branch"),
-      alias: FlowRouter.getParam("alias")
-    };
-    let doc = ReDoc.Collections.Docs.findOne(params);
+    // the Docs are filtered in publication
+    let doc = ReDoc.Collections.Docs.findOne();
     if (doc && typeof doc.docPageContent !== "undefined") {
       marked.setOptions({
         highlight: function (code) {
@@ -58,17 +54,6 @@ Template.docs.helpers({
 });
 
 Template.docs.events({
-  // "click .guide-nav-item,.guide-sub-nav-item": function () {
-  //   console.log(this)
-  //   // let goToUrl = "" + this.repo + "/" + this.branch + "/" + this.alias;
-  //   // ensure route is correct
-  //   // FlowRouter.setParams({
-  //   //   repo: this.repo,
-  //   //   branch: this.branch,
-  //   //   alias: this.alias
-  //   // });
-  //   console.log("nav object", this)
-  // },
   /* "click #next-doc": function(event, template) {
     var doc, nextDoc;
     nextDoc = $(".selected").next("li");

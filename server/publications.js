@@ -22,6 +22,16 @@ Meteor.publish("CacheDocs", function (params) {
     alias: Match.Optional(String, null)
   });
 
+  // if we have no params, we're the root document
+  if (Object.keys(params).length === 0) {
+    defaultDoc = ReDoc.Collections.TOC.findOne({
+      default: true
+    });
+    params.repo = defaultDoc.repo;
+    params.branch = "master";
+    params.alias = defaultDoc.alias;
+  }
+
   let docTOC = ReDoc.Collections.TOC.findOne({
     alias: params.alias,
     repo: params.repo
@@ -33,6 +43,7 @@ Meteor.publish("CacheDocs", function (params) {
     alias: params.alias
   });
 
+  // check if we need to fetch a new doc
   if (cacheDoc && cacheDoc.count() === 0) {
     let docSourceUrl = `${docTOC.repoUrl}/${params.branch}/${docTOC.docPath}`;
     // else lets fetch that Github repo
@@ -56,6 +67,7 @@ Meteor.publish("CacheDocs", function (params) {
       }
     });
   }
+  // return cache doc
   return cacheDoc;
 });
 

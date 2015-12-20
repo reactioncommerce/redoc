@@ -5,17 +5,17 @@
     }
   },
   "repos": [{
-    "alias": "Reaction",
-    "apiUrl": "https://api.github.com/repos/reactioncommerce/reaction",
-    "defaultAlias": "intro",
-    "defaultBranch": "development"
+    "repo": "reaction",
+    "label": "Reaction",
+    "apiUrl": "https://api.github.com/repos/reactioncommerce/reaction"
   }],
   "tocData": [{
     "class": "guide-nav-item",
     "alias": "intro",
     "label": "Introduction",
     "repoUrl": "https://raw.githubusercontent.com/reactioncommerce/reaction",
-    "docPath": "docs/index.md"
+    "docPath": "docs/index.md",
+    "default": true
   }, {
     "class": "guide-sub-nav-item",
     "alias": "dashboard",
