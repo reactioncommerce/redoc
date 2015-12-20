@@ -4,9 +4,16 @@
       <ul>
         {{#each docTOC}}
           <li class="{{isSelectedDoc}}">
-            <a class="{{class}}" href="{{alias}}">{{label}}</a>
+            <a class="{{class}}" href="/{{repo}}/{{currentBranch}}/{{alias}}">{{label}}</a>
           </li>
         {{/each}}
+        <li>
+          <select name="branch-select" id="">
+            {{#each branches}}
+              <option value="{{this}}" {{isCurrentBranch this "selected" ""}}>{{this}}</option>
+            {{/each}}
+          </select>
+        </li>
       </ul>
   </div>
 

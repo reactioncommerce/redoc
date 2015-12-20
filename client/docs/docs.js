@@ -1,22 +1,7 @@
-docPageFromCurrentRoute = function () {
-  const branch = FlowRouter.getParam("branch");
-  const alias = FlowRouter.getParam("alias");
-
-  let tocItem = ReDoc.Collections.TOC.findOne({
-    alias: alias
-  });
-  // if this is a new page
-  if (tocItem) {
-    return tocItem.repoUrl + "/" + branch + "/" + tocItem.docPath;
-  }
-  // existing url
-  return FlowRouter.current().path;
-};
-
 /*
  *  Docs, see data.js to add docs
  */
- /* eslint dot-notation: 0*/
+/* eslint dot-notation: 0*/
 Template.docs.helpers({
 
   docTOC: function () {
@@ -24,41 +9,26 @@ Template.docs.helpers({
   },
 
   docPageContent: function () {
-    let docPageUrl = docPageFromCurrentRoute();
-    if (docPageUrl) {
-      let doc = ReDoc.Collections.Docs.findOne({
-        docPage: docPageUrl
+    let params = {
+      repo: FlowRouter.getParam("repo"),
+      branch: FlowRouter.getParam("branch"),
+      alias: FlowRouter.getParam("alias")
+    };
+    let doc = ReDoc.Collections.Docs.findOne(params);
+    if (doc && typeof doc.docPageContent !== "undefined") {
+      marked.setOptions({
+        highlight: function (code) {
+          return hljs.highlightAuto(code).value;
+        }
       });
-
-      if (doc && typeof doc.docPageContent !== "undefined") {
-        marked.setOptions({
-          highlight: function (code) {
-            return hljs.highlightAuto(code).value;
-          }
-        });
-
-        return doc.docPageContent;
-      }
-      if (docPageUrl.includes("github")) {
-        Meteor.call("util/getGHDoc", docPageUrl);
-        return false;
-      }
-      // we return false here because we've
-      // already got the content
-      return false;
+      return doc.docPageContent;
     }
-    // we didn't have a doc url, this is default document
-    let defaultRepo = ReDoc.Collections.Repos.findOne();
-    FlowRouter.setParams({
-      branch: defaultRepo.defaultBranch,
-      alias: defaultRepo.defaultAlias
-    });
   },
   isSelectedDoc: function () {
     if (this.alias === FlowRouter.getParam("alias")) {
-      return true;
+      return "selected";
     }
-    return false;
+    return "";
   },
 
   branches: function () {
@@ -71,8 +41,8 @@ Template.docs.helpers({
     return branches;
   },
 
-  branch: function () {
-    return FlowRouter.getParam("branch");
+  currentBranch: function () {
+    return FlowRouter.getParam("branch") || "master";
   },
 
   isCurrentBranch: function (branch, returnValueIfTrue, returnValueIfFalse) {
@@ -88,14 +58,17 @@ Template.docs.helpers({
 });
 
 Template.docs.events({
-  "click .guide-nav-item,.guide-sub-nav-item": function () {
-    let branch = FlowRouter.getParam("branch");
-
-    FlowRouter.setParams({
-      branch: branch,
-      alias: this.alias
-    });
-  },
+  // "click .guide-nav-item,.guide-sub-nav-item": function () {
+  //   console.log(this)
+  //   // let goToUrl = "" + this.repo + "/" + this.branch + "/" + this.alias;
+  //   // ensure route is correct
+  //   // FlowRouter.setParams({
+  //   //   repo: this.repo,
+  //   //   branch: this.branch,
+  //   //   alias: this.alias
+  //   // });
+  //   console.log("nav object", this)
+  // },
   /* "click #next-doc": function(event, template) {
     var doc, nextDoc;
     nextDoc = $(".selected").next("li");
@@ -117,41 +90,26 @@ Template.docs.events({
       Session.set("docPage", doc);
     }
   },*/
-
-  "change select[name='branch-select']": function (event) {
-    let branch = event.currentTarget.value;
-    FlowRouter.setParams({
-      branch: branch,
-      alias: FlowRouter.getParam("alias")
-    });
-  },
-
+  // Handle markdown anchors that we don't want
+  // to redirect off the documentation site
   "click .markdown a": function (event) {
     event.preventDefault();
     event.stopPropagation();
 
     const path = $(event.currentTarget).attr("href");
-
+    // check to see if we can load
     if (path.substr(path.length - 3) === ".md") {
       try {
-        // Example: https://github.com/reactioncommerce/reaction/blob/master/docs/developer/packages.md
-        //         ---0--1-----2------------3-------------4------5-----6-----7------8---------9----XXX
-        const parts = path.split("/");
-        const org = parts[3];
-        const repo = parts[4];
-        const branch = parts[6];
-        const doc = parts[7] + "/" + parts[8];
-        const alias = parts[9].replace(".md", "");
-
+        let params = ReDoc.getPathParams(path);
         FlowRouter.setParams({
-          branch: branch,
-          alias: branch
+          repo: params.repo,
+          branch: params.branch,
+          alias: params.alias
         });
       } catch (error) {
         return window.open(path, "_blank");
       }
     }
-
-    return window.open(path, "_blank");
+    // return window.open(path, "_blank");
   }
 });

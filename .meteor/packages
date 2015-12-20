@@ -34,3 +34,11 @@ meteorhacks:search-source
 # ReDoc packages
 reactioncommerce:redoc-base-theme
 reactioncommerce:redoc-default-theme
+
+# ReDoc admin
+dburles:collection-helpers
+aldeed:collection2
+accounts-base
+accounts-password
+alanning:roles
+ongoworks:security

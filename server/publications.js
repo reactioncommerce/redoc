@@ -14,19 +14,49 @@ Meteor.publish("Repos", function () {
  *  CacheDocs gets retrieves a single doc page from GitHub
  *  pulls new data if there is none
  */
-Meteor.publish("CacheDocs", function (docPage) {
+Meteor.publish("CacheDocs", function (params) {
   // some minor validation
-  check(docPage, Match.Optional(String, null));
-
-  let docPageContent = ReDoc.Collections.Docs.find({
-    docPage: docPage
+  check(params, {
+    repo: Match.Optional(String, null),
+    branch: Match.Optional(String, null),
+    alias: Match.Optional(String, null)
   });
 
-  if (docPageContent.count() === 0 && docPage) {
-    Meteor.call("util/getGHDoc", docPage);
-  }
+  let docTOC = ReDoc.Collections.TOC.findOne({
+    alias: params.alias,
+    repo: params.repo
+  });
 
-  return docPageContent;
+  let cacheDoc = ReDoc.Collections.Docs.find({
+    repo: params.repo,
+    branch: params.branch,
+    alias: params.alias
+  });
+
+  if (cacheDoc && cacheDoc.count() === 0) {
+    let docSourceUrl = `${docTOC.repoUrl}/${params.branch}/${docTOC.docPath}`;
+    // else lets fetch that Github repo
+    Meteor.http.get(docSourceUrl, function (error, result) {
+      if (error) return error;
+      if (result.statusCode === 200) {
+        // sensible defaults for every repo
+        let docSet = ReDoc.getPathParams(docSourceUrl);
+        docSet.docPage = docSourceUrl;
+        docSet.docPageContent = result.content;
+        // if TOC has different alias, we'll use that
+        if (docTOC.alias) {
+          docSet.alias = docTOC.alias;
+        }
+        // insert new documentation into Cache
+        return ReDoc.Collections.Docs.upsert({
+          docPage: docSourceUrl
+        }, {
+          $set: docSet
+        });
+      }
+    });
+  }
+  return cacheDoc;
 });
 
 /*

@@ -1,72 +1,43 @@
+//
+// Meteor Methods
+//
+
 Meteor.methods({
   /**
-   *  util/clearDocCache
+   *  util/flushDocCache
    *  fetch repo profile from github and store in RepoData collection
    *  @param {Boolean} option - if true we'll flush the existing repo records first
    *  @returns {undefined} returns
    */
-  "util/clearDocCache": function () {
+  "util/flushDocCache": function () {
     ReDoc.Collections.TOC.remove({});
-
-    let TOC = ReDoc.Collections.TOC.find();
+    ReDoc.Collections.Docs.remove({});
     if (TOC.count() === 0) {
-      docData.forEach(function (tocItem) {
+      let tocData = Meteor.settings.tocData;
+      // if no tocData has been defined, we'll show this projects docs
+      if (!tocData) {
+        tocData = [{
+          class: "guide-nav-item",
+          alias: "intro",
+          label: "Introduction",
+          repoUrl: "https://raw.githubusercontent.com/reactioncommerce/redoc",
+          docPath: "README.md",
+          repo: "redoc"
+        }];
+      }
+
+      tocData.forEach(function (tocItem) {
+        // Example: https://github.com/reactioncommerce/reaction/blob/master/docs/developer/packages.md
+        //         ---0--1-----2------------3-------------4------5-----6-----7------8---------9----XXX
+        defaultParams = ReDoc.getPathParams(tocItem.repoUrl);
+        if (!tocItem.org) tocItem.org = defaultParams.org;
+        if (!tocItem.repo) tocItem.repo = defaultParams.repo;
+        if (!tocItem.branch) tocItem.branch = defaultParams.branch || "master";
+        if (!tocItem.alias) tocItem.alias = defaultParams.alias;
+
         ReDoc.Collections.TOC.insert(tocItem);
-        let docPage = tocItem.repoUrl + "/" + "master" + "/" + tocItem.docPath;
-        Meteor.call("util/getGHDoc", docPage);
       });
     }
-  },
-
-  /**
-   *  util/getGHDoc
-   *  fetch docs from github
-   *  and store in docs collection
-   *  docPage = "/" + org + "/" + repo + "/" + branch + "/" + doc;
-   *  @param {String} docPage - source url of markdown page to fetch into cache
-   *  @returns {String} docPage - returns docPage
-   */
-  "util/getGHDoc": function (docPage) {
-    this.unblock();
-    // some minor validation
-    check(docPage, String);
-
-    // sensible defaults for every repo
-    let alias = docPage.substring(docPage.lastIndexOf("/") + 1).split(".").slice(0, -1).join(".").toLowerCase();
-    let label = alias.charAt(0).toUpperCase() + alias.slice(1);
-    let org = docPage.split("/").slice(3, 4).join("/");
-    let repo = docPage.split("/").slice(4, 5).join("/");
-    let branch = docPage.split("/").slice(5, 6).join("/");
-
-    let docCache = ReDoc.Collections.Docs.findOne({
-      docPage: docPage
-    });
-
-    // our simple little caching mechanism
-    if (docCache !== undefined) {
-      return docPage;
-    }
-
-    // else lets fetch that Github repo
-    Meteor.http.get(docPage, function (error, result) {
-      if (error) return error;
-      if (result.statusCode === 200) {
-        return ReDoc.Collections.Docs.upsert({
-          docPage: docPage
-        }, {
-          $set: {
-            org: org,
-            repo: repo,
-            branch: branch,
-            alias: alias,
-            label: label,
-            docPage: docPage,
-            docPageContent: result.content
-          }
-        });
-      }
-    });
-    return docPage;
   },
   /**
    *  util/getRepoData

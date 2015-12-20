@@ -19,7 +19,7 @@ SyncedCron.add({
     return parser.text("every 3 days");
   },
   job: function () {
-    Docs.remove({});
+    ReDocs.Collections.Docs.remove({});
   }
 });
 
@@ -37,14 +37,21 @@ Meteor.startup(function () {
         alias: "intro",
         label: "Introduction",
         repoUrl: "https://raw.githubusercontent.com/reactioncommerce/redoc",
-        docPath: "docs/index.md"
+        docPath: "README.md",
+        repo: "redoc"
       }];
     }
 
     tocData.forEach(function (tocItem) {
+      // Example: https://github.com/reactioncommerce/reaction/blob/master/docs/developer/packages.md
+      //         ---0--1-----2------------3-------------4------5-----6-----7------8---------9----XXX
+      defaultParams = ReDoc.getPathParams(tocItem.repoUrl);
+      if (!tocItem.org) tocItem.org = defaultParams.org;
+      if (!tocItem.repo) tocItem.repo = defaultParams.repo;
+      if (!tocItem.branch) tocItem.branch = defaultParams.branch || "master";
+      if (!tocItem.alias) tocItem.alias = defaultParams.alias;
+
       ReDoc.Collections.TOC.insert(tocItem);
-      let docPage = tocItem.repoUrl + "/" + "master" + "/" + tocItem.docPath;
-      Meteor.call("util/getGHDoc", docPage);
     });
   }
 
