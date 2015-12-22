@@ -4,6 +4,7 @@
 @docs-code-width: 26vw;
 @docs-content-bg-width: 44vw;
 @docs-code-background-color: #fff;
+@docs-navigation-background-color: #2196F3;
 .doc-page {
   .redoc-navbar {
     position: static;
@@ -42,7 +43,7 @@
   border-right: 1px solid @black10;
   overflow-y: scroll;
   padding: 0 40px 100px;
-  background-color: @white;
+  background-color: fadeout(@docs-navigation-background-color, 30%);
   @media screen and (max-width: @screen-sm-max) {
     width: 100%;
     overflow-y: hidden;
@@ -65,20 +66,24 @@
   }
   li.selected {
     a {
-      color: @brand-secondary-color;
+      color: @brand-dark-color;
       text-decoration: none;
+    }
+    &:hover {
+      color: @brand-dark-color;
     }
   }
   .guide-nav-item {
     .h3;
     margin-bottom: 10px;
     &:hover {
-      color: @brand-secondary-color;
+      color: @black;
     }
   }
   .guide-sub-nav-item {
+    color: @white;
     &:hover {
-      color: @brand-secondary-color;
+      color: @white;
     }
   }
 }

@@ -188,7 +188,7 @@
     "class": "guide-sub-nav-item",
     "alias": "reaction-bootstrap",
     "label": "Bootstrap",
-    "repoUrl": "https://github.com/reactioncommerce/reaction-bootstrap-theme",
+    "repoUrl": "https://raw.githubusercontent.com/reactioncommerce/reaction-bootstrap-theme",
     "docPath": "README.md"
   }, {
     "class": "guide-sub-nav-item",

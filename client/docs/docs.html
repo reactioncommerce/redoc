@@ -20,21 +20,11 @@
   <div class="docs-content">
     <div class="section page--guide  guide">
       <div class="guide--content text-container">
-        {{#if docPageContent}}
           <div class="markdown">
             {{#markdown}}{{docPageContent}}{{/markdown}}
           </div>
-        {{else}}
-          {{> docSpinner}}
-        {{/if}}
       </div>
     </div>
-  </div>
-</template>
-
-<template name="docSpinner">
-  <div class="doc-spinner">
-    <p class="lead">Hmmm.. just a second, looking for fresh docs.</p>
   </div>
 </template>
 

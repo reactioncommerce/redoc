@@ -7,13 +7,7 @@ Package.describe({
 
 Package.onUse(function (api) {
   api.versionsFrom("METEOR@1.2");
-
   api.use("less");
-
-  api.addFiles("theme.js", "server");
-  api.export(["ReDocTheme"]);
-
-  api.addFiles("lib/bootstrap/dist/js/bootstrap.js", ["client"]);
 
   api.addFiles([
     "default/alerts.less",
@@ -102,4 +96,8 @@ Package.onUse(function (api) {
     "styles/code.less",
     "styles/docs.less"
   ], "client", {isImport: true});
+
+  api.addFiles("theme.js", "server");
+  api.addFiles("lib/bootstrap/dist/js/bootstrap.js", ["client"]);
+  api.export(["ReDocTheme"]);
 });

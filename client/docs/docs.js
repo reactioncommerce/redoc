@@ -12,13 +12,11 @@ Template.docs.helpers({
     // the Docs are filtered in publication
     let doc = ReDoc.Collections.Docs.findOne();
     if (doc && typeof doc.docPageContent !== "undefined") {
-      marked.setOptions({
-        highlight: function (code) {
-          return hljs.highlightAuto(code).value;
-        }
-      });
       return doc.docPageContent;
+    } else if (doc) {
+      return `Getting fresh content from [${doc.repo}](${doc.docPage})`;
     }
+    return "";
   },
   isSelectedDoc: function () {
     if (this.alias === FlowRouter.getParam("alias")) {
