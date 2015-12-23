@@ -5,7 +5,6 @@
 # but you can also edit it by hand.
 
 meteor-base             # Packages every Meteor app needs to have
-modules                 # meteor 1.3 modules
 mobile-experience       # Packages for a great mobile UX
 mongo                   # The database Meteor supports right now
 blaze-html-templates    # Compile .html files into Meteor Blaze views
