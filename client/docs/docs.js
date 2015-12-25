@@ -26,11 +26,14 @@ Template.docs.helpers({
   },
 
   branches: function () {
-    const repos = ReDoc.Collections.RepoData.find().fetch();
+    const repos = ReDoc.Collections.Repos.find().fetch();
     const branches = ["master"];
+
     // let's get all the default
     for (let repo of repos) {
-      branches.push(repo.data.default_branch);
+      if (repo.data && repo.data.default_branch) {
+        branches.push(repo.data.default_branch);
+      }
     }
     return branches;
   },

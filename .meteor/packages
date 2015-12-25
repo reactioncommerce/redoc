@@ -17,15 +17,22 @@ es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 audit-argument-checks   # enforce parameter checks on methods
 check                   # utils to check params
-#less                    # less precompiler
+ejson                   # ejson required for oauth/github
+react                   # meteor react
+service-configuration   # meteor accounts service configuration methods
+
+accounts-base
+accounts-password
+accounts-github
+accounts-ui
+
 
 # Community packages
-underscorestring:underscore.string
 percolate:synced-cron
 ongoworks:spiderable
-cmather:handlebars-server
 kadira:flow-router
 kadira:blaze-layout
+kadira:react-layout
 
 # ReDoc packages
 reactioncommerce:redoc-base-theme

@@ -1,0 +1,21 @@
+<template name="tools">
+
+    <nav class="redoc-tools-group" role="navigation">
+        <div class="container">
+          <div class="redoc-tools">
+            <ol class="breadcrumb">
+              <li>
+                <select name="branch-select" id="">
+                  {{#each branches}}
+                    <option value="{{this}}" {{isCurrentBranch this "selected" ""}}>{{this}}</option>
+                  {{/each}}
+                </select>
+              </li>
+              <li><a href="{{repoDetails.docPage}}" target="_blank">Source</a></li>
+              <li>{{> loginButtons}}</li>
+            </ol>
+          </div>
+        </div>
+    </nav>
+
+</template>

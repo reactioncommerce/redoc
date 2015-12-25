@@ -32,11 +32,22 @@ Meteor.publish("CacheDocs", function (params) {
     params.alias = defaultDoc.alias;
   }
 
+  // get repo details
+  let docRepo = ReDoc.Collections.Repos.findOne({
+    repo: params.repo
+  });
+
+  if (!docRepo) {
+    docRepo = ReDoc.Collections.Repos.findOne();
+  }
+
+  // assemble TOC
   let docTOC = ReDoc.Collections.TOC.findOne({
     alias: params.alias,
     repo: params.repo
   });
 
+  // find specific branch in Docs
   let cacheDoc = ReDoc.Collections.Docs.find({
     repo: params.repo,
     branch: params.branch,
@@ -45,7 +56,8 @@ Meteor.publish("CacheDocs", function (params) {
 
   // check if we need to fetch a new doc
   if (cacheDoc && cacheDoc.count() === 0) {
-    let docSourceUrl = `${docTOC.repoUrl}/${params.branch}/${docTOC.docPath}`;
+    let docSourceUrl = `${docRepo.rawUrl}/${params.branch}/${docTOC.docPath}`;
+
     // else lets fetch that Github repo
     Meteor.http.get(docSourceUrl, function (error, result) {
       if (error) return error;
@@ -76,22 +88,14 @@ Meteor.publish("CacheDocs", function (params) {
  *  pulls new data if there is none
  */
 
-Meteor.publish("RepoData", function () {
-  let repoData = ReDoc.Collections.RepoData.find({}, {
-    sort: {
-      createdAt: 1
-    }
-  });
-  if (repoData.count() === 0) {
-    Meteor.call("util/getRepoData");
-  }
-  return repoData;
-});
-
-Meteor.publish("Tags", function () {
-  return ReDoc.Collections.Tags.find({}, {
-    sort: {
-      releasedAt: -1
-    }
-  });
-});
+// Meteor.publish("RepoData", function () {
+//   let repoData = ReDoc.Collections.RepoData.find({}, {
+//     sort: {
+//       createdAt: 1
+//     }
+//   });
+//   if (repoData.count() === 0) {
+//     Meteor.call("redoc/getRepoData");
+//   }
+//   return repoData;
+// });
