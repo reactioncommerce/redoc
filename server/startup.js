@@ -39,6 +39,11 @@ Meteor.startup(function () {
           }, {
             $set: settings
           });
+          // if we have github credentials we'll also created
+          // some an auth param string for api requests
+          if (service === "github") {
+            authString = `?client_id=${settings.clientId}&client_secret=${settings.secret}`;
+          }
           console.log("service configuration loaded: " + service);
         }
       }
@@ -46,5 +51,4 @@ Meteor.startup(function () {
   }
   // Initialize Repo data
   Meteor.call("redoc/initRepoData");
-  
 });

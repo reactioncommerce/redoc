@@ -25,19 +25,6 @@ Template.docs.helpers({
     return "";
   },
 
-  branches: function () {
-    const repos = ReDoc.Collections.Repos.find().fetch();
-    const branches = ["master"];
-
-    // let's get all the default
-    for (let repo of repos) {
-      if (repo.data && repo.data.default_branch) {
-        branches.push(repo.data.default_branch);
-      }
-    }
-    return branches;
-  },
-
   currentBranch: function () {
     return FlowRouter.getParam("branch") || "master";
   },

@@ -21,11 +21,9 @@ ejson                   # ejson required for oauth/github
 react                   # meteor react
 service-configuration   # meteor accounts service configuration methods
 
-accounts-base
-accounts-password
-accounts-github
-accounts-ui
-
+# accounts-base
+# accounts-password
+# accounts-ui
 
 # Community packages
 percolate:synced-cron

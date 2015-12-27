@@ -20,6 +20,7 @@
     "highlight.js": "^9.0.0",
     "jsdoc-parse": "^1.2.5",
     "markdown-it": "^5.0.2",
-    "punycode": "^1.4.0"
+    "punycode": "^1.4.0",
+    "underscore": "^1.8.3"
   }
 }

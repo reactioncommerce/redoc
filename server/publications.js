@@ -36,7 +36,7 @@ Meteor.publish("CacheDocs", function (params) {
   let docRepo = ReDoc.Collections.Repos.findOne({
     repo: params.repo
   });
-
+  // default doc repo
   if (!docRepo) {
     docRepo = ReDoc.Collections.Repos.findOne();
   }
@@ -57,14 +57,14 @@ Meteor.publish("CacheDocs", function (params) {
   // check if we need to fetch a new doc
   if (cacheDoc && cacheDoc.count() === 0) {
     let docSourceUrl = `${docRepo.rawUrl}/${params.branch}/${docTOC.docPath}`;
-
-    // else lets fetch that Github repo
+    // lets fetch that Github repo
     Meteor.http.get(docSourceUrl, function (error, result) {
       if (error) return error;
       if (result.statusCode === 200) {
         // sensible defaults for every repo
         let docSet = ReDoc.getPathParams(docSourceUrl);
         docSet.docPage = docSourceUrl;
+        docSet.docPath = docTOC.docPath;
         docSet.docPageContent = result.content;
         // if TOC has different alias, we'll use that
         if (docTOC.alias) {
@@ -82,20 +82,3 @@ Meteor.publish("CacheDocs", function (params) {
   // return cache doc
   return cacheDoc;
 });
-
-/*
- *  RepoData gets all the repo data reactioncommerce/reaction
- *  pulls new data if there is none
- */
-
-// Meteor.publish("RepoData", function () {
-//   let repoData = ReDoc.Collections.RepoData.find({}, {
-//     sort: {
-//       createdAt: 1
-//     }
-//   });
-//   if (repoData.count() === 0) {
-//     Meteor.call("redoc/getRepoData");
-//   }
-//   return repoData;
-// });

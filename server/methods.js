@@ -9,36 +9,7 @@ Meteor.methods({
    *  @returns {undefined} returns
    */
   "redoc/initRepoData": function () {
-    let initRepoData =  EJSON.parse(Assets.getText(Meteor.settings.redoc.initRepoData || "redoc.json"));
-    // populate TOC from settings
-    let TOC = ReDoc.Collections.TOC.find();
-    if (TOC.count() === 0) {
-      let tocData = initRepoData.tocData;
-      // if no tocData has been defined, we'll show this projects docs
-      if (!tocData) {
-        tocData = [{
-          class: "guide-nav-item",
-          alias: "intro",
-          label: "Introduction",
-          repo: "redoc",
-          docPath: "README.md",
-          default: true
-        }];
-      }
-
-      tocData.forEach(function (tocItem) {
-        // Example: https://github.com/reactioncommerce/reaction/blob/master/docs/developer/packages.md
-        //         ---0--1-----2------------3-------------4------5-----6-----7------8---------9----XXX
-        // defaultParams = ReDoc.getPathParams(tocItem.repoUrl);
-        // if (!tocItem.org) tocItem.org = defaultParams.org;
-        // if (!tocItem.repo) tocItem.repo = defaultParams.repo;
-        // if (!tocItem.branch) tocItem.branch = defaultParams.branch || "master";
-        // if (!tocItem.alias) tocItem.alias = defaultParams.alias;
-        console.log("initRepoData", tocItem.org, tocItem.repo);
-        ReDoc.Collections.TOC.insert(tocItem);
-      });
-    }
-
+    let initRepoData = EJSON.parse(Assets.getText(Meteor.settings.redoc.initRepoData || "redoc.json"));
     //
     // populate REPOS from settings
     //
@@ -61,7 +32,27 @@ Meteor.methods({
         // insert new repoData, with flush enabled
       });
       // Run once will get all repo data for current repos
-      Meteor.call("redoc/getRepoData", true);
+      Meteor.call("redoc/getRepoData");
+    }
+    // populate TOC from settings
+    let TOC = ReDoc.Collections.TOC.find();
+    if (TOC.count() === 0) {
+      let tocData = initRepoData.tocData;
+      // if no tocData has been defined, we'll show this projects docs
+      if (!tocData) {
+        tocData = [{
+          class: "guide-nav-item",
+          alias: "intro",
+          label: "Introduction",
+          repo: "redoc",
+          docPath: "README.md",
+          default: true
+        }];
+      }
+      // insert TOC fixtures
+      tocData.forEach(function (tocItem) {
+        ReDoc.Collections.TOC.insert(tocItem);
+      });
     }
   },
   /**
@@ -88,14 +79,6 @@ Meteor.methods({
       }
 
       tocData.forEach(function (tocItem) {
-        // Example: https://github.com/reactioncommerce/reaction/blob/master/docs/developer/packages.md
-        //         ---0--1-----2------------3-------------4------5-----6-----7------8---------9----XXX
-        defaultParams = ReDoc.getPathParams(tocItem.repoUrl);
-        if (!tocItem.org) tocItem.org = defaultParams.org;
-        if (!tocItem.repo) tocItem.repo = defaultParams.repo;
-        if (!tocItem.branch) tocItem.branch = defaultParams.branch || "master";
-        if (!tocItem.alias) tocItem.alias = defaultParams.alias;
-
         ReDoc.Collections.TOC.insert(tocItem);
       });
     }
@@ -116,9 +99,8 @@ Meteor.methods({
       // should we maybe clean off prefix?
       apiUrl = repo.apiUrl || `https://api.github.com/repos/${repo.org}/${repo.repo}`;
       rawUrl = repo.rawUrl || `https://raw.githubusercontent.com/${repo.org}/${repo.repo}`;
-
       // get repo urls ands stats
-      let repoData = Meteor.http.get(apiUrl, {
+      let repoData = Meteor.http.get(apiUrl + authString, {
         headers: {
           "User-Agent": "ReDoc/1.0"
         }
@@ -126,7 +108,7 @@ Meteor.methods({
 
       if (repoData.data) {
         // get updated release tags
-        let releaseData = Meteor.http.get(repoData.data.tags_url, {
+        let releaseData = Meteor.http.get(repoData.data.tags_url + authString, {
           headers: {
             "User-Agent": "ReDoc/1.0"
           }
