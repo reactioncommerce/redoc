@@ -2,6 +2,21 @@
  *  Docs, see data.js to add docs
  */
 /* eslint dot-notation: 0*/
+
+Template.docs.onCreated(() => {
+  Template.instance().autorun(() => {
+    FlowRouter.current();
+
+    if (!FlowRouter.getParam("branch")) {
+      FlowRouter.setParams({
+        repo: "reaction-docs",
+        branch: "development",
+        alias: "intro"
+      });
+    }
+  });
+});
+
 Template.docs.helpers({
 
   docTOC: function () {
