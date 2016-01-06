@@ -28,9 +28,11 @@ service-configuration   # meteor accounts service configuration methods
 # Community packages
 percolate:synced-cron
 ongoworks:spiderable
-kadira:flow-router
-kadira:blaze-layout
-kadira:react-layout
+#kadira:flow-router
+#kadira:blaze-layout
+#kadira:react-layout
+reactrouter:react-router
+reactrouter:react-router-ssr
 
 # ReDoc packages
 reactioncommerce:redoc-base-theme

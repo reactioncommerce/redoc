@@ -1,5 +1,8 @@
 accounts-base@1.2.3-modules.2
-aldeed:collection2@2.7.1
+aldeed:collection2@2.8.0
+aldeed:collection2-core@1.0.0
+aldeed:schema-deny@1.0.1
+aldeed:schema-index@1.0.1
 aldeed:simple-schema@1.5.3
 allow-deny@1.0.1-modules.2
 audit-argument-checks@1.0.4
@@ -16,6 +19,7 @@ caching-compiler@1.0.1-modules.2
 caching-html-compiler@1.0.3-modules.2
 callback-hook@1.0.5-modules.2
 check@1.1.1-modules.2
+chuangbo:cookie@1.1.0
 coffeescript@1.0.12-modules.2
 cosmos:browserify@0.9.3
 ddp@1.2.2
@@ -38,9 +42,6 @@ http@1.1.2-modules.2
 id-map@1.0.4
 jquery@1.11.5-modules.2
 jsx@0.2.4
-kadira:blaze-layout@2.3.0
-kadira:flow-router@2.10.0
-kadira:react-layout@1.5.3
 launch-screen@1.0.5-modules.2
 less@2.5.2-modules.2
 livedata@1.0.15
@@ -51,6 +52,9 @@ meteor@1.1.11-modules.2
 meteor-base@1.0.1
 meteor-env-dev@0.0.1-modules.2
 meteor-env-prod@0.0.1-modules.2
+meteorhacks:fast-render@2.9.0
+meteorhacks:inject-data@1.4.1
+meteorhacks:picker@1.0.3
 minifiers-css@1.1.8-modules.2
 minifiers-js@1.1.8-modules.2
 minimongo@1.0.11-modules.2
@@ -78,6 +82,8 @@ reactioncommerce:redoc-base-theme@1.0.0
 reactioncommerce:redoc-default-theme@1.0.0
 reactive-dict@1.1.4-modules.2
 reactive-var@1.0.6
+reactrouter:react-router@1.0.3
+reactrouter:react-router-ssr@1.2.0
 reload@1.1.5-modules.2
 retry@1.0.4
 routepolicy@1.0.7-modules.2

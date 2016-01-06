@@ -28,7 +28,7 @@ Meteor.publish("CacheDocs", function (params) {
       default: true
     });
     params.repo = defaultDoc.repo;
-    params.branch = "master";
+    params.branch = "development";
     params.alias = defaultDoc.alias;
   }
 

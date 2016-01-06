@@ -5,99 +5,101 @@
 @docs-content-bg-width: 44vw;
 @docs-code-background-color: #fff;
 @docs-navigation-background-color: #2196F3;
-.doc-page {
-  .redoc-navbar {
-    position: static;
-  }
-  .main {
-    width: 100%;
-    height: 100%;
-    background-color: @docs-code-background-color;
-  }
+
+#react-app {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  @media screen and (max-width: @screen-sm-max) {
-    .redoc-navbar {
-      position: fixed;
-    }
-    position: static;
-    height: auto;
-  }
+  width: 100vw;
+  height: 100vh;
 }
-.main-docs .content {
-  .display(flex);
-  width: 100%;
-  height: 100%;
-  margin-top: 0;
-  top: 0;
-  @media screen and (max-width: @screen-sm-max) {
-    .flex-wrap(wrap);
-  }
+
+.redoc.docs {
+  display: flex;
+  flex: 1 1 auto;
+  height: 400px;
 }
-.docs-navigation {
-  .flex(0 0 auto);
-  min-width: 20vw;
+
+.redoc.docs .navigation {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  max-width: 270px;
+  // height: 100vh;
   border-right: 1px solid @black10;
-  overflow-y: scroll;
-  padding: 0 40px 100px;
-  background-color: fadeout(@docs-navigation-background-color, 30%);
-  @media screen and (max-width: @screen-sm-max) {
-    width: 100%;
-    overflow-y: hidden;
-  }
+  background-color: @black02;// fadeout(@docs-navigation-background-color, 30%);
 }
-.docs-navigation select {
-  width: 100%;
+
+.redoc.docs .menu {
+  padding: 20px;
+  flex: 1 1 auto;
+  overflow-y: auto;
 }
-.docs-navigation ul {
+
+.redoc.docs .menu ul {
   padding-left: 0;
   list-style-type: none;
-  li > ul {
-    padding-left: 20px;
-  }
-  li {
-    a {
-      display: inline-block;
-      padding: 2px 4px;
-    }
-  }
-  li.selected {
-    a {
-      color: @brand-dark-color;
-      text-decoration: none;
-    }
-    &:hover {
-      color: @brand-dark-color;
-    }
-  }
-  .guide-nav-item {
-    .h3;
-    margin-bottom: 10px;
-    &:hover {
-      color: @black;
-    }
-  }
-  .guide-sub-nav-item {
-    color: @white;
-    &:hover {
-      color: @white;
-    }
+}
+
+.redoc.docs .menu ul li > ul {
+  padding-left: 20px;
+}
+
+.redoc.docs .menu ul li {
+  a {
+    display: inline-block;
+    padding: 2px 4px;
   }
 }
+
+.redoc.docs .menu ul li.selected {
+  a {
+    color: @brand-dark-color;
+    text-decoration: none;
+  }
+  &:hover {
+    color: @brand-dark-color;
+  }
+}
+
+.redoc.docs .menu .guide-nav-item {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+  margin-top: 40px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: @black;
+  &:hover {
+    color: @black;
+  }
+}
+
+.redoc.docs .menu .guide-nav-item:first-child {
+  margin-top: 0;
+}
+
+
+
+.redoc.docs .menu .guide-sub-nav-item a {
+  color: @black;
+  &:hover {
+    color: @black;
+    text-decoration: underline;
+  }
+}
+
 .doc-spinner {
   padding: 75px 0 0 75;
 }
 
 // -----------------------------------------------------
-.docs-content {
+.redoc.docs .content {
   overflow-y: auto;
   background-color: white;
-  
+  // height: 100vh;
   // padding-top: @navbar-height;
   // padding-top: 20px;
+  padding: 20px;
   padding-bottom: 60px;
   .flex(1 1 auto);
   .section {
@@ -108,7 +110,7 @@
   blockquote {
     margin: 20px 0;
   }
-  
+
   // inset 781px 0 #dfe2e7,
   //rgba(0,0,0,0.1)
   .box-shadow( inset 44vw 0 @white );
@@ -121,12 +123,16 @@
       padding: 20px 30px;
     }
   }
+
+  a {
+    color: blue;
+  }
 }
 .markdown {
   p,
   ul,
   blockquote {
-    
+
   }
   pre {
     background-color: @docs-code-background-color;
@@ -144,7 +150,7 @@
   }
   img {
     max-width: @docs-content-width;
-    
+
     // border: 1px solid darken(@docs-code-background-color, 5%);
     background-color: @white;
     margin-top: 30px;
@@ -152,94 +158,24 @@
   }
 }
 
-//
-// Maybe some day
-// floats code blocks
-//
-// .markdown {
-//
-//   p, ul, blockquote {
-//     float: left;
-//     clear: left;
-//
-//     width: 40vw;
-//     margin-right: 2vw;
-//     // background-color: #ff00ff;
-//
-//     @media screen and (max-width: @screen-sm-max) {
-//       width: 100%;
-//       margin-right: 0;
-//       float: none;
-//     }
-//
-//   }
-//
-//   pre {
-//     float: left;
-//     clear: right;
-//
-//     width: 36vw;
-//     background-color: transparent;
-//     border: transparent;
-//
-//     background-color: @docs-code-background-color;
-//
-//     // border-top: 1px solid  darken(@docs-code-background-color, 2%);
-//     // border-bottom: 1px solid  darken(@docs-code-background-color, 2%);
-//
-//     @media screen and (max-width: @screen-sm-max) {
-//       float: none;
-//     }
-//   }
-//
-//   h1, h2, h3, h4, h5, h6 {
-//     .flex(0 0 auto);
-//     width: 100%;
-//     clear: both;
-//     .clearfix();
-//   }
-//
-//   h2, h3, h4, h5, h6 {
-//     margin-top: 40px;
-//     margin-bottom: 20px;
-//     padding-top: 20px;
-//     display: inline-block;
-//     width: 100%;
-//     border-top: 1px solid  darken(@docs-code-background-color, 5%);
-//   }
-//
-//   img {
-//     max-width: @docs-content-width;
-//     // border: 1px solid darken(@docs-code-background-color, 5%);
-//     background-color: @white;
-//     margin-top: 30px;
-//     margin-bottom: 30px;
-//   }
-//
-//   p + p,
-//   p + ul
-//   p + h1 ,
-//   p + h2 ,
-//   p + h3 ,
-//   p + h4 ,
-//   p + h5 ,
-//   p + h6 {
-//     .clearfix();
-//   }
-//
-//
-//
-//
-//   p + p,
-//   ul + p
-//   h1 + p,
-//   h2 + p,
-//   h3 + p,
-//   h4 + p,
-//   h5 + p,
-//   h6 + p,
-//   pre + p {
-//
-//   }
-//
-// }
+
+.redoc.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.redoc.header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  height: 60px;
+  width: 100%;
+  border-bottom: 1px solid @black10;
+}
+
+.redoc.header .title {
+  font-size: 1.6rem;
+  font-weight: 300;
+  padding-left: 20px;
+}

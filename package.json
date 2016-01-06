@@ -18,9 +18,14 @@
   "homepage": "https://github.com/reactioncommerce/redoc",
   "dependencies": {
     "highlight.js": "^9.0.0",
+    "history": "^1.17.0",
     "jsdoc-parse": "^1.2.5",
     "markdown-it": "^5.0.2",
     "punycode": "^1.4.0",
+    "react": "^0.14.5",
+    "react-dom": "^0.14.5",
+    "react-es7-mixin": "^1.1.0",
+    "react-router": "^1.0.3",
     "underscore": "^1.8.3"
   }
 }
