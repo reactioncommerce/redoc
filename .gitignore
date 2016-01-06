@@ -1,3 +1,5 @@
 node_modules
 .meteor/local
 .meteor/meteorite
+
+npm-debug.log

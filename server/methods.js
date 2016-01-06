@@ -1,7 +1,8 @@
+/* eslint no-loop-func: 0 */
+
 //
 // Meteor Methods
 //
-
 Meteor.methods({
   /**
    *  redoc/initRepoData
@@ -92,29 +93,31 @@ Meteor.methods({
    */
   "redoc/getRepoData": function () {
     this.unblock();
-
     let repos = ReDoc.Collections.Repos.find().fetch();
+
     // gather multiple repo gh profiles
     for (let repo of repos) {
-      // should we maybe clean off prefix?
-      apiUrl = repo.apiUrl || `https://api.github.com/repos/${repo.org}/${repo.repo}`;
-      rawUrl = repo.rawUrl || `https://raw.githubusercontent.com/${repo.org}/${repo.repo}`;
+      let repoData;
+      let releaseData;
+      const apiUrl = repo.apiUrl || `https://api.github.com/repos/${repo.org}/${repo.repo}`; // should we maybe clean off prefixes?
+      const rawUrl = repo.rawUrl || `https://raw.githubusercontent.com/${repo.org}/${repo.repo}`;
+
       // get repo urls ands stats
-      let repoData = Meteor.http.get(apiUrl + authString, {
+      repoData = Meteor.http.get(apiUrl + authString, {
         headers: {
           "User-Agent": "ReDoc/1.0"
         }
       });
-
-      if (repoData.data) {
+      // fetch repo release data
+      if (repoData && repoData.data) {
         // get updated release tags
-        let releaseData = Meteor.http.get(repoData.data.tags_url + authString, {
+        releaseData = Meteor.http.get(repoData.data.tags_url + authString, {
           headers: {
             "User-Agent": "ReDoc/1.0"
           }
         });
-
-        if (releaseData.data) {
+        // get release data
+        if (repoData && releaseData) {
           ReDoc.Collections.Repos.upsert({
             _id: repo._id
           }, {
