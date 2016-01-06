@@ -6,30 +6,6 @@
     "description": "Reaction Commerce Guide"
   }, {
     "org": "reactioncommerce",
-    "repo": "reaction-core",
-    "class": "guide-sub-nav-item",
-    "label": "Core",
-    "docPath": "README.md"
-  }, {
-    "org": "reactioncommerce",
-    "class": "guide-sub-nav-item",
-    "repo": "reaction-core-theme",
-    "label": "Core Theme",
-    "docPath": "README.md"
-  }, {
-    "org": "reactioncommerce",
-    "class": "guide-sub-nav-item",
-    "repo": "reaction-accounts",
-    "label": "Accounts",
-    "docPath": "README.md"
-  }, {
-    "org": "reactioncommerce",
-    "class": "guide-sub-nav-item",
-    "repo": "reaction-analytics",
-    "label": "Analytics",
-    "docPath": "README.md"
-  }, {
-    "org": "reactioncommerce",
     "class": "guide-sub-nav-item",
     "repo": "reaction-braintree",
     "label": "Braintree",
@@ -43,12 +19,6 @@
   }, {
     "class": "guide-sub-nav-item",
     "org": "reactioncommerce",
-    "repo": "reaction-shipping",
-    "label": "Shipping",
-    "docPath": "README.md"
-  }, {
-    "class": "guide-sub-nav-item",
-    "org": "reactioncommerce",
     "repo": "reaction-stripe",
     "label": "Stripe",
     "docPath": "README.md"
@@ -57,12 +27,6 @@
     "org": "reactioncommerce",
     "repo": "reaction-auth-net",
     "label": "Auth.Net",
-    "docPath": "README.md"
-  }, {
-    "class": "guide-sub-nav-item",
-    "org": "reactioncommerce",
-    "repo": "reaction-social",
-    "label": "Social",
     "docPath": "README.md"
   }],
   "tocData": [{
@@ -276,12 +240,6 @@
     "label": "Schema",
     "repo": "reaction-docs",
     "docPath": "developer/schema.md"
-  }, {
-    "class": "guide-sub-nav-item",
-    "alias": "hooks",
-    "label": "Hooks",
-    "repo": "reaction-docs",
-    "docPath": "developer/hooks.md"
   }, {
     "class": "guide-nav-item",
     "alias": "packages",
