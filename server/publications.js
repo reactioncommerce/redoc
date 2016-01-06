@@ -36,9 +36,13 @@ Meteor.publish("CacheDocs", function (params) {
   let docRepo = ReDoc.Collections.Repos.findOne({
     repo: params.repo
   });
+
   // default doc repo
   if (!docRepo) {
     docRepo = ReDoc.Collections.Repos.findOne();
+  }
+  if (!docRepo) {
+    console.log("Failed to load repo data for document cache request")
   }
 
   // assemble TOC
@@ -60,7 +64,7 @@ Meteor.publish("CacheDocs", function (params) {
     // lets fetch that Github repo
     Meteor.http.get(docSourceUrl, function (error, result) {
       if (error) return error;
-      if (result.statusCode === 200) {
+      if (result && result.statusCode === 200 && result.content) {
         // sensible defaults for every repo
         let docSet = ReDoc.getPathParams(docSourceUrl);
         docSet.docPage = docSourceUrl;

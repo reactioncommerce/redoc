@@ -302,15 +302,9 @@
     "docPath": "faqs/troubleshooting.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "support",
-    "label": "Support",
-    "repo": "reaction-docs",
-    "docPath": "faqs/suport.md"
-  }, {
-    "class": "guide-sub-nav-item",
     "alias": "license",
     "label": "License",
-    "repo": "reaction-docs",
+    "repo": "reaction",
     "docPath": "LICENSE.md"
   }]
 }

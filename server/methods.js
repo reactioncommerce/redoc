@@ -65,24 +65,7 @@ Meteor.methods({
   "redoc/flushDocCache": function () {
     ReDoc.Collections.TOC.remove({});
     ReDoc.Collections.Docs.remove({});
-    if (TOC.count() === 0) {
-      let tocData = Meteor.settings.tocData;
-      // if no tocData has been defined, we'll show this projects docs
-      if (!tocData) {
-        tocData = [{
-          class: "guide-nav-item",
-          alias: "intro",
-          label: "Introduction",
-          repoUrl: "https://raw.githubusercontent.com/reactioncommerce/redoc",
-          docPath: "README.md",
-          repo: "redoc"
-        }];
-      }
-
-      tocData.forEach(function (tocItem) {
-        ReDoc.Collections.TOC.insert(tocItem);
-      });
-    }
+    return Meteor.call("redoc/initRepoData");
   },
   /**
    *  redoc/getRepoData
@@ -132,8 +115,65 @@ Meteor.methods({
               release: releaseData.data
             }
           });
+          // populate docset
+          Meteor.call("redoc/getDocSet", repo.repo);
         }
       }
     } // end loop
+  },
+  /**
+   *  redoc/getDocSet
+   *  fetch all docs for a specified repo / branch
+   *  @param {String} repo - repo
+   *  @param {String} fetchBranch - optional branch
+   *  @returns {undefined} returns
+   */
+  "redoc/getDocSet": function (repo, fetchBranch) {
+    check(repo, String);
+    check(fetchBranch,  Match.Optional(String, null));
+    const branch = fetchBranch || "development";
+    // get repo details
+    const docRepo = ReDoc.Collections.Repos.findOne({
+      repo: repo
+    });
+
+    // we need to have a repo
+    if (!docRepo) {
+      console.log("Failed to load repo data for document repo request");
+      return false;
+    }
+
+    // assemble TOC
+    let docTOC = ReDoc.Collections.TOC.find({
+      repo: repo
+    }).fetch();
+
+    for (tocItem of docTOC) {
+      let docSourceUrl = `${docRepo.rawUrl}/${branch}/${tocItem.docPath}`;
+      console.log("docTOC.docPath", tocItem);
+      console.log("fetching", docSourceUrl)
+
+      // lets fetch that Github repo
+      Meteor.http.get(docSourceUrl, function (error, result) {
+        if (error) return error;
+        if (result.statusCode === 200) {
+          // sensible defaults for every repo
+          let docSet = ReDoc.getPathParams(docSourceUrl);
+          docSet.docPage = docSourceUrl;
+          docSet.docPath = tocItem.docPath;
+          docSet.docPageContent = result.content;
+          // if TOC has different alias, we'll use that
+          if (docTOC.alias) {
+            docSet.alias = tocItem.alias;
+          }
+          // insert new documentation into Cache
+          return ReDoc.Collections.Docs.upsert({
+            docPage: docSourceUrl
+          }, {
+            $set: docSet
+          });
+        }
+      });
+    }
   }
 });
