@@ -38,7 +38,14 @@ export default DocView = React.createClass({
   },
 
   render() {
+    let label = "";
     let content = "";
+
+    if (this.data.currentDoc) {
+      label = this.data.currentDoc.label;
+    }
+
+    const pageTitle = `Reaction Docs - ${label}`;
 
     if (this.data.currentDoc && this.data.currentDoc.docPageContent) {
       content = this.data.currentDoc.docPageContent;
@@ -46,6 +53,7 @@ export default DocView = React.createClass({
 
     return (
       <div className="redoc docs">
+        <ReactHelmet title={pageTitle} />
         <div className="navigation">
             <div className="menu">
               <ul>

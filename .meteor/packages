@@ -33,6 +33,7 @@ ongoworks:spiderable
 #kadira:react-layout
 reactrouter:react-router
 reactrouter:react-router-ssr
+nfl:react-helmet
 
 # ReDoc packages
 reactioncommerce:redoc-base-theme
