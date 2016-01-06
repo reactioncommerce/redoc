@@ -23,6 +23,7 @@
     "markdown-it": "^5.0.2",
     "punycode": "^1.4.0",
     "react": "^0.14.5",
+    "react-cookie": "^0.4.3",
     "react-dom": "^0.14.5",
     "react-es7-mixin": "^1.1.0",
     "react-router": "^1.0.3",
