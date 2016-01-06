@@ -31,8 +31,6 @@ Meteor.methods({
         ReDoc.Collections.Repos.insert(repoItem);
         // insert new repoData, with flush enabled
       });
-      // Run once will get all repo data for current repos
-      Meteor.call("redoc/getRepoData");
     }
     // populate TOC from settings
     let TOC = ReDoc.Collections.TOC.find();
@@ -54,6 +52,8 @@ Meteor.methods({
         ReDoc.Collections.TOC.insert(tocItem);
       });
     }
+    // Run once will get all repo data for current repos
+    Meteor.call("redoc/getRepoData");
   },
   /**
    *  redoc/flushDocCache
