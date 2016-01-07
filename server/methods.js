@@ -184,7 +184,7 @@ Meteor.methods({
           // pre-process documentation
           if (!result.content) {
             console.log(`redoc/getDocSet: Docset not found for ${docSet.docPath}.`);
-            result.content = `# Not found. > ${docSourceUrl}`; // default not found, should replace with custom tpl.
+            result.content = `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
           }
           docSet.docPageContent = result.content;
           docSet.docPageContentHTML = md.render(result.content);
