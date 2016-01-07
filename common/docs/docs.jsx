@@ -72,14 +72,20 @@ export default DocView = React.createClass({
     }
 
     // Render standard content
-    let content = "";
+    if (this.data.currentDoc && this.data.currentDoc.docPageContentHTML) {
+      let content = {
+        __html: this.data.currentDoc.docPageContentHTML
+      };
 
-    if (this.data.currentDoc && this.data.currentDoc.docPageContent) {
-      content = this.data.currentDoc.docPageContent;
+      return (
+        <div className="content-html" dangerouslySetInnerHTML={content}></div>
+      );
     }
 
     return (
-      <ReMarkdown content={content} />
+      <div className="content-html">
+        <h2>Doc Not Found</h2>
+      </div>
     );
   },
 

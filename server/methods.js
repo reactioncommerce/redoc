@@ -3,9 +3,8 @@
 import "highlight.js";
 import punycode from "punycode";
 import "markdown-it";
-import _ from "underscore";
+import "underscore";
 
-// export let _ = require("underscore");
 export let hljs = require("highlight.js");
 
 md = require("markdown-it")({
@@ -14,8 +13,19 @@ md = require("markdown-it")({
   typographer: true,
   highlight: function (code) {
     return hljs.highlightAuto(code).value;
+  },
+  replaceLink: (link, env) => {
+    const isImage = link.search(/([a-z\-_0-9\/\:\.]*\.(jpg|jpeg|png|gif))/i) > -1;
+    const hasProtocol = link.search(/^http[s]?\:\/\//) > -1;
+    let newLink = link;
+
+    if (isImage && !hasProtocol) {
+      newLink = `${env.rawUrl}/${env.branch}/${link}`;
+    }
+
+    return newLink;
   }
-});
+}).use(require("markdown-it-replace-link"));
 
 
 //
@@ -187,7 +197,10 @@ Meteor.methods({
             result.content = `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
           }
           docSet.docPageContent = result.content;
-          docSet.docPageContentHTML = md.render(result.content);
+          docSet.docPageContentHTML = md.render(result.content, {
+            rawUrl: docRepo.rawUrl,
+            branch: branch
+          });
 
           // insert new documentation into Cache
           return ReDoc.Collections.Docs.upsert({
