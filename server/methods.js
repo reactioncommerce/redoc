@@ -177,7 +177,7 @@ Meteor.methods({
           docSet.docPath = tocItem.docPath;
 
           // if TOC has different alias, we'll use that
-          if (docTOC.alias) {
+          if (tocItem.alias) {
             docSet.alias = tocItem.alias;
           }
 
