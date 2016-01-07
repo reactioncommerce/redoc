@@ -7,7 +7,7 @@ export default DocView = React.createClass({
 
   getMeteorData() {
     if (Meteor.isClient) {
-      const sub = Meteor.subscribe("Docs");
+      const sub = Meteor.subscribe("CacheDocs", this.props.params);
       const tocSub = Meteor.subscribe("TOC");
       const search = DocSearch.getData({
         transform: (matchText, regExp) => {

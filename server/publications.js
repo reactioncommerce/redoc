@@ -1,6 +1,6 @@
-Meteor.publish("Docs", function () {
-  return ReDoc.Collections.Docs.find();
-});
+// Meteor.publish("Docs", function () {
+//   return ReDoc.Collections.Docs.find();
+// });
 
 Meteor.publish("TOC", function () {
   return ReDoc.Collections.TOC.find();
@@ -11,8 +11,8 @@ Meteor.publish("Repos", function () {
 });
 
 /*
- *  CacheDocs gets retrieves a single doc page from GitHub
- *  pulls new data if there is none
+ *  CacheDocs returns all docs, filter by branch
+ *  checks if request docs exists first then pulls new data if there is none
  */
 Meteor.publish("CacheDocs", function (params) {
   // some minor validation
@@ -42,7 +42,7 @@ Meteor.publish("CacheDocs", function (params) {
     docRepo = ReDoc.Collections.Repos.findOne();
   }
   if (!docRepo) {
-    console.log("Failed to load repo data for document cache request")
+    console.log("CacheDocs Publication: Failed to load repo data for document cache request", params);
   }
 
   // assemble TOC
@@ -58,35 +58,13 @@ Meteor.publish("CacheDocs", function (params) {
     alias: params.alias
   });
 
-  // check if we need to fetch a new doc
-  if (cacheDoc && cacheDoc.count() === 0) {
-    if (!docRepo || !params || !docTOC) {
-      return null;
-    }
-
-    let docSourceUrl = `${docRepo.rawUrl}/${params.branch}/${docTOC.docPath}`;
-    // lets fetch that Github repo
-    Meteor.http.get(docSourceUrl, function (error, result) {
-      if (error) return error;
-      if (result && result.statusCode === 200 && result.content) {
-        // sensible defaults for every repo
-        let docSet = ReDoc.getPathParams(docSourceUrl);
-        docSet.docPage = docSourceUrl;
-        docSet.docPath = docTOC.docPath;
-        docSet.docPageContent = result.content;
-        // if TOC has different alias, we'll use that
-        if (docTOC.alias) {
-          docSet.alias = docTOC.alias;
-        }
-        // insert new documentation into Cache
-        return ReDoc.Collections.Docs.upsert({
-          docPage: docSourceUrl
-        }, {
-          $set: docSet
-        });
-      }
-    });
+  // check if we need to fetch new docs
+  if (cacheDoc.count() === 0 && docTOC) {
+    Meteor.call("redoc/getDocSet", params.repo, params.branch);
   }
   // return cache doc
-  return cacheDoc;
+  return ReDoc.Collections.Docs.find({
+    repo: params.repo,
+    branch: params.branch
+  });
 });

@@ -45,10 +45,9 @@ Meteor.methods({
           rawUrl: "https://raw.githubusercontent.com/reactioncommerce/redoc/"
         }];
       }
-
+      // for each Repo insert new repoData
       Repos.forEach(function (repoItem) {
         ReDoc.Collections.Repos.insert(repoItem);
-        // insert new repoData, with flush enabled
       });
     }
     // populate TOC from settings
@@ -157,7 +156,7 @@ Meteor.methods({
 
     // we need to have a repo
     if (!docRepo) {
-      console.log("Failed to load repo data for document repo request");
+      console.log(`redoc/getDocSet: Failed to load repo data for ${repo}`);
       return false;
     }
 
@@ -168,9 +167,6 @@ Meteor.methods({
 
     for (tocItem of docTOC) {
       let docSourceUrl = `${docRepo.rawUrl}/${branch}/${tocItem.docPath}`;
-      console.log("docTOC.docPath", tocItem);
-      console.log("fetching", docSourceUrl)
-
       // lets fetch that Github repo
       Meteor.http.get(docSourceUrl, function (error, result) {
         if (error) return error;
@@ -186,11 +182,15 @@ Meteor.methods({
             docSet.alias = tocItem.alias;
           }
           // insert new documentation into Cache
-          return ReDoc.Collections.Docs.upsert({
-            docPage: docSourceUrl
-          }, {
-            $set: docSet
-          });
+          if (docSet.docPageContent) {
+            return ReDoc.Collections.Docs.upsert({
+              docPage: docSourceUrl
+            }, {
+              $set: docSet
+            });
+          } else {
+            console.log(`redoc/getDocSet: Failed to load ${tocItem.docPath}`);
+          }
         }
       });
     }
