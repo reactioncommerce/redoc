@@ -40,6 +40,7 @@ export default DocView = React.createClass({
     // Close the TOC nav on mobile
     if (Meteor.isClient) {
       Session.set("isMenuVisible", false);
+      DocSearch.search("");
     }
   },
 
@@ -93,7 +94,13 @@ export default DocView = React.createClass({
 
     return (
       <div className="redoc docs">
-        <ReactHelmet title={pageTitle} />
+        <ReactHelmet
+          link={[
+            {rel: "canonical", href: "http://docs.reactioncommerce.com"},
+            {rel: "icon", href: "/favicon.png", type: "type/png"}
+          ]}
+          title={pageTitle}
+        />
         <TableOfContents
           onDocNavigation={this.handleDocNavigation}
           params={this.props.params}

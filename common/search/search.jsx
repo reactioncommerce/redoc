@@ -1,11 +1,25 @@
 
 
 export default SearchField = React.createClass({
+  // mixins: [ReactMeteorData],
+
   getIniitalState() {
     return {
       showClearButton: false
     };
   },
+
+  // getMeteorData() {
+  //   if (Meteor.isClient) {
+  //     return {
+  //       searchQuery: DocSearch.getCurrentQuery()
+  //     };
+  //   }
+  //
+  //   return {
+  //     searchQuery: ""
+  //   };
+  // },
 
   handleChange(event) {
     let value = event.target.value;

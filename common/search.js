@@ -34,7 +34,7 @@ if (Meteor.isServer) {
 function buildRegExp(searchText) {
   const words = searchText.trim().split(/[ \-\:]+/);
   const exps = _.map(words, (word) => {
-    return "(?=.*" + word + ")";
+    return "(<.+?>[^<>]*?)(?=.*" + word + ")([^<>]*?<.+?>)";
   });
   const fullExp = exps.join("") + ".+";
 
