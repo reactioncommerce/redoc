@@ -165,7 +165,7 @@ Meteor.methods({
       repo: repo
     }).fetch();
 
-    for (tocItem of docTOC) {
+    for (let tocItem of docTOC) {
       let docSourceUrl = `${docRepo.rawUrl}/${branch}/${tocItem.docPath}`;
       // lets fetch that Github repo
       Meteor.http.get(docSourceUrl, function (error, result) {
@@ -175,22 +175,26 @@ Meteor.methods({
           let docSet = ReDoc.getPathParams(docSourceUrl);
           docSet.docPage = docSourceUrl;
           docSet.docPath = tocItem.docPath;
-          docSet.docPageContent = result.content;
-          docSet.docPageContentHTML = md.render(result.content);
+
           // if TOC has different alias, we'll use that
           if (docTOC.alias) {
             docSet.alias = tocItem.alias;
           }
-          // insert new documentation into Cache
-          if (docSet.docPageContent) {
-            return ReDoc.Collections.Docs.upsert({
-              docPage: docSourceUrl
-            }, {
-              $set: docSet
-            });
-          } else {
-            console.log(`redoc/getDocSet: Failed to load ${tocItem.docPath}`);
+
+          // pre-process documentation
+          if (!result.content) {
+            console.log(`redoc/getDocSet: Docset not found for ${docSet.docPath}.`);
+            result.content = `# Not found. > ${docSourceUrl}`; // default not found, should replace with custom tpl.
           }
+          docSet.docPageContent = result.content;
+          docSet.docPageContentHTML = md.render(result.content);
+
+          // insert new documentation into Cache
+          return ReDoc.Collections.Docs.upsert({
+            docPage: docSourceUrl
+          }, {
+            $set: docSet
+          });
         }
       });
     }
