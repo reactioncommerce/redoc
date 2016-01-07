@@ -5,30 +5,13 @@ import "underscore";
 export default DocView = React.createClass({
   mixins: [ReactMeteorData],
 
-  componentDidMount() {
-  },
-
-  componentWillReceiveProps(props) {
-
-  },
-
   getMeteorData() {
     if (Meteor.isClient) {
       const sub = Meteor.subscribe("Docs");
       const tocSub = Meteor.subscribe("TOC");
       const search = DocSearch.getData({
-        transform: function(matchText, regExp) {
-
-          const pos = matchText.search(regExp)
-
-          let text = matchText.replace(regExp, "<span class='highlight'>$&</span>")
-          console.log(pos, Math.max(pos - 80, 0), Math.min(40, text.length - 1));
-          const excerpt = text.substring(
-            Math.max(pos - 80, 0),
-            Math.min(pos + 41, text.length - 1)
-          );
-          // return matchText;
-          return `...${excerpt}...`;
+        transform: (matchText, regExp) => {
+          return matchText.replace(regExp, "<span class='highlight'>$&</span>");
         },
         sort: {isoScore: -1}
       });
@@ -43,7 +26,7 @@ export default DocView = React.createClass({
     }
 
     if (Meteor.isServer) {
-      let search
+      let search;
 
       return {
         docIsLoaded: true,
@@ -57,8 +40,6 @@ export default DocView = React.createClass({
 
   handleDocNavigation(event) {
     event.preventDefault();
-    // console.log(event.target.href);
-    console.log(this.props);
     this.props.history.pushState({null}, event.target.href);
   },
 
@@ -92,14 +73,17 @@ export default DocView = React.createClass({
       const results = this.data.search.map((item) => {
         const branch = this.props.params.branch || "development";
         const url = `/${item.repo}/${branch}/${item.alias}`;
+        const html = {
+          __html: item.docPageContentHTML
+        };
 
         return (
           <li>
             <a href={url}><strong>{item.label}</strong></a>
-            <ReMarkdown content={item.docPageContent} />
+            <div dangerouslySetInnerHTML={html}></div>
           </li>
         );
-      })
+      });
 
       return (
         <div className="redoc search-results">
@@ -119,10 +103,6 @@ export default DocView = React.createClass({
     }
 
     const pageTitle = `Reaction Docs - ${label}`;
-
-
-
-    console.log("Search Results", this.data.search);
 
     return (
       <div className="redoc docs">
