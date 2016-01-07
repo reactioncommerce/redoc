@@ -34,8 +34,12 @@ export default DocView = React.createClass({
         </div>
         <div className="navigation"></div>
         <div className="filters">
-          <BranchSelect onBranchSelect={this.handleBranchSelect} />
-          <SearchField />
+          <div className="item">
+            <BranchSelect onBranchSelect={this.handleBranchSelect} />
+          </div>
+          <div className="item">
+            <SearchField />
+          </div>
         </div>
       </div>
     );

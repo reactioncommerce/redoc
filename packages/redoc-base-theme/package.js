@@ -93,8 +93,12 @@ Package.onUse(function (api) {
     "lib/bootstrap/less/variables.less",
     "lib/bootstrap/less/wells.less",
     // redoc specific styles
+    "styles/base.less",
     "styles/code.less",
-    "styles/docs.less"
+    "styles/controls.less",
+    "styles/docs.less",
+    "styles/header.less",
+    "styles/search.less"
   ], "client", {isImport: true});
 
   api.addFiles("theme.js", "server");

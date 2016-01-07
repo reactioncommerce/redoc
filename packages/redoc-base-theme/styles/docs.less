@@ -6,14 +6,6 @@
 @docs-code-background-color: #fff;
 @docs-navigation-background-color: #2196F3;
 
-#react-app {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-}
-
 .redoc.docs {
   display: flex;
   flex: 1 1 auto;
@@ -156,91 +148,4 @@
     margin-top: 30px;
     margin-bottom: 30px;
   }
-}
-
-
-.redoc.page {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.redoc.header {
-  display: flex;
-  flex: 0 0 auto;
-  align-items: center;
-  height: 60px;
-  width: 100%;
-  border-bottom: 1px solid @black10;
-}
-
-.redoc.header .title {
-  font-size: 1.6rem;
-  font-weight: 300;
-  padding-left: 20px;
-}
-
-.redoc.header .brand {
-  flex: 0 0 auto;
-}
-
-.redoc.header .navigation {
-  flex: 1 1 auto;
-}
-
-.redoc.header .filters {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  flex: 0 0 auto;
-  padding-right: 20px;
-}
-
-.redoc.control.search {
-  display: flex;
-  border: 1px solid @black10;
-  background-color: @white;
-}
-
-.redoc.control.search .icon {
-  flex: 0 0 auto;
-  padding: 5px 5px 5px 10px;
-}
-
-.redoc.control.search input {
-  flex: 1 1 auto;
-  padding: 5px 10px 5px 5px;
-  border: none;
-  background-color: transparent;
-}
-
-.redoc.search-results {
-
-}
-
-.redoc.search-results > ul {
-  list-style: none;
-  padding: 0;
-}
-
-.redoc.search-results > ul > li {
-  margin-bottom: 30px;
-}
-
-.redoc.search-results > ul > li > a {
-  color: inherit;
-}
-
-.redoc.search-results > ul > li > a:hover {
-
-}
-
-.redoc.search-results > ul > li > a > strong {
-  display: block;
-  font-size: 1.4rem;
-  margin-bottom: 10px;
-}
-
-.highlight {
-  background-color: yellow;
 }
