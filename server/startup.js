@@ -19,7 +19,7 @@ SyncedCron.add({
     return parser.text("every 3 days");
   },
   job: function () {
-    ReDocs.Collections.Docs.remove({});
+    ReDoc.Collections.Docs.remove({});
   }
 });
 
