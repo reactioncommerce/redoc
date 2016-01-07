@@ -8,9 +8,9 @@ export default DocView = React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData() {
+    const sub = Meteor.subscribe("CacheDocs", this.props.params);
+
     if (Meteor.isClient) {
-      const sub = Meteor.subscribe("CacheDocs", this.props.params);
-      const tocSub = Meteor.subscribe("TOC");
       const search = DocSearch.getData({
         transform: (matchText, regExp) => {
           return matchText.replace(regExp, "<span class='highlight'>$&</span>");
@@ -20,22 +20,16 @@ export default DocView = React.createClass({
 
       return {
         docIsLoaded: sub.ready(),
-        tocIsLoaded: tocSub.ready(),
-        docs: ReDoc.Collections.TOC.find().fetch(),
         currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
         search: search
       };
     }
 
     if (Meteor.isServer) {
-      let search;
-
       return {
-        docIsLoaded: true,
-        tocIsLoaded: true,
-        docs: ReDoc.Collections.TOC.find().fetch(),
-        currentDoc: ReDoc.Collections.Docs.findOne(),
-        search: search
+        docIsLoaded: sub.ready(),
+        currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
+        search: []
       };
     }
   },

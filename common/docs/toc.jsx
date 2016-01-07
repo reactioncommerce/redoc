@@ -9,9 +9,9 @@ export default DocView = React.createClass({
 
   getMeteorData() {
     let data = {};
+    const tocSub = Meteor.subscribe("TOC");
 
     if (Meteor.isClient) {
-      const tocSub = Meteor.subscribe("TOC");
       const search = DocSearch.getData({
         transform: (matchText, regExp) => {
           return matchText.replace(regExp, "<span class='highlight'>$&</span>");
@@ -28,8 +28,9 @@ export default DocView = React.createClass({
     }
 
     if (Meteor.isServer) {
+      Meteor.subscribe("TOC");
       data = {
-        tocIsLoaded: true,
+        tocIsLoaded: tocSub.ready(),
         docs: ReDoc.Collections.TOC.find().fetch(),
         search: []
       };
