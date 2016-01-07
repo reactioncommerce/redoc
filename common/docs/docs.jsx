@@ -17,22 +17,21 @@ export default DocView = React.createClass({
       const sub = Meteor.subscribe("Docs");
       const tocSub = Meteor.subscribe("TOC");
       const search = DocSearch.getData({
-         transform: function(matchText, regExp) {
+        transform: function(matchText, regExp) {
 
-           const pos = matchText.search(regExp)
+          const pos = matchText.search(regExp)
 
-           let text = matchText.replace(regExp, "<span class='highlight'>$&</span>")
-           const excerpt = matchText.substring(
-             Math.max(pos - 40, 0),
-             Math.min(40, text.length - 1)
-           );
-
-           console.log("Excerpt", `...${excerpt}...`, pos);
-
-           return excerpt
-         },
-         sort: {isoScore: -1}
-       });
+          let text = matchText.replace(regExp, "<span class='highlight'>$&</span>")
+          console.log(pos, Math.max(pos - 80, 0), Math.min(40, text.length - 1));
+          const excerpt = text.substring(
+            Math.max(pos - 80, 0),
+            Math.min(pos + 41, text.length - 1)
+          );
+          // return matchText;
+          return `...${excerpt}...`;
+        },
+        sort: {isoScore: -1}
+      });
 
       return {
         docIsLoaded: sub.ready(),
