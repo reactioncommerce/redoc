@@ -31,9 +31,12 @@ ongoworks:spiderable
 #kadira:flow-router
 #kadira:blaze-layout
 #kadira:react-layout
+nfl:react-helmet
+
 reactrouter:react-router
 reactrouter:react-router-ssr
-nfl:react-helmet
+meteorhacks:search-source
+fortawesome:fontawesome
 
 # ReDoc packages
 reactioncommerce:redoc-base-theme

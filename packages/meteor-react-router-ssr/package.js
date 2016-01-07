@@ -13,6 +13,7 @@ Npm.depends({
 
 Package.onUse(function(api) {
   api.use('webapp');
+  // api.use(['nfl:react-helmet'], 'server');
 
   api.use([
     'jsx@0.2.3',
@@ -28,7 +29,7 @@ Package.onUse(function(api) {
   api.use('mongo@1.0.0', 'server');
   api.use('autopublish@1.0.0', 'server', {weak: true});
 
-  api.use('nfl:react-helmet@2.2.0', 'server', {weak: true});
+  api.use('nfl:react-helmet@2.2.0', 'server');
   api.use('promise@0.5.1', 'server', {weak: true});
 
   api.use('tmeasday:publish-counts@0.7.0', 'server', {weak: true});

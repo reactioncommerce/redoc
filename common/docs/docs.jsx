@@ -5,21 +5,62 @@ import "underscore";
 export default DocView = React.createClass({
   mixins: [ReactMeteorData],
 
-  getMeteorData() {
-    let sub = Meteor.subscribe("CacheDocs", this.props.params);
-    const tocSub = Meteor.subscribe("TOC");
+  componentDidMount() {
+  },
 
-    return {
-      docIsLoaded: sub.ready(),
-      tocIsLoaded: tocSub.ready(),
-      docs: ReDoc.Collections.TOC.find().fetch(),
-      currentDoc: ReDoc.Collections.Docs.findOne()
-    };
+  componentWillReceiveProps(props) {
+
+  },
+
+  getMeteorData() {
+    if (Meteor.isClient) {
+      const sub = Meteor.subscribe("Docs");
+      const tocSub = Meteor.subscribe("TOC");
+      const search = DocSearch.getData({
+         transform: function(matchText, regExp) {
+
+           const pos = matchText.search(regExp)
+
+           let text = matchText.replace(regExp, "<span class='highlight'>$&</span>")
+           const excerpt = matchText.substring(
+             Math.max(pos - 40, 0),
+             Math.min(40, text.length - 1)
+           );
+
+           console.log("Excerpt", `...${excerpt}...`, pos);
+
+           return excerpt
+         },
+         sort: {isoScore: -1}
+       });
+
+      return {
+        docIsLoaded: sub.ready(),
+        tocIsLoaded: tocSub.ready(),
+        docs: ReDoc.Collections.TOC.find().fetch(),
+        currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
+        search: search
+      };
+    }
+
+    if (Meteor.isServer) {
+      let search
+
+      return {
+        docIsLoaded: true,
+        tocIsLoaded: true,
+        docs: ReDoc.Collections.TOC.find().fetch(),
+        currentDoc: ReDoc.Collections.Docs.findOne(),
+        search: search
+      };
+    }
   },
 
   handleDocNavigation(event) {
     event.preventDefault();
-    this.props.history.pushState(null, event.target.href);
+    // console.log(event.target.href);
+    console.log(this.props);
+    this.props.history.pushState({null}, event.target.href);
   },
 
   renderMenu() {
@@ -37,9 +78,42 @@ export default DocView = React.createClass({
     return items;
   },
 
+  renderContent() {
+    if (_.isArray(this.data.search) && this.data.search.length === 0) {
+      let content = "";
+
+      if (this.data.currentDoc && this.data.currentDoc.docPageContent) {
+        content = this.data.currentDoc.docPageContent;
+      }
+
+      return (
+        <ReMarkdown content={content} />
+      );
+    } else if (_.isArray(this.data.search) && DocSearch.getCurrentQuery().length) {
+      const results = this.data.search.map((item) => {
+        const branch = this.props.params.branch || "development";
+        const url = `/${item.repo}/${branch}/${item.alias}`;
+
+        return (
+          <li>
+            <a href={url}><strong>{item.label}</strong></a>
+            <ReMarkdown content={item.docPageContent} />
+          </li>
+        );
+      })
+
+      return (
+        <div className="redoc search-results">
+          <ul>
+            {results}
+          </ul>
+        </div>
+      );
+    }
+  },
+
   render() {
     let label = "";
-    let content = "";
 
     if (this.data.currentDoc) {
       label = this.data.currentDoc.label;
@@ -47,9 +121,9 @@ export default DocView = React.createClass({
 
     const pageTitle = `Reaction Docs - ${label}`;
 
-    if (this.data.currentDoc && this.data.currentDoc.docPageContent) {
-      content = this.data.currentDoc.docPageContent;
-    }
+
+
+    console.log("Search Results", this.data.search);
 
     return (
       <div className="redoc docs">
@@ -63,7 +137,7 @@ export default DocView = React.createClass({
         </div>
 
         <div className="content">
-          <ReMarkdown content={content} />
+          {this.renderContent()}
         </div>
       </div>
     );

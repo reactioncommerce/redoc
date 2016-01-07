@@ -60,6 +60,10 @@ Meteor.publish("CacheDocs", function (params) {
 
   // check if we need to fetch a new doc
   if (cacheDoc && cacheDoc.count() === 0) {
+    if (!docRepo || !params || !docTOC) {
+      return null;
+    }
+
     let docSourceUrl = `${docRepo.rawUrl}/${params.branch}/${docTOC.docPath}`;
     // lets fetch that Github repo
     Meteor.http.get(docSourceUrl, function (error, result) {
