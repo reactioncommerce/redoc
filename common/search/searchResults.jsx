@@ -1,27 +1,37 @@
-
-// TODO: move search results into this component, currentlu in docs/docs.jsx
+import "underscore";
 
 export default SearchResults = React.createClass({
+  renderResults() {
+    if (_.isArray(this.props.results)) {
+      const results = this.props.results.map((item) => {
+        const branch = this.props.branch || "development";
+        const url = `/${item.repo}/${branch}/${item.alias}`;
+        const html = {
+          __html: item.docPageContentHTML
+        };
 
-  handleChange(event) {
-    let value = event.target.value;
-    console.log("search string", value);
-    DocSearch.search(value);
-  },
+        return (
+          <li>
+            <div className="header">
+              <a href={url}><strong>{item.label}</strong></a>
+            </div>
+            <div className="content-html" dangerouslySetInnerHTML={html} />
+          </li>
+        );
+      });
 
-  handleFocus() {
-
-  },
-
-  handleBlur() {
-
+      return results;
+    }
   },
 
   render() {
     return (
       <div className="redoc search-results">
-
+        <h2 className="title">Search Results</h2>
+        <ul>
+          {this.renderResults()}
+        </ul>
       </div>
     );
   }
-})
+});

@@ -23,7 +23,7 @@ export default class ReMarkdown extends React.Component {
     };
 
     return (
-      <div dangerouslySetInnerHTML={content}></div>
+      <div className="content-html" dangerouslySetInnerHTML={content}></div>
     );
   }
 }

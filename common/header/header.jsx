@@ -1,28 +1,38 @@
-// import apply from "react-es7-mixin/apply"
-// import ReMarkdown from "./markdown.jsx";
-// import React from "react"
-
-import SearchField from "../docs/search.jsx";
+import SearchField from "../search/search.jsx";
 import BranchSelect from "../docs/branchSelect.jsx";
 
-
-// @apply(ReactMeteorData)
 export default DocView = React.createClass({
-  // mixins: [ReactMeteorData],
+  mixins: [ReactMeteorData],
 
   getMeteorData() {
-    const sub = Meteor.subscribe("CacheDocs", this.props.params);
-
-    return {
-      docIsLoaded: sub.ready(),
-      docs: ReDoc.Collections.TOC.find().fetch(),
-      currentDoc: ReDoc.Collections.Docs.findOne()
+    let data = {
+      isMenuVisible: true
     };
+
+    if (Meteor.isClient) {
+      data.isMenuVisible = Session.equals("isMenuVisible", true);
+    }
+
+    return data;
   },
 
-  handleBranchSelect(branch) {
+  handleBranchSelect(selectedBranch) {
     if (this.props.history) {
-      // this.props.history.pushState({})
+      const branch = selectedBranch || this.props.params.branch || "development";
+      const params = this.props.params;
+      const url = `/${params.repo}/${branch}/${params.alias}`;
+
+      this.props.history.pushState(null, url);
+    }
+  },
+
+  handleMenuToggle() {
+    if (Meteor.isClient) {
+      if (Session.equals("isMenuVisible", true)) {
+        Session.set("isMenuVisible", false);
+      } else {
+        Session.set("isMenuVisible", true);
+      }
     }
   },
 
@@ -30,12 +40,21 @@ export default DocView = React.createClass({
     return (
       <div className="redoc header">
         <div className="brand">
-          <div className="title">Reaction Docs</div>
+          <button className="redoc menu-button" onClick={this.handleMenuToggle}>
+            <i className="fa fa-bars"></i>
+          </button>
+          <a className="title" href="/">
+            <img className="logo" src="/images/logo.png" />
+            {"Reaction Docs"}
+          </a>
         </div>
         <div className="navigation"></div>
         <div className="filters">
           <div className="item">
-            <BranchSelect onBranchSelect={this.handleBranchSelect} />
+            <BranchSelect
+              currentBranch={this.props.params.branch}
+              onBranchSelect={this.handleBranchSelect}
+            />
           </div>
           <div className="item">
             <SearchField />

@@ -1,5 +1,7 @@
-import apply from "react-es7-mixin/apply"
+
 import ReMarkdown from "./markdown.jsx";
+import TableOfContents from "./toc.jsx";
+import SearchResults from "../search/searchResults.jsx";
 import "underscore";
 
 export default DocView = React.createClass({
@@ -38,9 +40,13 @@ export default DocView = React.createClass({
     }
   },
 
-  handleDocNavigation(event) {
-    event.preventDefault();
-    this.props.history.pushState({null}, event.target.href);
+  handleDocNavigation(href) {
+    this.props.history.pushState(null, href);
+
+    // Close the TOC nav on mobile
+    if (Meteor.isClient) {
+      Session.set("isMenuVisible", false);
+    }
   },
 
   renderMenu() {
@@ -59,40 +65,27 @@ export default DocView = React.createClass({
   },
 
   renderContent() {
-    if (_.isArray(this.data.search) && this.data.search.length === 0) {
-      let content = "";
-
-      if (this.data.currentDoc && this.data.currentDoc.docPageContent) {
-        content = this.data.currentDoc.docPageContent;
-      }
-
-      return (
-        <ReMarkdown content={content} />
-      );
-    } else if (_.isArray(this.data.search) && DocSearch.getCurrentQuery().length) {
-      const results = this.data.search.map((item) => {
-        const branch = this.props.params.branch || "development";
-        const url = `/${item.repo}/${branch}/${item.alias}`;
-        const html = {
-          __html: item.docPageContentHTML
-        };
-
+    if (Meteor.isClient && DocSearch.getCurrentQuery()) {
+      if (DocSearch.getCurrentQuery().length > 0) {
         return (
-          <li>
-            <a href={url}><strong>{item.label}</strong></a>
-            <div dangerouslySetInnerHTML={html}></div>
-          </li>
+          <SearchResults
+            branch={this.props.params.branch}
+            results={this.data.search}
+          />
         );
-      });
-
-      return (
-        <div className="redoc search-results">
-          <ul>
-            {results}
-          </ul>
-        </div>
-      );
+      }
     }
+
+    // Render standard content
+    let content = "";
+
+    if (this.data.currentDoc && this.data.currentDoc.docPageContent) {
+      content = this.data.currentDoc.docPageContent;
+    }
+
+    return (
+      <ReMarkdown content={content} />
+    );
   },
 
   render() {
@@ -107,13 +100,10 @@ export default DocView = React.createClass({
     return (
       <div className="redoc docs">
         <ReactHelmet title={pageTitle} />
-        <div className="navigation">
-            <div className="menu">
-              <ul>
-                {this.renderMenu()}
-              </ul>
-            </div>
-        </div>
+        <TableOfContents
+          onDocNavigation={this.handleDocNavigation}
+          params={this.props.params}
+        />
 
         <div className="content">
           {this.renderContent()}

@@ -1,3 +1,4 @@
+
 .redoc.header {
   display: flex;
   flex: 0 0 auto;
@@ -8,13 +9,31 @@
 }
 
 .redoc.header .title {
+  display: flex;
+  align-items: center;
   font-size: 1.6rem;
   font-weight: 300;
   padding-left: 20px;
 }
 
 .redoc.header .brand {
+  display: flex;
   flex: 0 0 auto;
+}
+
+.redoc.header .logo {
+  width: 32px;
+  margin-right: 10px;
+}
+
+.redoc.menu-button {
+  display: none;
+  align-items: center;
+  flex: 0 0 auto;
+  height: 100%;
+  padding: 20px;
+  border: none;
+  background: transparent;
 }
 
 .redoc.header .navigation {
@@ -31,4 +50,37 @@
 
 .redoc.header .filters .item {
   margin-left: 10px;
+}
+
+@media screen and (max-width: @screen-sm-max) {
+  .redoc.header {
+    display: block;
+    height: auto;
+  }
+
+  .redoc.header .brand {
+    // padding-bottom: 20px;
+    height: 60px;
+    border-buttom: 1px solid @border-color;
+  }
+
+  .redoc.menu-button {
+    display: flex;
+  }
+
+  .redoc.header .filters {
+    margin: 0;
+    padding: 0;
+  }
+
+  .redoc.header .filters .item {
+    flex: 1 1 auto;
+    margin-left: 0;
+  }
+
+  .redoc.header .filters .item > .redoc.control {
+    flex: 1 1 auto;
+    border-right: 0;
+    border-bottom: 0;
+  }
 }

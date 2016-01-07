@@ -11,15 +11,15 @@ const AppRoutes = (
   </Route>
 );
 
-ReactRouterSSR.Run(AppRoutes,{
+ReactRouterSSR.Run(AppRoutes, {
   props: {
     onUpdate() {
       // Notify the page has been changed to Google Analytics
-      ga('send', 'pageview');
+      ga("send", "pageview");
     }
   }
 }, {
-  preRender: function(req, res) {
+  preRender: (req, res) => {
     ReactCookie.plugToRequest(req, res);
   }
 });

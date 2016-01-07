@@ -16,10 +16,29 @@
   display: flex;
   flex-direction: column;
   flex: 0 0 auto;
-  max-width: 270px;
+  max-width: 300px;
   // height: 100vh;
   border-right: 1px solid @black10;
   background-color: @black02;// fadeout(@docs-navigation-background-color, 30%);
+}
+
+@media screen and (max-width: @screen-sm-max) {
+  .redoc.docs .navigation {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100vh;
+
+    box-shadow: 0 0 30px rgba(0,0,0,.15);
+
+    z-index: 100;
+  }
+
+  .redoc.docs .navigation.visible {
+    display: flex;
+  }
 }
 
 .redoc.docs .menu {
@@ -88,11 +107,7 @@
 .redoc.docs .content {
   overflow-y: auto;
   background-color: white;
-  // height: 100vh;
-  // padding-top: @navbar-height;
-  // padding-top: 20px;
-  padding: 20px;
-  padding-bottom: 60px;
+
   .flex(1 1 auto);
   .section {
     padding: 0 2rem;
@@ -103,24 +118,12 @@
     margin: 20px 0;
   }
 
-  // inset 781px 0 #dfe2e7,
-  //rgba(0,0,0,0.1)
-  .box-shadow( inset 44vw 0 @white );
-  @media screen and (max-width: @screen-sm-max) {
-    position: static;
-    box-shadow: none;
-    background-color: @white;
-    overflow-y: hidden;
-    .section {
-      padding: 20px 30px;
-    }
-  }
-
   a {
     color: blue;
   }
 }
-.markdown {
+
+.content-html {
   p,
   ul,
   blockquote {
@@ -141,11 +144,16 @@
     border-top: 1px solid darken(@docs-code-background-color, 5%);
   }
   img {
-    max-width: @docs-content-width;
+    max-width: 70%;
 
     // border: 1px solid darken(@docs-code-background-color, 5%);
     background-color: @white;
     margin-top: 30px;
     margin-bottom: 30px;
   }
+}
+
+.redoc.docs .content-html {
+  padding: 40px 60px;
+  padding-bottom: 60px;
 }

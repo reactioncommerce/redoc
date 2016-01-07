@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/reactioncommerce/redoc",
   "dependencies": {
+    "classnames": "^2.2.3",
     "highlight.js": "^9.0.0",
     "history": "^1.17.0",
     "jsdoc-parse": "^1.2.5",
@@ -26,6 +27,7 @@
     "react-cookie": "^0.4.3",
     "react-dom": "^0.14.5",
     "react-es7-mixin": "^1.1.0",
+    "react-lazy-load": "^2.0.2",
     "react-router": "^1.0.3",
     "react-select": "^1.0.0-beta8",
     "underscore": "^1.8.3"

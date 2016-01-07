@@ -1,5 +1,6 @@
 .redoc.control.search {
   display: flex;
+  position: relative;
   border: 1px solid @black10;
   background-color: @white;
 }
@@ -10,14 +11,33 @@
 }
 
 .redoc.control.search input {
+  position: relative;
   flex: 1 1 auto;
-  padding: 5px 10px 5px 5px;
+  padding: 0 10px 0 30px;
+  height: 100%;
   border: none;
   background-color: transparent;
+  z-index: 1;
 }
 
+.redoc.control .icon {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 5px;
+  z-index: 0;
+  font-size: 1.2rem;
+}
 
+.redoc.control .icon.left {
+  left: 0;
+}
 
+.redoc.control .icon.right {
+  right: 5px;
+}
 
 .redoc.control.select {
   border: 1px solid @black10;
@@ -25,22 +45,10 @@
   position: relative;
 }
 
-.redoc.control.select:after {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  right: 5px;
-  content: "\f078";
-  font-family: "fontawesome";
-  z-index: 0;
-  // padding-right: 10px;
-}
-
 .redoc.control.select select {
   position: relative;
   padding: 0 30px 0 10px;
+  width: 100%;
   height: 100%;
   border: none;
   background-color: transparent;

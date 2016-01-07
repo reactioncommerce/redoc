@@ -1,5 +1,12 @@
 .redoc.search-results {
+  background-color: @black05;
+  padding: 40px 60px;
+  min-height: 100%;
+}
 
+.redoc.search-results > .title {
+  text-align: center;
+  margin: 20px;
 }
 
 .redoc.search-results > ul {
@@ -9,6 +16,20 @@
 
 .redoc.search-results > ul > li {
   margin-bottom: 30px;
+  border: 1px solid @black10;
+  border-radius: 7px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.1);
+  background-color: @black02;
+}
+
+.redoc.search-results > ul > li .header {
+  border-bottom: 1px solid @black10;
+  padding: 10px 20px;
+}
+
+.redoc.search-results > ul > li .content-html {
+  border-bottom: 1px solid @black10;
+  padding: 20px;
 }
 
 .redoc.search-results > ul > li > a {
