@@ -12,17 +12,9 @@ export default DocView = React.createClass({
     const tocSub = Meteor.subscribe("TOC");
 
     if (Meteor.isClient) {
-      const search = DocSearch.getData({
-        transform: (matchText, regExp) => {
-          return matchText.replace(regExp, "<span class='highlight'>$&</span>");
-        },
-        sort: {isoScore: -1}
-      });
-
       data = {
         tocIsLoaded: tocSub.ready(),
         docs: ReDoc.Collections.TOC.find().fetch(),
-        search: search,
         isMenuVisible: Session.get("isMenuVisible")
       };
     }
@@ -31,8 +23,7 @@ export default DocView = React.createClass({
       Meteor.subscribe("TOC");
       data = {
         tocIsLoaded: tocSub.ready(),
-        docs: ReDoc.Collections.TOC.find().fetch(),
-        search: []
+        docs: ReDoc.Collections.TOC.find().fetch()
       };
     }
 
