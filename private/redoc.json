@@ -103,12 +103,6 @@
     "repo": "reaction-docs",
     "docPath": "developer/pr.md"
   }, {
-    "class": "guide-sub-nav-item",
-    "alias": "deploying",
-    "label": "Deploying",
-    "repo": "reaction-docs",
-    "docPath": "developer/deploying.md"
-  }, {
     "class": "guide-nav-item",
     "alias": "architecture",
     "label": "Architecture",
@@ -116,22 +110,28 @@
     "docPath": "developer/architecture/overview.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "resources",
-    "label": "Resources",
+    "alias": "getting-started",
+    "label": "Getting Started",
     "repo": "reaction-docs",
-    "docPath": "developer/resources.md"
+    "docPath": "developer/getting-started.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "registry",
-    "label": "Registry",
+    "alias": "globalvars",
+    "label": "Globals",
     "repo": "reaction-docs",
-    "docPath": "developer/packages/registry.md"
+    "docPath": "developer/architecture/globals.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "permissions",
-    "label": "Permissions",
+    "alias": "simple-schema",
+    "label": "Schemas",
     "repo": "reaction-docs",
-    "docPath": "developer/architecture/permissions.md"
+    "docPath": "developer/architecture/schemas.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "collections",
+    "label": "Collections",
+    "repo": "reaction-docs",
+    "docPath": "developer/architecture/collections.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "routing",
@@ -146,16 +146,22 @@
     "docPath": "developer/architecture/logging.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "globalvars",
-    "label": "Globals",
-    "repo": "reaction-docs",
-    "docPath": "developer/architecture/globals.md"
-  }, {
-    "class": "guide-sub-nav-item",
     "alias": "i18n",
     "label": "i18n/l10n/RTL",
     "repo": "reaction-docs",
     "docPath": "developer/architecture/i18n.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "registry",
+    "label": "Registry",
+    "repo": "reaction-docs",
+    "docPath": "developer/packages/registry.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "permissions",
+    "label": "Permissions",
+    "repo": "reaction-docs",
+    "docPath": "developer/architecture/permissions.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "workflow",
@@ -176,70 +182,76 @@
     "docPath": "developer/architecture/seo.md"
   }, {
     "class": "guide-nav-item",
-    "alias": "collections",
-    "label": "Collections",
+    "alias": "themes",
+    "label": "Themes",
     "repo": "reaction-docs",
-    "docPath": "developer/collections/collections.md"
+    "docPath": "developer/themes/themes.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "schemas",
-    "label": "Schemas",
+    "alias": "templates",
+    "label": "Templates",
     "repo": "reaction-docs",
-    "docPath": "developer/collections/schema.md"
+    "docPath": "developer/themes/templates.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "template-helpers",
+    "label": "Helpers",
+    "repo": "reaction-docs",
+    "docPath": "developer/themes/helpers.md"
+  }, {
+    "class": "guide-nav-item",
+    "alias": "reaction-core",
+    "label": "Core",
+    "repo": "reaction-docs",
+    "docPath": "developer/core/core.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "collection-hooks",
-    "label": "Hooks",
+    "label": "Collection Hooks",
     "repo": "reaction-docs",
-    "docPath": "developer/collections/collection-hooks.md"
+    "docPath": "developer/core/collection-hooks.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "shipping",
     "label": "Shipping",
     "repo": "reaction-docs",
-    "docPath": "developer/collections/shipping.md"
+    "docPath": "developer/core/shipping.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "payments",
     "label": "Payments",
     "repo": "reaction-docs",
-    "docPath": "developer/collections/payments.md"
+    "docPath": "developer/core/payments.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "import",
     "label": "Import",
     "repo": "reaction-docs",
-    "docPath": "developer/collections/import.md"
+    "docPath": "developer/core/import.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "inventory",
     "label": "Inventory",
     "repo": "reaction-docs",
-    "docPath": "developer/collections/inventory.md"
+    "docPath": "developer/core/inventory.md"
   }, {
-    "class": "guide-nav-item",
+    "class": "guide-sub-nav-item",
     "alias": "methods",
     "label": "Methods",
     "repo": "reaction-docs",
-    "docPath": "developer/methods/methods.md"
+    "docPath": "developer/core/methods.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "method-hooks",
-    "label": "Hooks",
+    "label": "Method Hooks",
     "repo": "reaction-docs",
-    "docPath": "developer/methods/hooks.md"
+    "docPath": "developer/core/hooks.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "analytics",
     "label": "Analytics",
     "repo": "reaction-docs",
-    "docPath": "developer/methods/analytics.md"
-  }, {
-    "class": "guide-sub-nav-item",
-    "alias": "schema",
-    "label": "Schema",
-    "repo": "reaction-docs",
-    "docPath": "developer/schema.md"
+    "docPath": "developer/core/analytics.md"
   }, {
     "class": "guide-nav-item",
     "alias": "packages",
@@ -253,41 +265,71 @@
     "repo": "reaction-docs",
     "docPath": "developer/packages/registry.md"
   }, {
-    "class": "guide-sub-nav-item",
+    "class": "guide-sub-sub-nav-item",
     "alias": "including",
-    "label": "Distribute",
+    "label": "Cycle",
     "repo": "reaction-docs",
     "docPath": "developer/packages/including.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "publishing",
-    "label": "publishing",
+    "label": "Publishing",
     "repo": "reaction-docs",
     "docPath": "developer/testing/publishing.md"
   }, {
     "class": "guide-nav-item",
-    "alias": "testing",
+    "alias": "testing-reaction",
     "label": "Testing",
     "repo": "reaction-docs",
     "docPath": "developer/testing/testing.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "factories",
+    "alias": "using-factories-for-testing",
     "label": "Factories",
     "repo": "reaction-docs",
     "docPath": "developer/testing/factories.md"
   }, {
-    "class": "guide-nav-item",
-    "alias": "themes",
-    "label": "Themes",
+    "class": "guide-sub-nav-item",
+    "alias": "using-faker-for-testing",
+    "label": "Faker",
     "repo": "reaction-docs",
-    "docPath": "developer/themes/themes.md"
+    "docPath": "developer/testing/faker.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "templates",
-    "label": "Templates",
+    "alias": "using-ci",
+    "label": "CI",
     "repo": "reaction-docs",
-    "docPath": "developer/templates.md"
+    "docPath": "developer/testing/ci.md"
+  }, {
+    "class": "guide-nav-item",
+    "alias": "deploying",
+    "label": "Deploying",
+    "repo": "reaction-docs",
+    "docPath": "developer/deploying.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "deploying-on-launchdock",
+    "label": "Reaction Commerce",
+    "repo": "reaction-docs",
+    "docPath": "developer/deploying/launchdock.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "deploying-on-digitalocean",
+    "label": "Digital Ocean",
+    "repo": "reaction-docs",
+    "docPath": "developer/deploying/digitalocean.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "deploying-on-galaxy",
+    "label": "Galaxy",
+    "repo": "reaction-docs",
+    "docPath": "developer/deploying/galaxy.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "deploying-on-docker",
+    "label": "Docker",
+    "repo": "reaction-docs",
+    "docPath": "developer/deploying/docker.md"
   }, {
     "class": "guide-nav-item",
     "alias": "faqs",
