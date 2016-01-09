@@ -63,7 +63,7 @@
   }, {
     "class": "guide-sub-nav-item",
     "alias": "shipping",
-    "label": "Shipping",
+    "label": "Flat Rate Shipping",
     "repo": "reaction-docs",
     "docPath": "admin/shipping.md"
   }, {
@@ -72,6 +72,12 @@
     "label": "Developer",
     "repo": "reaction-docs",
     "docPath": "developer/index.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "getting-started",
+    "label": "Getting Started",
+    "repo": "reaction-docs",
+    "docPath": "developer/getting-started.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "requirements",
@@ -110,16 +116,10 @@
     "docPath": "developer/architecture/overview.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "getting-started",
-    "label": "Getting Started",
+    "alias": "exports",
+    "label": "Exports",
     "repo": "reaction-docs",
-    "docPath": "developer/getting-started.md"
-  }, {
-    "class": "guide-sub-nav-item",
-    "alias": "globalvars",
-    "label": "Globals",
-    "repo": "reaction-docs",
-    "docPath": "developer/architecture/globals.md"
+    "docPath": "developer/architecture/exports.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "simple-schema",
@@ -132,6 +132,12 @@
     "label": "Collections",
     "repo": "reaction-docs",
     "docPath": "developer/architecture/collections.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "image-handling",
+    "label": "Images",
+    "repo": "reaction-docs",
+    "docPath": "developer/architecture/images.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "routing",
@@ -147,7 +153,7 @@
   }, {
     "class": "guide-sub-nav-item",
     "alias": "i18n",
-    "label": "i18n/l10n/RTL",
+    "label": "i18n and RTL",
     "repo": "reaction-docs",
     "docPath": "developer/architecture/i18n.md"
   }, {
@@ -162,6 +168,12 @@
     "label": "Permissions",
     "repo": "reaction-docs",
     "docPath": "developer/architecture/permissions.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "layout",
+    "label": "layout",
+    "repo": "reaction-docs",
+    "docPath": "developer/architecture/layout.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "workflow",
@@ -206,40 +218,64 @@
     "docPath": "developer/core/core.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "collection-hooks",
-    "label": "Collection Hooks",
+    "alias": "analytics",
+    "label": "Analytics",
     "repo": "reaction-docs",
-    "docPath": "developer/core/collection-hooks.md"
+    "docPath": "developer/core/analytics.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "shipping",
+    "alias": "reaction-products",
+    "label": "Products",
+    "repo": "reaction-docs",
+    "docPath": "developer/core/products.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "reaction-tags",
+    "label": "Tags",
+    "repo": "reaction-docs",
+    "docPath": "developer/core/tags.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "reaction-cart",
+    "label": "Cart",
+    "repo": "reaction-docs",
+    "docPath": "developer/core/cart.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "reaction-shipping",
     "label": "Shipping",
     "repo": "reaction-docs",
     "docPath": "developer/core/shipping.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "payments",
+    "alias": "reaction-payments",
     "label": "Payments",
     "repo": "reaction-docs",
     "docPath": "developer/core/payments.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "import",
+    "alias": "reaction-orders",
+    "label": "Orders",
+    "repo": "reaction-docs",
+    "docPath": "developer/core/orders.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "reaction-import",
     "label": "Import",
     "repo": "reaction-docs",
     "docPath": "developer/core/import.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "inventory",
+    "alias": "reaction-inventory",
     "label": "Inventory",
     "repo": "reaction-docs",
     "docPath": "developer/core/inventory.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "methods",
-    "label": "Methods",
+    "alias": "reaction-localization",
+    "label": "Localization",
     "repo": "reaction-docs",
-    "docPath": "developer/core/methods.md"
+    "docPath": "developer/core/localization.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "method-hooks",
@@ -248,10 +284,10 @@
     "docPath": "developer/core/hooks.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "analytics",
-    "label": "Analytics",
+    "alias": "collection-hooks",
+    "label": "Collection Hooks",
     "repo": "reaction-docs",
-    "docPath": "developer/core/analytics.md"
+    "docPath": "developer/core/collection-hooks.md"
   }, {
     "class": "guide-nav-item",
     "alias": "packages",
@@ -284,6 +320,12 @@
     "docPath": "developer/testing/testing.md"
   }, {
     "class": "guide-sub-nav-item",
+    "alias": "using-velocity-for-testing",
+    "label": "Velocity",
+    "repo": "reaction-docs",
+    "docPath": "developer/testing/velocity.md"
+  }, {
+    "class": "guide-sub-nav-item",
     "alias": "using-factories-for-testing",
     "label": "Factories",
     "repo": "reaction-docs",
@@ -297,7 +339,7 @@
   }, {
     "class": "guide-sub-nav-item",
     "alias": "using-ci",
-    "label": "CI",
+    "label": "CI Builds",
     "repo": "reaction-docs",
     "docPath": "developer/testing/ci.md"
   }, {
@@ -309,24 +351,24 @@
   }, {
     "class": "guide-sub-nav-item",
     "alias": "deploying-on-launchdock",
-    "label": "Reaction Commerce",
+    "label": "Launchdock",
     "repo": "reaction-docs",
     "docPath": "developer/deploying/launchdock.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "deploying-on-digitalocean",
-    "label": "Digital Ocean",
+    "alias": "deploying-reaction-with-mup",
+    "label": "Mup",
     "repo": "reaction-docs",
-    "docPath": "developer/deploying/digitalocean.md"
+    "docPath": "developer/deploying/mup.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "deploying-on-galaxy",
+    "alias": "deploying-reaction-on-galaxy",
     "label": "Galaxy",
     "repo": "reaction-docs",
     "docPath": "developer/deploying/galaxy.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "deploying-on-docker",
+    "alias": "deploying-reaction-using-docker",
     "label": "Docker",
     "repo": "reaction-docs",
     "docPath": "developer/deploying/docker.md"
@@ -335,7 +377,7 @@
     "alias": "faqs",
     "label": "FAQs",
     "repo": "reaction-docs",
-    "docPath": "developer/faqs/faq.md"
+    "docPath": "faqs/faq.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "troubleshooting",
