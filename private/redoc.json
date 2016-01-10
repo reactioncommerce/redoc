@@ -68,14 +68,8 @@
     "docPath": "admin/shipping.md"
   }, {
     "class": "guide-nav-item",
-    "alias": "developer",
+    "alias": "getting-started-developing-with-reaction",
     "label": "Developer",
-    "repo": "reaction-docs",
-    "docPath": "developer/index.md"
-  }, {
-    "class": "guide-sub-nav-item",
-    "alias": "getting-started",
-    "label": "Getting Started",
     "repo": "reaction-docs",
     "docPath": "developer/getting-started.md"
   }, {
@@ -104,10 +98,10 @@
     "docPath": "developer/styleguide.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "pullrequests",
-    "label": "Pull Requests",
+    "alias": "contributing-to-reaction",
+    "label": "Contributing",
     "repo": "reaction-docs",
-    "docPath": "developer/pr.md"
+    "docPath": "developer/contributing.md"
   }, {
     "class": "guide-nav-item",
     "alias": "architecture",
@@ -120,6 +114,12 @@
     "label": "Exports",
     "repo": "reaction-docs",
     "docPath": "developer/architecture/exports.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "security",
+    "label": "Security",
+    "repo": "reaction-docs",
+    "docPath": "developer/architecture/security.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "simple-schema",
@@ -146,10 +146,10 @@
     "docPath": "developer/architecture/routing.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "logging",
-    "label": "Logging",
+    "alias": "seo-metadata",
+    "label": "Metadata",
     "repo": "reaction-docs",
-    "docPath": "developer/architecture/logging.md"
+    "docPath": "developer/architecture/metadata.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "i18n",
@@ -171,7 +171,7 @@
   }, {
     "class": "guide-sub-nav-item",
     "alias": "layout",
-    "label": "layout",
+    "label": "Layout",
     "repo": "reaction-docs",
     "docPath": "developer/architecture/layout.md"
   }, {
@@ -182,16 +182,10 @@
     "docPath": "developer/architecture/workflow.md"
   }, {
     "class": "guide-sub-nav-item",
-    "alias": "security",
-    "label": "Security",
+    "alias": "logging",
+    "label": "Logging",
     "repo": "reaction-docs",
-    "docPath": "developer/architecture/security.md"
-  }, {
-    "class": "guide-sub-nav-item",
-    "alias": "seo",
-    "label": "SEO",
-    "repo": "reaction-docs",
-    "docPath": "developer/architecture/seo.md"
+    "docPath": "developer/architecture/logging.md"
   }, {
     "class": "guide-nav-item",
     "alias": "themes",
@@ -218,10 +212,22 @@
     "docPath": "developer/core/core.md"
   }, {
     "class": "guide-sub-nav-item",
+    "alias": "reaction-user-accounts",
+    "label": "Accounts",
+    "repo": "reaction-docs",
+    "docPath": "developer/core/accounts.md"
+  }, {
+    "class": "guide-sub-nav-item",
     "alias": "analytics",
     "label": "Analytics",
     "repo": "reaction-docs",
     "docPath": "developer/core/analytics.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "reaction-shops",
+    "label": "Shops",
+    "repo": "reaction-docs",
+    "docPath": "developer/core/shops.md"
   }, {
     "class": "guide-sub-nav-item",
     "alias": "reaction-products",
@@ -301,6 +307,18 @@
     "repo": "reaction-docs",
     "docPath": "developer/packages/registry.md"
   }, {
+    "class": "guide-sub-nav-item",
+    "alias": "permissions",
+    "label": "Permissions",
+    "repo": "reaction-docs",
+    "docPath": "developer/architecture/permissions.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "layout",
+    "label": "Layout",
+    "repo": "reaction-docs",
+    "docPath": "developer/architecture/layout.md"
+  }, {
     "class": "guide-sub-sub-nav-item",
     "alias": "including",
     "label": "Cycle",
@@ -311,7 +329,7 @@
     "alias": "publishing",
     "label": "Publishing",
     "repo": "reaction-docs",
-    "docPath": "developer/testing/publishing.md"
+    "docPath": "developer/packages/publishing.md"
   }, {
     "class": "guide-nav-item",
     "alias": "testing-reaction",
