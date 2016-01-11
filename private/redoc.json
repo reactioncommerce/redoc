@@ -67,6 +67,12 @@
     "repo": "reaction-docs",
     "docPath": "admin/shipping.md"
   }, {
+    "class": "guide-sub-nav-item",
+    "alias": "faqs",
+    "label": "FAQs",
+    "repo": "reaction-docs",
+    "docPath": "admin/faq.md"
+  }, {
     "class": "guide-nav-item",
     "alias": "getting-started-developing-with-reaction",
     "label": "Developer",
@@ -390,23 +396,5 @@
     "label": "Docker",
     "repo": "reaction-docs",
     "docPath": "developer/deploying/docker.md"
-  }, {
-    "class": "guide-nav-item",
-    "alias": "faqs",
-    "label": "FAQs",
-    "repo": "reaction-docs",
-    "docPath": "faqs/faq.md"
-  }, {
-    "class": "guide-sub-nav-item",
-    "alias": "troubleshooting",
-    "label": "Troubleshooting",
-    "repo": "reaction-docs",
-    "docPath": "faqs/troubleshooting.md"
-  }, {
-    "class": "guide-sub-nav-item",
-    "alias": "license",
-    "label": "License",
-    "repo": "reaction",
-    "docPath": "LICENSE.md"
   }]
 }
