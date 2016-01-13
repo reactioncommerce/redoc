@@ -101,10 +101,6 @@ export default DocView = React.createClass({
     return (
       <div className="redoc docs">
         <ReactHelmet
-          link={[
-            {rel: "canonical", href: "http://docs.reactioncommerce.com"},
-            {rel: "icon", href: "/favicon.png", type: "type/png"}
-          ]}
           title={pageTitle}
         />
         <TableOfContents

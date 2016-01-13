@@ -48,6 +48,20 @@ export default BaseLayout = React.createClass({
   render() {
     return (
       <div className="redoc page">
+        <ReactHelmet
+          meta={[
+            {name: "viewport", content: "width=device-width"},
+            {property: "og:title", content: "Reaction Commerce | A completely open source JavaScript ecommerce solution"},
+            {property: "og:description", content: "Reaction Commerce is a modern, global, real time reactive, open source ecommerce platform for small and medium-sized businesses that is built with JavaScript, Node.js, MongoDB, Meteor, and Docker."},
+            {property: "og:url", content: "https://docs.reactioncommerce.com"},
+            {property: "og:image", content: "https://docs.reactioncommerce.com/images/facebook-reaction-profile.png"}
+          ]}
+          link={[
+            {rel: "canonical", href: "https://docs.reactioncommerce.com"},
+            {rel: "icon", href: "/favicon.png", type: "type/png"}
+          ]}
+          title={"Reaction Docs"}
+        />
         {/*this.renderTopNavigation()*/}
         <Header
           history={this.props.history}

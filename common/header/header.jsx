@@ -53,9 +53,9 @@ export default DocView = React.createClass({
           <button className="redoc menu-button" onClick={this.handleMenuToggle}>
             <i className="fa fa-bars"></i>
           </button>
-          <a className="title" href="/">
+          <a className="title" href="https://reactioncommerce.com">
             <img className="logo" src="/images/logo.png" />
-            {"Reaction Docs"}
+            {"Reaction"}
           </a>
         </div>
         <div className="navigation">
