@@ -33,9 +33,22 @@ export default BaseLayout = React.createClass({
     }
   },
 
+  renderTopNavigation() {
+    return (
+      <div className="navigation">
+        <a className="nav-link" href="https://reactioncommerce.com/features">{"Features"}</a>
+        <a className="nav-link" href="https://reactioncommerce.com/partners">{"Partners"}</a>
+        <a className="nav-link active" href="https://docs.reactioncommerce.com">{"Docs"}</a>
+        <a className="nav-link" href="https://reactioncommerce.com/about">{"About"}</a>
+        <a className="nav-link" href="http://blog.reactioncommerce.com">{"Blog"}</a>
+      </div>
+    );
+  },
+
   render() {
     return (
       <div className="redoc page">
+        {/*this.renderTopNavigation()*/}
         <Header
           history={this.props.history}
           params={this.props.params}

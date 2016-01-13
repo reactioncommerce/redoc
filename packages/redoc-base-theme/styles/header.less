@@ -36,8 +36,59 @@
   background: transparent;
 }
 
-.redoc.header .navigation {
+.redoc.page > .navigation {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   flex: 1 1 auto;
+  padding-right: 20px;
+  max-height: 30px;
+
+  @media screen and (max-width: @screen-xs-max) {
+    padding: 0;
+    justify-content: center;
+  }
+  background-color: @black70;
+}
+
+.redoc.page > .navigation .nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  height: 100%;
+  color: @white
+}
+
+.redoc.page > .navigation .nav-link.active {
+  color: @reaction-primary-color-lighter;
+  font-weight: 600;
+}
+
+.redoc.header .navigation {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 1 1 auto;
+  padding-right: 20px;
+  height: 100%;
+
+  @media screen and (max-width: @screen-xs-max) {
+    padding: 0;
+    height: 44px;
+    justify-content: center;
+  }
+}
+
+.redoc.header .navigation .nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  height: 100%;
+  font-weight: 600;
+}
+
+.redoc.header .navigation .nav-link.active {
+  color: @reaction-primary-color;
 }
 
 .redoc.header .filters {
@@ -52,7 +103,7 @@
   margin-left: 10px;
 }
 
-@media screen and (max-width: @screen-sm-max) {
+@media screen and (max-width: @screen-xs-max) {
   .redoc.header {
     display: block;
     height: auto;

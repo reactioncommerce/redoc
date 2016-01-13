@@ -36,6 +36,16 @@ export default DocView = React.createClass({
     }
   },
 
+  renderMainNavigationLinks() {
+    return [
+      <a className="nav-link" href="https://reactioncommerce.com/features">{"Features"}</a>,
+      <a className="nav-link" href="https://reactioncommerce.com/partners">{"Partners"}</a>,
+      <a className="nav-link active" href="https://docs.reactioncommerce.com">{"Docs"}</a>,
+      <a className="nav-link" href="https://reactioncommerce.com/about">{"About"}</a>,
+      <a className="nav-link" href="http://blog.reactioncommerce.com">{"Blog"}</a>
+    ];
+  },
+
   render() {
     return (
       <div className="redoc header">
@@ -48,7 +58,9 @@ export default DocView = React.createClass({
             {"Reaction Docs"}
           </a>
         </div>
-        <div className="navigation"></div>
+        <div className="navigation">
+          {this.renderMainNavigationLinks()}
+        </div>
         <div className="filters">
           <div className="item">
             <BranchSelect
