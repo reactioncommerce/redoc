@@ -22,7 +22,7 @@
   background-color: @black02;// fadeout(@docs-navigation-background-color, 30%);
 }
 
-@media screen and (max-width: @screen-sm-max) {
+@media screen and (max-width: @screen-xs-max) {
   .redoc.docs .navigation {
     display: none;
     position: fixed;
@@ -42,9 +42,10 @@
 }
 
 .redoc.docs .menu {
-  padding: 20px;
+  padding: 20px 20px 80px;
   flex: 1 1 auto;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .redoc.docs .menu ul {
@@ -85,6 +86,31 @@
   }
 }
 
+.redoc.docs .menu .reaction-nav-item {
+  display: none;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: @black;
+  &:hover {
+    color: @black;
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    display: block;
+  }
+}
+
+.redoc.docs .menu .reaction-nav-item.primary {
+  border-bottom: 1px solid @black10;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+.redoc.docs .menu .reaction-nav-item.primary img {
+  width: 32px;
+}
+
+
 .redoc.docs .menu .guide-nav-item:first-child {
   margin-top: 0;
 }
@@ -106,6 +132,7 @@
 // -----------------------------------------------------
 .redoc.docs .content {
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background-color: white;
 
   .flex(1 1 auto);
@@ -156,4 +183,8 @@
 .redoc.docs .content-html {
   padding: 40px 60px;
   padding-bottom: 60px;
+
+  @media screen and (max-width: @screen-xs-max) {
+    padding: 20px 20px 80px;
+  }
 }
