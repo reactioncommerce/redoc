@@ -1,18 +1,30 @@
+# Make sure the NGINX proxy is running first
+
+# Without SSL
+#
+# docker run -d -p 80:80 \
+#   --name nginx-proxy-ssl \
+#   -v /var/run/docker.sock:/tmp/docker.sock:ro \
+#   jwilder/nginx-proxy:latest
+
+# With SSL (using our private SSL enabled NGINX image)
+#
+# docker run -d -p 80:80 -p 443:443 \
+#   --name nginx-proxy-ssl \
+#   -v /var/run/docker.sock:/tmp/docker.sock:ro \
+#   ongoworks/nginx-proxy-ssl:latest
+
+
 mongo:
   image: mongo:latest
+  restart: always
   command: mongod --storageEngine=wiredTiger
-nginx:
-  image: ongoworks/nginx-proxy-ssl
-  volumes:
-    - "/var/run/docker.sock:/tmp/docker.sock:ro"
-  ports:
-    - "80:80"
-    - "443:443"
+
 redoc:
   image: reactioncommerce/redoc:latest
   links:
     - mongo
-    - nginx
+  restart: always
   environment:
     ROOT_URL: "https://docs.reactioncommerce.com"
     MONGO_URL: "mongodb://mongo:27017/redoc"
