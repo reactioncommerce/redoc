@@ -27,7 +27,6 @@ md = require("markdown-it")({
   }
 }).use(require("markdown-it-replace-link"));
 
-
 //
 // Meteor Methods
 //
@@ -38,7 +37,23 @@ Meteor.methods({
    *  @returns {undefined} returns
    */
   "redoc/initRepoData": function () {
-    let initRepoData = EJSON.parse(Assets.getText(Meteor.settings.redoc.initRepoData || "redoc.json"));
+    let initRepoData;
+    // ensure we can start if we don't have settings
+    if (!Meteor.settings.redoc || !Meteor.settings.redoc.initRepoData) {
+      Meteor.settings.redoc.initRepoData = "redoc.json";
+    }
+
+    // allow fetching remote initial repo data.
+    if (Meteor.settings.redoc.initRepoData.includes("http")) {
+      console.log("HTTP GET initRepoData: ", Meteor.settings.redoc.initRepoData);
+      // todo, callback validate, and catch this puppy
+      initRepoData = EJSON.parse(HTTP.get(Meteor.settings.redoc.initRepoData).content);
+    }
+    // default to local project configuration (the reaction example docs)
+    if (!initRepoData) {
+      initRepoData = EJSON.parse(Assets.getText(Meteor.settings.redoc.initRepoData || "redoc.json"));
+    }
+
     //
     // populate REPOS from settings
     //
@@ -157,7 +172,7 @@ Meteor.methods({
    */
   "redoc/getDocSet": function (repo, fetchBranch) {
     check(repo, String);
-    check(fetchBranch,  Match.Optional(String, null));
+    check(fetchBranch, Match.Optional(String, null));
     const branch = fetchBranch || "development";
     // get repo details
     const docRepo = ReDoc.Collections.Repos.findOne({

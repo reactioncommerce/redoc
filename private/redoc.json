@@ -408,5 +408,11 @@
     "label": "Docker",
     "repo": "reaction-docs",
     "docPath": "developer/deploying/docker.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "alias": "deploying-reaction-using-heroku",
+    "label": "Heroku",
+    "repo": "reaction-docs",
+    "docPath": "developer/deploying/heroku.md"
   }]
 }
