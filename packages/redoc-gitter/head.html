@@ -1,0 +1,11 @@
+<head>
+<script>
+  if (Meteor.settings.public.gitter && Meteor.settings.public.gitter.room) {
+    var room = Meteor.settings.public.gitter.room || "reactioncommerce/reaction";
+    ((window.gitter = {}).chat = {}).options = {
+      room: room
+    };
+  }
+</script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+</head>

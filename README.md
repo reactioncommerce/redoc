@@ -22,6 +22,9 @@ Example`settings.json`
   "public": {
     "ga": {
       "account": ""
+    },
+    "gitter": {
+      "room": "reactioncommerce/redoc"
     }
   },
   "services": [{
@@ -88,3 +91,10 @@ ROOT_URL="http://localhost/docs" meteor --settings settings.json
 
 ## Theme
 To customize the theme, copy the `packages/reaction-doc-theme` to a new package folder, and update the packages.js with your new theme package name.
+
+## Gitter
+Use `Meteor.settings.public.gitter.room` to configure the [Gitter Sidecar](https://sidecar.gitter.im/) room. To remove Gitter:
+
+```
+meteor remove reactioncommerce:redoc-gitter
+```
