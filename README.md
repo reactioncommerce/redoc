@@ -1,7 +1,7 @@
 # redoc
 **redoc** is a [Meteor](https://meteor.com) application that can be used to present styled markdown from multiple Github repositories.
 
-**redoc** fetches content from Github and renders and caches markdown as HTML so that it can be managed with a Table of Contents and stylized with theme packages.
+**redoc** fetches content from GitHub and [renders markdown](https://github.com/markdown-it/markdown-it), caching the HTML to be managed with a Table of Contents and stylized with theme packages.
 
 ```
 git clone https://github.com/reactioncommerce/redoc.git
