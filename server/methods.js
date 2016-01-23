@@ -18,15 +18,30 @@ md = require("markdown-it")({
     const isImage = link.search(/([a-z\-_0-9\/\:\.]*\.(jpg|jpeg|png|gif))/i) > -1;
     const hasProtocol = link.search(/^http[s]?\:\/\//) > -1;
     let newLink = link;
-
     if (isImage && !hasProtocol) {
       newLink = `${env.rawUrl}/${env.branch}/${link}`;
     }
-
+    // general link replacement for relative repo links
+    if (!isImage && !hasProtocol) {
+      switch (link.charAt(0)) {
+      case "#":
+        newLink = `/${env.repo}/${env.branch}/${env.alias}${link}`;
+        break;
+      case "/":
+        tocItem = ReDoc.Collections.TOC.findOne({
+          docPath: link.substring(1)
+        });
+        if (tocItem) {
+          newLink = `/${tocItem.repo}/${env.branch}/${tocItem.alias}`;
+        }
+        break;
+      default:
+        newlink = link;
+      }
+    }
     return newLink;
   }
 }).use(require("markdown-it-replace-link"));
-
 
 //
 // Meteor Methods
@@ -38,7 +53,23 @@ Meteor.methods({
    *  @returns {undefined} returns
    */
   "redoc/initRepoData": function () {
-    let initRepoData = EJSON.parse(Assets.getText(Meteor.settings.redoc.initRepoData || "redoc.json"));
+    let initRepoData;
+    // ensure we can start if we don't have settings
+    if (!Meteor.settings.redoc || !Meteor.settings.redoc.initRepoData) {
+      Meteor.settings.redoc.initRepoData = "redoc.json";
+    }
+
+    // allow fetching remote initial repo data.
+    if (Meteor.settings.redoc.initRepoData.includes("http")) {
+      console.log("HTTP GET initRepoData: ", Meteor.settings.redoc.initRepoData);
+      // todo, callback validate, and catch this puppy
+      initRepoData = EJSON.parse(HTTP.get(Meteor.settings.redoc.initRepoData).content);
+    }
+    // default to local project configuration (the reaction example docs)
+    if (!initRepoData) {
+      initRepoData = EJSON.parse(Assets.getText(Meteor.settings.redoc.initRepoData || "redoc.json"));
+    }
+
     //
     // populate REPOS from settings
     //
@@ -157,7 +188,7 @@ Meteor.methods({
    */
   "redoc/getDocSet": function (repo, fetchBranch) {
     check(repo, String);
-    check(fetchBranch,  Match.Optional(String, null));
+    check(fetchBranch, Match.Optional(String, null));
     const branch = fetchBranch || "development";
     // get repo details
     const docRepo = ReDoc.Collections.Repos.findOne({
@@ -199,7 +230,9 @@ Meteor.methods({
           docSet.docPageContent = result.content;
           docSet.docPageContentHTML = md.render(result.content, {
             rawUrl: docRepo.rawUrl,
-            branch: branch
+            branch: branch,
+            alias: tocItem.alias,
+            repo: repo
           });
 
           // insert new documentation into Cache

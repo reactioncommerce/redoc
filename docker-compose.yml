@@ -1,19 +1,18 @@
-# Make sure the NGINX proxy is running first
-
+# Make sure a NGINX proxy is running first
 # Without SSL
 #
 # docker run -d -p 80:80 \
-#   --name nginx-proxy \
+#   --name nginx-proxy-ssl \
 #   -v /var/run/docker.sock:/tmp/docker.sock:ro \
 #   jwilder/nginx-proxy:latest
 
-# With SSL (using our private SSL enabled NGINX image)
+# With SSL (using a private SSL enabled NGINX image)
 #
 # docker run -d -p 80:80 -p 443:443 \
 #   --name nginx-proxy-ssl \
 #   -v /var/run/docker.sock:/tmp/docker.sock:ro \
-#   ongoworks/nginx-proxy-ssl:latest
-
+#   <yourprivate>/nginx-proxy-ssl:latest
+#
 
 mongo:
   image: mongo:latest
@@ -22,6 +21,8 @@ mongo:
 
 redoc:
   image: reactioncommerce/redoc:latest
+  ports:
+    - 80:80
   links:
     - mongo
   restart: always
