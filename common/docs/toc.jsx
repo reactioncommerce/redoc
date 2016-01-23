@@ -40,7 +40,7 @@ export default DocView = React.createClass({
 
   renderMenu() {
     const items = this.data.docs.map((item) => {
-      const branch = this.props.params.branch || "development";
+      const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const url = `/${item.repo}/${branch}/${item.alias}`;
 
       return (

@@ -54,21 +54,27 @@ Meteor.methods({
    */
   "redoc/initRepoData": function () {
     let initRepoData;
-    // ensure we can start if we don't have settings
+    // if we don't have settings we'll load the redoc defaults
     if (!Meteor.settings.redoc || !Meteor.settings.redoc.initRepoData) {
-      Meteor.settings.redoc.initRepoData = "redoc.json";
+      initRepoData = EJSON.parse(Assets.getText("private/redoc.json"));
     }
 
-    // allow fetching remote initial repo data.
-    if (Meteor.settings.redoc.initRepoData.includes("http")) {
+    // you can pass in a remote url for the initRepoData object file
+    if (Meteor.settings.redoc.initRepoData.includes("http") && !Meteor.settings.redoc.initRepoData.includes("tocData")) {
       console.log("HTTP GET initRepoData: ", Meteor.settings.redoc.initRepoData);
       // todo, callback validate, and catch this puppy
       initRepoData = EJSON.parse(HTTP.get(Meteor.settings.redoc.initRepoData).content);
     }
-    // default to local project configuration (the reaction example docs)
+
+    // you can pass in the entire initRepoData object in settings.json
     if (!initRepoData) {
-      initRepoData = EJSON.parse(Assets.getText(Meteor.settings.redoc.initRepoData || "redoc.json"));
+      if (!Meteor.settings.redoc.initRepoData.tocData && Meteor.settings.redoc.initRepoData.repos) {
+        initRepoData = Meteor.settings.redoc.initRepoData;
+      } else {
+        throw new Meteor.Error("Meteor.settings.redoc.initRepoData should be an object or http url in settings.json");
+      }
     }
+
 
     //
     // populate REPOS from settings

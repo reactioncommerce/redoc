@@ -39,6 +39,7 @@ meteorhacks:search-source
 fortawesome:fontawesome
 
 # ReDoc packages
+reactioncommerce:redoc-core
 reactioncommerce:redoc-base-theme
 reactioncommerce:redoc-default-theme
 reactioncommerce:redoc-gitter

@@ -46,7 +46,7 @@ export default DocView = React.createClass({
 
   renderMenu() {
     const items = this.data.docs.map((item) => {
-      const branch = this.props.params.branch || "development";
+      const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const url = `/${item.repo}/${branch}/${item.alias}`;
 
       return (
@@ -84,7 +84,7 @@ export default DocView = React.createClass({
 
     return (
       <div className="content-html">
-        <h2>Doc Not Found</h2>
+        <h2>Requested document not found for this version.</h2>
       </div>
     );
   },

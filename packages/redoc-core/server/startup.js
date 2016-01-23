@@ -6,7 +6,8 @@
 SyncedCron.add({
   name: "Update Github Stargazers",
   schedule: function (parser) {
-    return parser.text("every 1 days");
+    let schedule = Meteor.settings.redoc.schedule || "every 1 days";
+    return parser.text(schedule);
   },
   job: function () {
     return Meteor.call("redoc/getRepoData");
@@ -16,7 +17,8 @@ SyncedCron.add({
 SyncedCron.add({
   name: "Update Docs Every 3 Days",
   schedule: function (parser) {
-    return parser.text("every 1 days");
+    let schedule = Meteor.settings.redoc.schedule || "every 4 hours";
+    return parser.text(schedule);
   },
   job: function () {
     ReDoc.Collections.Docs.remove({});
