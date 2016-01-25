@@ -61,7 +61,7 @@ Meteor.methods({
 
     // you can pass in a remote url for the initRepoData object file
     if (Meteor.settings.redoc.initRepoData.includes("http") && !Meteor.settings.redoc.initRepoData.includes("tocData")) {
-      console.log("HTTP GET initRepoData: ", Meteor.settings.redoc.initRepoData);
+      console.log("remote initRepoData: ", Meteor.settings.redoc.initRepoData);
       // todo, callback validate, and catch this puppy
       initRepoData = EJSON.parse(HTTP.get(Meteor.settings.redoc.initRepoData).content);
     }

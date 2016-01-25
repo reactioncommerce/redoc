@@ -9,13 +9,11 @@ export default DocView = React.createClass({
 
   getMeteorData() {
     const sub = Meteor.subscribe("CacheDocs", this.props.params);
-
     if (Meteor.isClient) {
       const search = DocSearch.getData({
         transform: (matchText, regExp) => {
           return matchText.replace(regExp, "<span class='highlight'>$&</span>");
-        },
-        sort: {isoScore: -1}
+        }
       });
 
       return {
@@ -35,8 +33,9 @@ export default DocView = React.createClass({
   },
 
   handleDocNavigation(href) {
-    this.props.history.pushState(null, href);
-
+    // strip tld to prevent pushState warning
+    let path = "/" + href.replace(/^(?:\/\/|[^\/]+)*\//, "");
+    this.props.history.pushState(null, path );
     // Close the TOC nav on mobile
     if (Meteor.isClient) {
       Session.set("isMenuVisible", false);
