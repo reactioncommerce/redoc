@@ -28,10 +28,9 @@ Meteor.publish("CacheDocs", function (params) {
       default: true
     });
     params.repo = defaultDoc.repo;
-    params.branch = "development";
+    params.branch = Meteor.settings.public.redoc.branch || "master";
     params.alias = defaultDoc.alias;
   }
-
   // get repo details
   let docRepo = ReDoc.Collections.Repos.findOne({
     repo: params.repo
@@ -65,6 +64,7 @@ Meteor.publish("CacheDocs", function (params) {
   // return cache doc
   return ReDoc.Collections.Docs.find({
     repo: params.repo,
-    branch: params.branch
+    branch: params.branch,
+    alias: params.alias
   });
 });

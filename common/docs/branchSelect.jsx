@@ -15,8 +15,8 @@ export default BranchSelect = React.createClass({
           ref="select"
           value={this.props.currentBranch}
         >
-          <option value="development">development</option>
-          <option value="master">master</option>
+          <option value="master">Current Release</option>
+          <option value="development">Development</option>
         </select>
         <div className="icon right">
           <i className="fa fa-angle-down"></i>

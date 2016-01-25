@@ -18,7 +18,7 @@ export default DocView = React.createClass({
 
   handleBranchSelect(selectedBranch) {
     if (this.props.history) {
-      const branch = selectedBranch || this.props.params.branch || "development";
+      const branch = selectedBranch || this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const params = this.props.params;
       const url = `/${params.repo}/${branch}/${params.alias}`;
 

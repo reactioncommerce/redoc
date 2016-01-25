@@ -9,13 +9,11 @@ export default DocView = React.createClass({
 
   getMeteorData() {
     const sub = Meteor.subscribe("CacheDocs", this.props.params);
-
     if (Meteor.isClient) {
       const search = DocSearch.getData({
         transform: (matchText, regExp) => {
           return matchText.replace(regExp, "<span class='highlight'>$&</span>");
-        },
-        sort: {isoScore: -1}
+        }
       });
 
       return {
@@ -35,8 +33,9 @@ export default DocView = React.createClass({
   },
 
   handleDocNavigation(href) {
-    this.props.history.pushState(null, href);
-
+    // strip tld to prevent pushState warning
+    let path = "/" + href.replace(/^(?:\/\/|[^\/]+)*\//, "");
+    this.props.history.pushState(null, path );
     // Close the TOC nav on mobile
     if (Meteor.isClient) {
       Session.set("isMenuVisible", false);
@@ -46,7 +45,7 @@ export default DocView = React.createClass({
 
   renderMenu() {
     const items = this.data.docs.map((item) => {
-      const branch = this.props.params.branch || "development";
+      const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const url = `/${item.repo}/${branch}/${item.alias}`;
 
       return (
@@ -84,7 +83,7 @@ export default DocView = React.createClass({
 
     return (
       <div className="content-html">
-        <h2>Doc Not Found</h2>
+        <h2>Requested document not found for this version.</h2>
       </div>
     );
   },

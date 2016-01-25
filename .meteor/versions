@@ -82,6 +82,7 @@ react-runtime@0.14.4
 react-runtime-dev@0.14.4
 react-runtime-prod@0.14.4
 reactioncommerce:redoc-base-theme@1.0.0
+reactioncommerce:redoc-core@0.0.1
 reactioncommerce:redoc-default-theme@1.0.0
 reactioncommerce:redoc-gitter@0.0.1
 reactive-dict@1.1.4-modules.4

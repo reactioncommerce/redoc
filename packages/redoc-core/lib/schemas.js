@@ -50,7 +50,7 @@ ReDoc.Collections.Repos.attachSchema(ReDoc.Schemas.Repos);
 ReDoc.Schemas.TOC = new SimpleSchema({
   class: {
     type: String,
-      max: 60
+    max: 60
   },
   alias: {
     type: String

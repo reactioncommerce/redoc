@@ -8,7 +8,7 @@ export default SearchResults = React.createClass({
   renderResults() {
     if (_.isArray(this.props.results)) {
       const results = this.props.results.map((item) => {
-        const branch = this.props.branch || "development";
+        const branch = this.props.branch || Meteor.settings.public.redoc.branch || "master";
         const url = `/${item.repo}/${branch}/${item.alias}`;
         const html = {
           __html: item.docPageContentHTML
