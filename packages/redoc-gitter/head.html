@@ -1,7 +1,7 @@
 <head>
 <script>
   if (Meteor.settings.public.gitter && Meteor.settings.public.gitter.room) {
-    var room = Meteor.settings.public.gitter.room || "reactioncommerce/reaction";
+    var room = Meteor.settings.public.gitter.room;
     ((window.gitter = {}).chat = {}).options = {
       room: room
     };

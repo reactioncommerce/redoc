@@ -7,6 +7,28 @@
       "room": "reactioncommerce/redoc"
     },
     "redoc": {
+      "title": "Reaction Docs",
+      "meta": {
+        "title": "Reaction Commerce | A completely open source JavaScript ecommerce solution",
+        "description": "Reaction Commerce is a modern, global, real time reactive, open source ecommerce platform for small and medium-sized businesses that is built with JavaScript, Node.js, MongoDB, Meteor, and Docker.",
+        "url": "https://docs.reactioncommerce.com",
+        "image": "https://docs.reactioncommerce.com/images/facebook-reaction-profile.png",
+        "favicon": "/favicon.png"
+      },
+      "mainNavigationLinks": [
+        { "href": "https://reactioncommerce.com/features", "value": "Features" },
+        { "href": "https://reactioncommerce.com/partners", "value": "Partners" },
+        { "href": "https://docs.reactioncommerce.com", "value": "Docs" },
+        { "href": "https://reactioncommerce.com/about", "value": "About" },
+        { "href": "http://blog.reactioncommerce.com", "value": "Blog" }
+      ],
+      "logo": {
+        "image": "/images/logo.png",
+        "link": {
+          "href": "https://reactioncommerce.com",
+          "value": "Reaction"
+        }
+      },
       "branch": "master"
     }
   },

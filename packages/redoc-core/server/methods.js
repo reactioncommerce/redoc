@@ -60,7 +60,7 @@ Meteor.methods({
     }
 
     // you can pass in a remote url for the initRepoData object file
-    if (Meteor.settings.redoc.initRepoData.includes("http") && !Meteor.settings.redoc.initRepoData.includes("tocData")) {
+    if (_.isString(Meteor.settings.redoc.initRepoData) && Meteor.settings.redoc.initRepoData.includes("http")) {
       console.log("remote initRepoData: ", Meteor.settings.redoc.initRepoData);
       // todo, callback validate, and catch this puppy
       initRepoData = EJSON.parse(HTTP.get(Meteor.settings.redoc.initRepoData).content);
@@ -68,13 +68,12 @@ Meteor.methods({
 
     // you can pass in the entire initRepoData object in settings.json
     if (!initRepoData) {
-      if (!Meteor.settings.redoc.initRepoData.tocData && Meteor.settings.redoc.initRepoData.repos) {
+      if (Meteor.settings.redoc.initRepoData.repos) {
         initRepoData = Meteor.settings.redoc.initRepoData;
       } else {
         throw new Meteor.Error("Meteor.settings.redoc.initRepoData should be an object or http url in settings.json");
       }
     }
-
 
     //
     // populate REPOS from settings
@@ -84,13 +83,7 @@ Meteor.methods({
       let Repos = initRepoData.repos;
       // if no tocData has been defined, we'll show this projects docs
       if (!Repos) {
-        Repos = [{
-          class: "guide-nav-item",
-          repo: "redoc",
-          label: "Redoc",
-          apiUrl: "https://api.github.com/repos/reactioncommerce/redoc",
-          rawUrl: "https://raw.githubusercontent.com/reactioncommerce/redoc/"
-        }];
+        throw new Meteor.Error("No repos have been defined in Meteor.settings.redoc.initRepoData url or object neither in private/redoc.json");
       }
       // for each Repo insert new repoData
       Repos.forEach(function (repoItem) {
@@ -103,14 +96,7 @@ Meteor.methods({
       let tocData = initRepoData.tocData;
       // if no tocData has been defined, we'll show this projects docs
       if (!tocData) {
-        tocData = [{
-          class: "guide-nav-item",
-          alias: "intro",
-          label: "Introduction",
-          repo: "redoc",
-          docPath: "README.md",
-          default: true
-        }];
+        throw new Meteor.Error("No tocData have been defined in Meteor.settings.redoc.initRepoData url or object neither in private/redoc.json");
       }
       // insert TOC fixtures
       tocData.forEach(function (tocItem) {
