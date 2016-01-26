@@ -38,6 +38,15 @@ export default DocView = React.createClass({
     }
   },
 
+  renderMainNavigationLinks(active) {
+    let links = [];
+    for (link of Meteor.settings.public.redoc.mainNavigationLinks) {
+      let className = (link.href === active || link.value === active) ? "nav-link active" : "nav-link";
+      links.push(<li className="reaction-nav-item"><a className={className} href={link.href}>{link.value}</a></li>);
+    }
+    return links;
+  },
+
   renderMenu() {
     const items = this.data.docs.map((item) => {
       const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
@@ -65,15 +74,10 @@ export default DocView = React.createClass({
             <div className="menu">
               <ul>
                 <li className="reaction-nav-item primary">
-                  <img className="logo" src="/images/logo.png" />
-                  <a className="nav-link" href="https://reactioncommerce.com">{"Reaction"}</a>
+                  <img className="logo" src={Meteor.settings.public.redoc.logo.image} />
+                  <a className="nav-link" href={Meteor.settings.public.redoc.logo.link.href}>{Meteor.settings.public.redoc.logo.link.value}</a>
                 </li>
-                <li className="reaction-nav-item"><a className="nav-link" href="https://reactioncommerce.com/features">{"Features"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link" href="https://reactioncommerce.com/partners">{"Partners"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link active" href="https://docs.reactioncommerce.com">{"Docs"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link" href="https://reactioncommerce.com/about">{"About"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link" href="http://blog.reactioncommerce.com">{"Blog"}</a></li>
-
+                {this.renderMainNavigationLinks('Docs')}
                 {this.renderMenu()}
               </ul>
             </div>

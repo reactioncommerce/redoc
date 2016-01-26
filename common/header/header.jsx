@@ -36,14 +36,13 @@ export default DocView = React.createClass({
     }
   },
 
-  renderMainNavigationLinks() {
-    return [
-      <a className="nav-link" href="https://reactioncommerce.com/features">{"Features"}</a>,
-      <a className="nav-link" href="https://reactioncommerce.com/partners">{"Partners"}</a>,
-      <a className="nav-link active" href="https://docs.reactioncommerce.com">{"Docs"}</a>,
-      <a className="nav-link" href="https://reactioncommerce.com/about">{"About"}</a>,
-      <a className="nav-link" href="http://blog.reactioncommerce.com">{"Blog"}</a>
-    ];
+  renderMainNavigationLinks(active) {
+    let links = [];
+    for (link of Meteor.settings.public.redoc.mainNavigationLinks) {
+      let className = (link.href === active || link.value === active) ? "nav-link active" : "nav-link";
+      links.push(<a className={className} href={link.href}>{link.value}</a>);
+    }
+    return links;
   },
 
   render() {
@@ -53,13 +52,13 @@ export default DocView = React.createClass({
           <button className="redoc menu-button" onClick={this.handleMenuToggle}>
             <i className="fa fa-bars"></i>
           </button>
-          <a className="title" href="https://reactioncommerce.com">
-            <img className="logo" src="/images/logo.png" />
-            {"Reaction"}
+          <a className="title" href={Meteor.settings.public.redoc.logo.link.href}>
+            <img className="logo" src={Meteor.settings.public.redoc.logo.image} />
+            {Meteor.settings.public.redoc.logo.link.value}
           </a>
         </div>
         <div className="navigation">
-          {this.renderMainNavigationLinks()}
+          {this.renderMainNavigationLinks('Docs')}
         </div>
         <div className="filters">
           <div className="item">

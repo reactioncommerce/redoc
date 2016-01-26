@@ -95,7 +95,7 @@ export default DocView = React.createClass({
       label = this.data.currentDoc.label;
     }
 
-    const pageTitle = `Reaction Docs - ${label}`;
+    const pageTitle = `${Meteor.settings.public.redoc.title} - ${label}`;
 
     return (
       <div className="redoc docs">
