@@ -39,6 +39,15 @@ ReDoc.Schemas.Repos = new SimpleSchema({
     type: [Object],
     blackbox: true,
     optional: true
+  },
+  branches: {
+    type: [Object],
+    blackbox: true,
+    optional: true
+  },
+  defaultBranch: {
+    type: String,
+    optional: true
   }
 });
 

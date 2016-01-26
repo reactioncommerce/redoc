@@ -63,7 +63,8 @@ export default DocView = React.createClass({
         <div className="filters">
           <div className="item">
             <BranchSelect
-              currentBranch={this.props.params.branch}
+              repo={this.props.params.repo}
+              currentBranch={this.props.params.branch || Meteor.settings.public.redoc.branch || "master"}
               onBranchSelect={this.handleBranchSelect}
             />
           </div>
