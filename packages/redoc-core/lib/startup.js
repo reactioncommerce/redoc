@@ -37,8 +37,8 @@ Meteor.startup(function () {
   }
 
   // default GA settings
-  if (Meteor.settings.ga === undefined) {
-    Meteor.settings.ga = {
+  if (Meteor.settings.public.ga === undefined) {
+    Meteor.settings.public.ga = {
       account: ""
     };
   }

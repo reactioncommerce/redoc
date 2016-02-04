@@ -8,8 +8,8 @@ export default DocView = React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData() {
-    const sub = Meteor.subscribe("CacheDocs", this.props.params);
     if (Meteor.isClient) {
+      const sub = Meteor.subscribe("CacheDocs", this.props.params);
       const search = DocSearch.getData({
         transform: (matchText, regExp) => {
           return matchText.replace(regExp, "<span class='highlight'>$&</span>");
@@ -25,7 +25,6 @@ export default DocView = React.createClass({
 
     if (Meteor.isServer) {
       return {
-        docIsLoaded: sub.ready(),
         currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
         search: []
       };
@@ -69,23 +68,24 @@ export default DocView = React.createClass({
         );
       }
     }
+    if (this.data.docIsLoaded) {
+      // Render standard content
+      if (this.data.currentDoc && this.data.currentDoc.docPageContentHTML) {
+        let content = {
+          __html: this.data.currentDoc.docPageContentHTML
+        };
 
-    // Render standard content
-    if (this.data.currentDoc && this.data.currentDoc.docPageContentHTML) {
-      let content = {
-        __html: this.data.currentDoc.docPageContentHTML
-      };
+        return (
+          <div className="content-html" dangerouslySetInnerHTML={content}></div>
+        );
+      }
 
       return (
-        <div className="content-html" dangerouslySetInnerHTML={content}></div>
+        <div className="content-html">
+          <h2>Requested document not found for this version.</h2>
+        </div>
       );
     }
-
-    return (
-      <div className="content-html">
-        <h2>Requested document not found for this version.</h2>
-      </div>
-    );
   },
 
   render() {
