@@ -1,3 +1,5 @@
 .meteor/local
 *.build/*
 *.npm/*
+
+node_modules
