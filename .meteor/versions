@@ -48,12 +48,12 @@ less@2.5.2-modules.6
 livedata@1.0.15
 localstorage@1.0.6-modules.6
 logging@1.0.9-modules.6
-mdg:validation-error@0.2.0
+mdg:validation-error@0.4.0
 meteor@1.1.11-modules.6
 meteor-base@1.0.1
 meteor-env-dev@0.0.1-modules.6
 meteor-env-prod@0.0.1-modules.6
-meteorhacks:fast-render@2.9.0
+meteorhacks:fast-render@2.11.0
 meteorhacks:inject-data@1.4.1
 meteorhacks:picker@1.0.3
 meteorhacks:search-source@1.4.2
