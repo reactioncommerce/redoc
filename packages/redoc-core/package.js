@@ -21,6 +21,7 @@ Package.onUse(function (api) {
   api.addFiles("lib/collections.js");
   api.addFiles("lib/router.js");
   api.addFiles("lib/schemas.js");
+  api.addFiles("lib/startup.js");
   // server
   api.addFiles("server/methods.js", "server");
   api.addFiles("server/publications.js", "server");
