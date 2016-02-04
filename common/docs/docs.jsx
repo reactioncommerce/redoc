@@ -49,7 +49,7 @@ export default DocView = React.createClass({
       const url = `/${item.repo}/${branch}/${item.alias}`;
 
       return (
-        <li className={item.class}>
+        <li className={item.class} key={item._id}>
           <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
         </li>
       );
