@@ -1,6 +1,6 @@
 accounts-base@1.2.3-modules.6
-aldeed:collection2@2.8.0
-aldeed:collection2-core@1.0.0
+aldeed:collection2@2.9.0
+aldeed:collection2-core@1.1.0
 aldeed:schema-deny@1.0.1
 aldeed:schema-index@1.0.1
 aldeed:simple-schema@1.5.3
@@ -21,7 +21,7 @@ callback-hook@1.0.5-modules.6
 check@1.1.1-modules.6
 chuangbo:cookie@1.1.0
 coffeescript@1.0.12-modules.6
-cosmos:browserify@0.9.3
+cosmos:browserify@0.9.4
 ddp@1.2.2
 ddp-client@1.2.2-modules.6
 ddp-common@1.2.2
