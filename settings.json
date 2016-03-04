@@ -1,5 +1,8 @@
 {
   "public": {
+    "segment": {
+      "writeKey": ""
+    },
     "ga": {
       "account": ""
     },
