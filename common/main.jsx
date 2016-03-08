@@ -14,8 +14,21 @@ const AppRoutes = (
 ReactRouterSSR.Run(AppRoutes, {
   props: {
     onUpdate() {
-      // Notify the page has been changed to Google Analytics
-      ga("send", "pageview");
+      if (analytics) {
+        // Segment.com pageview
+        // TODO: figure out the best way to make this wait for the
+        // page title and location details to be ready
+        analytics.page({
+          path: window.location.pathname,
+          url: window.location.href,
+          title: Meteor.settings.public.redoc.title
+        });
+      }
+
+      if (ga) {
+        // Google Analytics pageview
+        ga("send", "pageview");
+      }
     }
   }
 }, {
@@ -23,18 +36,3 @@ ReactRouterSSR.Run(AppRoutes, {
     ReactCookie.plugToRequest(req, res);
   }
 });
-
-if (Meteor.isClient) {
-  if (Meteor.settings.public.ga.account !== undefined) {
-    // Load Google Analytics
-    /* eslint-disable */
-    (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,"script","//www.google-analytics.com/analytics.js","ga");
-    /* eslint-enable */
-
-    ga("create", Meteor.settings.public.ga.account, "auto");
-    ga("send", "pageview");
-  }
-}
