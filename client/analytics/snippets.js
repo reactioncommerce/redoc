@@ -3,7 +3,8 @@
 /**
  * Segment.com (Analytics.js)
  */
-const segmentKey = Meteor.settings.public.segment.writeKey;
+const segment = Meteor.settings.public.segment || {};
+const segmentKey = segment.writeKey;
 
 if (segmentKey) {
   // Create a queue, but don't obliterate an existing one!
