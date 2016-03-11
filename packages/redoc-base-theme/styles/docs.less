@@ -16,10 +16,12 @@
   display: flex;
   flex-direction: column;
   flex: 0 0 auto;
+  width: 300px;
   max-width: 300px;
   // height: 100vh;
   border-right: 1px solid @black10;
   background-color: @black02;// fadeout(@docs-navigation-background-color, 30%);
+  background-color: @white;
 }
 
 @media screen and (max-width: @screen-xs-max) {
@@ -131,6 +133,8 @@
 
 // -----------------------------------------------------
 .redoc.docs .content {
+  .display(flex);
+  .justify-content(center);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   background-color: white;
@@ -181,8 +185,9 @@
 }
 
 .redoc.docs .content-html {
-  padding: 40px 60px;
-  padding-bottom: 60px;
+  padding: 40px 40px 60px;
+  // padding-bottom: 60px;
+  max-width: 800px;
 
   @media screen and (max-width: @screen-xs-max) {
     padding: 20px 20px 80px;
