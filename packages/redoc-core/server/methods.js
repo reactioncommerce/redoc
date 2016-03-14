@@ -2,8 +2,8 @@
 
 import "highlight.js";
 import punycode from "punycode";
-import "markdown-it";
 import "underscore";
+import TOCParser from "../lib/plugins/toc";
 
 export let hljs = require("highlight.js");
 
@@ -14,6 +14,18 @@ md = require("markdown-it")({
   highlight: function (code) {
     return hljs.highlightAuto(code).value;
   },
+  documentTOC(toc, env) {
+    ReDoc.Collections.TOC.update({
+      repo: env.repo,
+      // branch: env.branch,
+      alias: env.alias
+    }, {
+      $set: {
+        documentTOC: toc
+      }
+    });
+  },
+
   replaceLink: (link, env) => {
     const isImage = link.search(/([a-z\-_0-9\/\:\.]*\.(jpg|jpeg|png|gif))/i) > -1;
     const hasProtocol = link.search(/^http[s]?\:\/\//) > -1;
@@ -41,7 +53,9 @@ md = require("markdown-it")({
     }
     return newLink;
   }
-}).use(require("markdown-it-replace-link"));
+})
+.use(require("markdown-it-replace-link"))
+.use(TOCParser);
 
 //
 // Meteor Methods
@@ -104,8 +118,11 @@ Meteor.methods({
         );
       }
       // insert TOC fixtures
-      tocData.forEach(function (tocItem) {
-        ReDoc.Collections.TOC.insert(tocItem);
+      tocData.forEach(function (tocItem, index) {
+        ReDoc.Collections.TOC.insert({
+          ...tocItem,
+          position: index
+        });
       });
     }
     // Run once will get all repo data for current repos
@@ -240,6 +257,7 @@ Meteor.methods({
             console.log(`redoc/getDocSet: Docset not found for ${docSet.docPath}.`);
             result.content = `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
           }
+
           docSet.docPageContent = result.content;
           docSet.docPageContentHTML = md.render(result.content, {
             rawUrl: docRepo.rawUrl,

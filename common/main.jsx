@@ -18,11 +18,13 @@ ReactRouterSSR.Run(AppRoutes, {
         // Segment.com pageview
         // TODO: figure out the best way to make this wait for the
         // page title and location details to be ready
-        analytics.page({
-          path: window.location.pathname,
-          url: window.location.href,
-          title: Meteor.settings.public.redoc.title
-        });
+        if (analytics.page) {
+          analytics.page({
+            path: window.location.pathname,
+            url: window.location.href,
+            title: Meteor.settings.public.redoc.title
+          });
+        }
       }
 
       if (ga) {

@@ -1,11 +1,35 @@
 
 import ReMarkdown from "./markdown.jsx";
+import ReactDom from "react-dom";
 import TableOfContents from "./toc.jsx";
 import SearchResults from "../search/searchResults.jsx";
 import "underscore";
 
 export default DocView = React.createClass({
+  propTypes: {
+    alias: React.PropTypes.string,
+    branch: React.PropTypes.string,
+    history: React.PropTypes.object,
+    repo: React.PropTypes.string,
+    params: React.PropTypes.any
+  },
+
   mixins: [ReactMeteorData],
+
+  shouldComponentUpdate(nextProps) {
+    const {branch, alias, repo} = this.props;
+    const {nBranch, nAlias, nRepo} = nextProps;
+
+    if (branch === nBranch && alias === nAlias && repo === nRepo) {
+      return false;
+    }
+
+    return true;
+  },
+
+  componentDidUpdate() {
+    this.scrollToElement();
+  },
 
   getMeteorData() {
     if (Meteor.isClient) {
@@ -32,29 +56,17 @@ export default DocView = React.createClass({
   },
 
   handleDocNavigation(href) {
-    // strip tld to prevent pushState warning
-    let path = "/" + href.replace(/^(?:\/\/|[^\/]+)*\//, "");
-    this.props.history.pushState(null, path );
-    // Close the TOC nav on mobile
-    if (Meteor.isClient) {
-      Session.set("isMenuVisible", false);
-      DocSearch.search("");
+    if (href) {
+      // strip tld to prevent pushState warning
+      let path = "/" + href.replace(/^(?:\/\/|[^\/]+)*\//, "");
+      this.props.history.pushState(null, path);
+
+      // Close the TOC nav on mobile
+      if (Meteor.isClient) {
+        Session.set("isMenuVisible", false);
+        DocSearch.search("");
+      }
     }
-  },
-
-  renderMenu() {
-    const items = this.data.docs.map((item) => {
-      const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
-      const url = `/${item.repo}/${branch}/${item.alias}`;
-
-      return (
-        <li className={item.class} key={item._id}>
-          <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
-        </li>
-      );
-    });
-
-    return items;
   },
 
   renderContent() {
@@ -82,15 +94,34 @@ export default DocView = React.createClass({
 
       return (
         <div className="content-html">
-          <h2>Requested document not found for this version.</h2>
+          <h2>{"Requested document not found for this version."}</h2>
         </div>
       );
     }
   },
 
+  scrollToElement() {
+    if (Meteor.isClient) {
+      if (window.location.hash) {
+        const hashParts = window.location.hash.split("#");
+
+        if (hashParts.length >= 2) {
+          const hash = hashParts[hashParts.length - 1];
+          const element = document.getElementById(hash);
+
+          if (element) {
+            const top = Math.floor(element.getBoundingClientRect().top);
+            const content = document.getElementById("main-content");
+
+            content.scrollTop = top;
+          }
+        }
+      }
+    }
+  },
+
   render() {
     let label = "";
-
     if (this.data.currentDoc) {
       label = this.data.currentDoc.label;
     }
@@ -107,7 +138,7 @@ export default DocView = React.createClass({
           params={this.props.params}
         />
 
-        <div className="content">
+        <div className="content" id="main-content">
           {this.renderContent()}
         </div>
       </div>

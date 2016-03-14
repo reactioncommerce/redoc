@@ -3,7 +3,11 @@
 // });
 
 Meteor.publish("TOC", function () {
-  return ReDoc.Collections.TOC.find();
+  return ReDoc.Collections.TOC.find({}, {
+    sort: {
+      position: 1
+    }
+  });
 });
 
 Meteor.publish("Repos", function () {

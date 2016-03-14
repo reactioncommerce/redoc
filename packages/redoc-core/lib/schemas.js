@@ -53,6 +53,18 @@ ReDoc.Schemas.Repos = new SimpleSchema({
 
 ReDoc.Collections.Repos.attachSchema(ReDoc.Schemas.Repos);
 
+ReDoc.Schemas.DocumentTOC = new SimpleSchema({
+  className: {
+    type: String
+  },
+  label: {
+    type: String
+  },
+  docPath: {
+    type: String
+  }
+});
+
 //
 // Table of Contents
 //
@@ -60,6 +72,10 @@ ReDoc.Schemas.TOC = new SimpleSchema({
   class: {
     type: String,
     max: 60
+  },
+  position: {
+    type: Number,
+    optional: true
   },
   alias: {
     type: String
@@ -72,6 +88,10 @@ ReDoc.Schemas.TOC = new SimpleSchema({
   },
   repo: {
     type: String
+  },
+  documentTOC: {
+    type: [ReDoc.Schemas.DocumentTOC],
+    optional: true
   },
   default: {
     type: Boolean,
@@ -122,6 +142,11 @@ ReDoc.Schemas.Docs = new SimpleSchema({
   },
   docPath: {
     type: String
+  },
+  docParsed: {
+    type: [Object],
+    blackbox: true,
+    optional: true
   },
   createdAt: {
     type: Date,

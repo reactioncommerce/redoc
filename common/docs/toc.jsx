@@ -14,7 +14,11 @@ export default DocView = React.createClass({
     if (Meteor.isClient) {
       data = {
         tocIsLoaded: tocSub.ready(),
-        docs: ReDoc.Collections.TOC.find().fetch(),
+        docs: ReDoc.Collections.TOC.find({}, {
+          sort: {
+            position: 1
+          }
+        }).fetch(),
         isMenuVisible: Session.get("isMenuVisible")
       };
     }
@@ -23,7 +27,11 @@ export default DocView = React.createClass({
       Meteor.subscribe("TOC");
       data = {
         tocIsLoaded: tocSub.ready(),
-        docs: ReDoc.Collections.TOC.find().fetch()
+        docs: ReDoc.Collections.TOC.find({
+          sort: {
+            position: 1
+          }
+        }).fetch()
       };
     }
 
@@ -34,7 +42,7 @@ export default DocView = React.createClass({
     event.preventDefault();
 
     if (this.props.onDocNavigation) {
-      this.props.onDocNavigation(event.target.href);
+      this.props.onDocNavigation(event.currentTarget.href);
     }
   },
 
@@ -52,9 +60,33 @@ export default DocView = React.createClass({
       const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const url = `/${item.repo}/${branch}/${item.alias}`;
 
+      let subList;
+
+      if (item.documentTOC) {
+        const subItems = item.documentTOC.map((subItem, index) => {
+          return (
+            <li className={subItem.className} key={index}>
+              <a href={subItem.docPath} >{subItem.label}</a>
+            </li>
+          );
+        });
+
+        const subItemClassName = classnames({
+          hidden: this.props.params.alias !== item.alias
+        });
+
+        subList = (
+          <ul className={subItemClassName}>
+            {subItems}
+          </ul>
+        );
+      }
+
       return (
         <li className={item.class} key={item._id}>
-          <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
+          <a href={url} onClick={this.handleDocNavigation}><strong>{item.label}</strong></a>
+
+          {subList}
         </li>
       );
     });
