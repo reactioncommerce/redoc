@@ -84,7 +84,7 @@ export default DocView = React.createClass({
 
       return (
         <li className={item.class} key={item._id}>
-          <a href={url} onClick={this.handleDocNavigation}><strong>{item.label}</strong></a>
+          <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
 
           {subList}
         </li>

@@ -34,7 +34,11 @@ function TOCParser(md) {
         // Look for open header tags
         if (blockToken.type === "heading_open") {
           const nextToken = state.tokens[index + 1];
-          const headingLevel = blockToken.tag.replace("h", "");
+          const headingLevel = parseInt(blockToken.tag.replace("h", ""), 10);
+
+          if (headingLevel <= 1 || headingLevel > 4) {
+            return;
+          }
 
           // This is the content of the heading
           if (nextToken.type === "inline" && nextToken.children) {
