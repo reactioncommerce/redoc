@@ -3,6 +3,7 @@ import Docs from "../common/docs/docs.jsx";
 import ReactCookie from "react-cookie";
 
 const {Route, IndexRoute} = ReactRouter;
+const analytics = analytics || null;
 
 const AppRoutes = (
   <Route component={Layout} path="/">
