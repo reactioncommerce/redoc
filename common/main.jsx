@@ -26,11 +26,6 @@ ReactRouterSSR.Run(AppRoutes, {
           });
         }
       }
-
-      if (ga) {
-        // Google Analytics pageview
-        ga("send", "pageview");
-      }
     }
   }
 }, {
