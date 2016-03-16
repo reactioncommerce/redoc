@@ -66,11 +66,11 @@ export default DocView = React.createClass({
 
       if (item.documentTOC) {
         const subItems = item.documentTOC.map((subItem, index) => {
-          const key = `${subItem.label}-${index}`;
+          const hashUrl = `${url}#${subItem.slug}`;
 
           return (
-            <li className={subItem.className} key={key}>
-              <a href={subItem.docPath} >{subItem.label}</a>
+            <li className={subItem.className} key={index}>
+              <a href={hashUrl} >{subItem.label}</a>
             </li>
           );
         });
@@ -87,7 +87,7 @@ export default DocView = React.createClass({
       }
 
       return (
-        <li className={item.class} key={item._id}>
+        <li className={item.class} key={`${branch}-${item._id}`}>
           <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
 
           {subList}

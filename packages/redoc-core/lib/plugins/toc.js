@@ -49,9 +49,8 @@ function TOCParser(md) {
                   content: node.content,
                   slug: slugify(node.content)
                 };
-                const { alias, repo, branch} = state.env;
+                const { alias, repo } = state.env;
                 const slug = slugify(node.content);
-                // console.log("Heading level", headingLevel, "for content", node.content);
 
                 if (_.isFunction(md.options.processTOCHeadings)) {
                   md.options.processTOCHeadings(data, state.env);
@@ -63,7 +62,7 @@ function TOCParser(md) {
                   documentTOC.push({
                     className: `guide-sub-subnav-item level-${headingLevel}`,
                     label: node.content || "--",
-                    docPath: `/${repo}/${branch}/${alias}#${slug}`
+                    slug
                   });
                 }
                 break;

@@ -60,7 +60,7 @@ ReDoc.Schemas.DocumentTOC = new SimpleSchema({
   label: {
     type: String
   },
-  docPath: {
+  slug: {
     type: String
   }
 });
