@@ -9,6 +9,7 @@ reaction:
   environment:
     ROOT_URL: "http://localhost"
     MONGO_URL: "mongodb://mongo:27017/reaction"
+    METEOR_SETTINGS: # defaults to value set in $METEOR_SETTINGS on CircleCI
 
 mongo:
   image: mongo:latest
