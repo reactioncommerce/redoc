@@ -22,47 +22,47 @@ Since we use this project to generate docs for [Reaction Commerce](https://react
 
 ```
 {
-    "public": {
-        "ga": {
-            "account": ""
-        },
-        "gitter": {
-            "room": "reactioncommerce/reaction"
-        },
-        "redoc": {
-            "branch": "master"
-        }
+  "public": {
+    "ga": {
+      "account": ""
     },
-    "services": [{
-        "github": {
-            "clientId": "",
-            "secret": ""
-        }
-    }],
+    "gitter": {
+      "room": "reactioncommerce/reaction"
+    },
     "redoc": {
-        "initRepoData": {
-            "repos": [{
-                "org": "reactioncommerce",
-                "repo": "reaction-docs",
-                "label": "Reaction",
-                "description": "Reaction Commerce Guide"
-            }],
-            "tocData": [{
-                "class": "guide-nav-item",
-                "alias": "intro",
-                "label": "Introduction",
-                "repo": "reaction-docs",
-                "docPath": "index.md",
-                "default": true
-            }, {
-                "class": "guide-sub-nav-item",
-                "alias": "dashboard",
-                "label": "Dashboard",
-                "repo": "reaction-docs",
-                "docPath": "admin/dashboard.md"
-            }]
-        }
+      "branch": "master"
     }
+  },
+  "services": [{
+    "github": {
+      "clientId": "",
+      "secret": ""
+    }
+  }],
+  "redoc": {
+    "initRepoData": {
+      "repos": [{
+        "org": "reactioncommerce",
+        "repo": "reaction-docs",
+        "label": "Reaction",
+        "description": "Reaction Commerce Guide"
+      }],
+      "tocData": [{
+        "class": "guide-nav-item",
+        "alias": "intro",
+        "label": "Introduction",
+        "repo": "reaction-docs",
+        "docPath": "index.md",
+        "default": true
+      }, {
+        "class": "guide-sub-nav-item",
+        "alias": "dashboard",
+        "label": "Dashboard",
+        "repo": "reaction-docs",
+        "docPath": "admin/dashboard.md"
+      }]
+    }
+  }
 }
 ```
 
@@ -71,10 +71,10 @@ The environment variable `METEOR_SETTINGS` can also be used.
 ### Remote configuration
 You can supply a url in `initRepoData` as well, and we'll fetch from the remote location.
 
-```
-  "redoc": {
-    "initRepoData": "https://raw.githubusercontent.com/reactioncommerce/redoc/master/private/redoc.json"
-  }
+```js
+"redoc": {
+  "initRepoData": "https://raw.githubusercontent.com/reactioncommerce/redoc/master/private/redoc.json"
+}
 ```
 
 ### Custom prefix
@@ -98,3 +98,68 @@ meteor remove reactioncommerce:redoc-gitter
 `Meteor.settings.redoc.schedule` is configurable in settings.json, and defaults to "every 4 hours".
 
 This configures a schedule for flushing the collections and fetching updates.
+
+## Deployment
+Although you can deploy Redoc with any of the [deployment methods supported by Meteor](http://guide.meteor.com/v1.3/deployment.html), the recommended method is to use [Docker](http://docker.com).  Redoc has several Dockerfiles to choose from that are intended for different use cases.
+
+All Dockerfiles and the associated build scripts are in the `docker/` directory. The default Dockerfile in the root of the project is an alias that points to `docker/redoc.prod.docker` (which is the recommended Dockerfile for production deployments). However, the production image builds from a base OS from scratch every time and will take a bit longer to build than the development image (found at `docker/redoc.dev.docker`). So when you're developing locally, you may prefer to have the faster build time that the development image gives you (by caching each build step layer). Just note that you don't ever want to use the development image for production because the image size is usually about 4x the size of the production image.
+
+### Build
+The Docker build step is optional and is only required if you have a customized version of Redoc. If you haven't customized the app, skip to the next section.
+
+To build your custom version of Redoc:
+
+```sh
+# production image
+docker build -t <your org>/redoc .
+
+# or a local development image for quicker debugging
+docker build -f docker/redoc.dev.docker -t <your org>/redoc .
+```
+
+Once you have built a production image, you can push it to your Docker Hub account:
+```sh
+docker push <your org>/redoc
+```
+
+### Run
+Running the official Redoc image
+(assuming you're using `settings.json` in the project root and an external MongoDB):
+
+```sh
+docker run -d \
+  -p 80:80 \
+  -e ROOT_URL='http://example.com' \
+  -e MONGO_URL='mongodb://url...' \
+  -e METEOR_SETTINGS='$(cat settings.json)' \
+  reactioncommerce/redoc:latest
+```
+
+We've also provided an example Docker Compose config (`docker-compose.yml`) that can be used as a starting point if you'd like to use the official MongoDB image from Docker Hub.
+
+```yaml
+redoc:
+  image: reactioncommerce/redoc:latest
+  ports:
+    - 80:80
+  links:
+    - mongo
+  restart: always
+  environment:
+    ROOT_URL: "http://example.com" # set to your domain name
+    MONGO_URL: "mongodb://mongo:27017/redoc" # this is fine as-is
+    METEOR_SETTINGS: # provide a JSON stringified version of your settings.json here
+
+mongo:
+  image: mongo:latest
+  restart: always
+  command: mongod --storageEngine=wiredTiger
+```
+
+Once you've added your `METEOR_SETTINGS`, you can then run start up the containers with:
+
+```sh
+docker-compose up -d
+```
+
+Once the containers have started, your app should be linked to the mongo container and serving content on port 80.
