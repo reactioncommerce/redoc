@@ -1,21 +1,3 @@
-# Make sure a NGINX proxy is running first
-
-# Without SSL
-#
-# docker run -d -p 80:80 \
-#   --name nginx-proxy \
-#   --restart always
-#   -v /var/run/docker.sock:/tmp/docker.sock:ro \
-#   jwilder/nginx-proxy:latest
-
-# With SSL (using a private SSL enabled NGINX image)
-#
-# docker run -d -p 80:80 -p 443:443 \
-#   --name nginx-proxy-ssl \
-#   --restart always
-#   -v /var/run/docker.sock:/tmp/docker.sock:ro \
-#   <yourprivate>/nginx-proxy-ssl:latest
-#
 
 redoc:
   image: reactioncommerce/redoc:latest
@@ -25,9 +7,8 @@ redoc:
     - mongo
   restart: always
   environment:
-    ROOT_URL: "https://docs.reactioncommerce.com"
+    ROOT_URL: "http://example.com"
     MONGO_URL: "mongodb://mongo:27017/redoc"
-    VIRTUAL_HOST: "docs.reactioncommerce.com"
 
 mongo:
   image: mongo:latest

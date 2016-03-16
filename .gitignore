@@ -2,6 +2,5 @@ node_modules
 .meteor/local
 .meteor/meteorite
 settings.json
-docker
 
 npm-debug.log

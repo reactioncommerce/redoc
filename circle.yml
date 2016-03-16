@@ -1,0 +1,27 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+    
+  override:
+    - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
+    - docker build -f docker/redoc.ci.docker -t reactioncommerce/redoc .
+    - mkdir -p ~/docker; docker save reactioncommerce/redoc > ~/docker/image.tar
+
+test:
+  override:
+    - docker-compose -f docker/docker-compose.test.yml up -d; sleep 10
+    - curl --retry 10 --retry-delay 5 -v http://localhost
+
+deployment:
+  release:
+    branch: master
+    commands:
+      - docker build -f docker/redoc.prod.docker -t reactioncommerce/redoc:latest .
+      - docker tag reactioncommerce/redoc:latest reactioncommerce/redoc:$CIRCLE_BUILD_NUM
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push reactioncommerce/redoc:$CIRCLE_BUILD_NUM
+      - docker push reactioncommerce/redoc:latest
