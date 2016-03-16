@@ -1,8 +1,12 @@
+import { render } from "react-dom";
+import React from "react";
+import {Route, IndexRoute} from "react-router";
 import Layout from "../common/layout.jsx";
 import Docs from "../common/docs/docs.jsx";
-import ReactCookie from "react-cookie";
+import { ReactRouterSSR } from "meteor/reactrouter:react-router-ssr";
+import { default as ReactCookie } from "react-cookie";
 
-const {Route, IndexRoute} = ReactRouter;
+const analytics = analytics || null;
 
 const AppRoutes = (
   <Route component={Layout} path="/">
@@ -18,16 +22,13 @@ ReactRouterSSR.Run(AppRoutes, {
         // Segment.com pageview
         // TODO: figure out the best way to make this wait for the
         // page title and location details to be ready
-        analytics.page({
-          path: window.location.pathname,
-          url: window.location.href,
-          title: Meteor.settings.public.redoc.title
-        });
-      }
-
-      if (ga) {
-        // Google Analytics pageview
-        ga("send", "pageview");
+        if (analytics.page) {
+          analytics.page({
+            path: window.location.pathname,
+            url: window.location.href,
+            title: Meteor.settings.public.redoc.title
+          });
+        }
       }
     }
   }

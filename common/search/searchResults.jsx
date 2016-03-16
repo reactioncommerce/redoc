@@ -1,4 +1,5 @@
-import "underscore";
+import React from "react";
+import _ from "underscore";
 
 export default SearchResults = React.createClass({
   handleSearchClear() {
@@ -7,7 +8,7 @@ export default SearchResults = React.createClass({
 
   renderResults() {
     if (_.isArray(this.props.results)) {
-      const results = this.props.results.map((item) => {
+      const results = this.props.results.map((item, index) => {
         const branch = this.props.branch || Meteor.settings.public.redoc.branch || "master";
         const url = `/${item.repo}/${branch}/${item.alias}`;
         const html = {
@@ -15,7 +16,7 @@ export default SearchResults = React.createClass({
         };
 
         return (
-          <li>
+          <li key={index}>
             <div className="header">
               <a href={url}><strong>{item.label}</strong></a>
             </div>
@@ -32,9 +33,6 @@ export default SearchResults = React.createClass({
     return (
       <div className="redoc search-results">
         <h2 className="title">{"Search Results"}</h2>
-        <button className="close" onClick={this.handleSearchClear}>
-          <i className="fa fa-times"></i>
-        </button>
         <ul>
           {this.renderResults()}
         </ul>

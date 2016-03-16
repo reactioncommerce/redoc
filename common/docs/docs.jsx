@@ -1,15 +1,45 @@
-
-import ReMarkdown from "./markdown.jsx";
+import React from "react"
+import ReactDom from "react-dom";
+import Helmet from "react-helmet";
 import TableOfContents from "./toc.jsx";
 import SearchResults from "../search/searchResults.jsx";
-import "underscore";
+import { browserHistory } from 'react-router'
+import _ from "underscore";
 
 export default DocView = React.createClass({
+  propTypes: {
+    alias: React.PropTypes.string,
+    branch: React.PropTypes.string,
+    history: React.PropTypes.object,
+    repo: React.PropTypes.string,
+    params: React.PropTypes.any
+  },
+
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
   mixins: [ReactMeteorData],
 
+  shouldComponentUpdate(nextProps) {
+    const {branch, alias, repo} = this.props;
+    const {nBranch, nAlias, nRepo} = nextProps;
+
+    if (branch === nBranch && alias === nAlias && repo === nRepo) {
+      return false;
+    }
+
+    return true;
+  },
+
+  componentDidUpdate() {
+    this.scrollToElement();
+  },
+
   getMeteorData() {
+    const sub = Meteor.subscribe("CacheDocs", this.props.params);
+
     if (Meteor.isClient) {
-      const sub = Meteor.subscribe("CacheDocs", this.props.params);
       const search = DocSearch.getData({
         transform: (matchText, regExp) => {
           return matchText.replace(regExp, "<span class='highlight'>$&</span>");
@@ -25,6 +55,7 @@ export default DocView = React.createClass({
 
     if (Meteor.isServer) {
       return {
+        docIsLoaded: true,
         currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
         search: []
       };
@@ -32,29 +63,17 @@ export default DocView = React.createClass({
   },
 
   handleDocNavigation(href) {
-    // strip tld to prevent pushState warning
-    let path = "/" + href.replace(/^(?:\/\/|[^\/]+)*\//, "");
-    this.props.history.pushState(null, path );
-    // Close the TOC nav on mobile
-    if (Meteor.isClient) {
-      Session.set("isMenuVisible", false);
-      DocSearch.search("");
+    if (href) {
+      // strip tld to prevent pushState warning
+      let path = "/" + href.replace(/^(?:\/\/|[^\/]+)*\//, "");
+      this.context.router.push(path);
+
+      // Close the TOC nav on mobile
+      if (Meteor.isClient) {
+        Session.set("isMenuVisible", false);
+        DocSearch.search("");
+      }
     }
-  },
-
-  renderMenu() {
-    const items = this.data.docs.map((item) => {
-      const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
-      const url = `/${item.repo}/${branch}/${item.alias}`;
-
-      return (
-        <li className={item.class} key={item._id}>
-          <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
-        </li>
-      );
-    });
-
-    return items;
   },
 
   renderContent() {
@@ -82,15 +101,34 @@ export default DocView = React.createClass({
 
       return (
         <div className="content-html">
-          <h2>Requested document not found for this version.</h2>
+          <h2>{"Requested document not found for this version."}</h2>
         </div>
       );
     }
   },
 
+  scrollToElement() {
+    if (Meteor.isClient) {
+      if (window.location.hash) {
+        const hashParts = window.location.hash.split("#");
+
+        if (hashParts.length >= 2) {
+          const hash = hashParts[hashParts.length - 1];
+          const element = document.getElementById(hash);
+
+          if (element) {
+            const top = Math.floor(element.getBoundingClientRect().top);
+            const content = document.getElementById("main-content");
+
+            content.scrollTop = top;
+          }
+        }
+      }
+    }
+  },
+
   render() {
     let label = "";
-
     if (this.data.currentDoc) {
       label = this.data.currentDoc.label;
     }
@@ -99,7 +137,7 @@ export default DocView = React.createClass({
 
     return (
       <div className="redoc docs">
-        <ReactHelmet
+        <Helmet
           title={pageTitle}
         />
         <TableOfContents
@@ -107,7 +145,7 @@ export default DocView = React.createClass({
           params={this.props.params}
         />
 
-        <div className="content">
+        <div className="content" id="main-content">
           {this.renderContent()}
         </div>
       </div>

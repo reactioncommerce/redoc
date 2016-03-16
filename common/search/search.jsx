@@ -1,53 +1,48 @@
+import React from "react";
 
-
-export default SearchField = React.createClass({
-  // mixins: [ReactMeteorData],
-
-  getIniitalState() {
-    return {
+class SearchField extends React.Component {
+  constructor(props) {
+    super(props);
+    this.displayName = "Search Field";
+    this.state = {
       showClearButton: false
     };
-  },
 
-  // getMeteorData() {
-  //   if (Meteor.isClient) {
-  //     return {
-  //       searchQuery: DocSearch.getCurrentQuery()
-  //     };
-  //   }
-  //
-  //   return {
-  //     searchQuery: ""
-  //   };
-  // },
+    this.handleChange = _.debounce(() => {
+      let value = this.refs.input.value;
+      DocSearch.search(value);
 
-  handleChange(event) {
-    let value = event.target.value;
-    DocSearch.search(value);
-
-    if (Meteor.isClient && this.state) {
-      if (value.length > 0 && this.state.showClearButton === false) {
-        this.setState({showClearButton: true});
+      if (Meteor.isClient && this.state) {
+        if (value.length > 0 && this.state.showClearButton === false) {
+          this.setState({showClearButton: true});
+        }
       }
-    }
-  },
+    }, 600);
 
-  clearSearchQuery() {
-    DocSearch.search("");
-    this.setState({showClearButton: false});
-  },
+    this.clearSearchQuery = () => {
+      DocSearch.search("");
+      this.refs.input.value = "";
+      this.setState({showClearButton: false});
+    };
+
+    this.handleKeyDown = (event) => {
+      if (event.keyCode === 27) {
+        this.clearSearchQuery();
+      }
+    };
+  }
 
   renderClearButton() {
     if (Meteor.isClient && this.state) {
       if (this.state.showClearButton) {
         return (
-          <button onClick={this.clearSearchQuery}>
-            <i className="fa fa-times"></i>
+          <button className="btn btn-default" onClick={this.clearSearchQuery}>
+            <i className="fa fa-times-circle"></i>
           </button>
         );
       }
     }
-  },
+  }
 
   render() {
     return (
@@ -57,8 +52,9 @@ export default SearchField = React.createClass({
         </div>
         <input
           onBlur={this.handleBlur}
-          onChange={_.throttle(this.handleChange)}
+          onChange={this.handleChange}
           onFocus={this.handleFocus}
+          onKeyDown={this.handleKeyDown}
           placeholder="Search"
           ref="input"
         />
@@ -66,4 +62,6 @@ export default SearchField = React.createClass({
       </div>
     );
   }
-});
+}
+
+export default SearchField;

@@ -3,7 +3,8 @@
 /**
  * Segment.com (Analytics.js)
  */
-const segmentKey = Meteor.settings.public.segment.writeKey;
+const segment = Meteor.settings.public.segment || {};
+const segmentKey = segment.writeKey;
 
 if (segmentKey) {
   // Create a queue, but don't obliterate an existing one!
@@ -82,19 +83,6 @@ if (segmentKey) {
   // Load Analytics.js with your key, which will automatically
   // load the tools you've enabled for your account. Boosh!
   analytics.load(segmentKey);
-}
-
-
-/**
- * Google Analytics
- */
-if (Meteor.settings.public.ga.account) {
-  (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,"script","//www.google-analytics.com/analytics.js","ga");
-
-  ga("create", Meteor.settings.public.ga.account, "auto");
 }
 
 /* eslint-enable */

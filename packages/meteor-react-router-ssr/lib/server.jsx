@@ -1,3 +1,7 @@
+import React from "react";
+// import ReactCookie from "react-cookie";
+// import {Router as RouterContext} from "react-router";
+
 // meteor algorithm to check if this is a meteor serving http request or not
 function IsAppUrl(req) {
   var url = req.url
@@ -21,11 +25,17 @@ function IsAppUrl(req) {
   }
   return true;
 }
+const ReactRouter = Npm.require('react-router');
+const ReactCookie = Npm.require("react-cookie");
+const ReactDOMServer = require('react-dom/server');
+// ReactRouter.history = Npm.require('history');
 
-const { RoutingContext } = ReactRouter;
+const { RouterContext } = ReactRouter;
 const url = Npm.require('url');
 const Fiber = Npm.require('fibers');
 const cookieParser = Npm.require('cookie-parser');
+
+const ReactRouterSSR = {};
 
 let webpackStats;
 
@@ -131,10 +141,10 @@ function patchResWrite(clientOptions, serverOptions, originalWrite, css, html, h
           rootElementAttributes = rootElementAttributes + ' ' + attributes[i][0] + '="' + attributes[i][1] + '"';
         }
       } else if (attributes.length > 0){
-        rootElementAttributes = attributes[0] + '="' + attributes[1] + '"';
+        rootElementAttributes = ' ' + attributes[0] + '="' + attributes[1] + '"';
       }
 
-      data = data.replace('<body>', '<body><' + (clientOptions.rootElementType || 'div') + ' id="' + (clientOptions.rootElement || 'react-app') + '" ' + rootElementAttributes + ' >' + html + '</' + (clientOptions.rootElementType || 'div') + '>');
+      data = data.replace('<body>', '<body><' + (clientOptions.rootElementType || 'div') + ' id="' + (clientOptions.rootElement || 'react-app') + '"' + rootElementAttributes + '>' + html + '</' + (clientOptions.rootElementType || 'div') + '>');
 
       if (typeof serverOptions.webpackStats !== 'undefined') {
         data = addAssetsChunks(serverOptions, data);
@@ -208,8 +218,8 @@ function generateSSRData(serverOptions, context, req, res, renderProps) {
         fetchComponentData(renderProps, reduxStore);
       }
 
-      // Wrap the <RoutingContext> if needed before rendering it.
-      let app = <RoutingContext {...renderProps} />;
+      // Wrap the <RouterContext> if needed before rendering it.
+      let app = <RouterContext {...renderProps} />;
       if (serverOptions.wrapper) {
         const wrapperProps = {};
         // Pass the redux store to the wrapper, which is supposed to be some
@@ -229,7 +239,7 @@ function generateSSRData(serverOptions, context, req, res, renderProps) {
         // inject-data accepts raw objects and calls EJSON.stringify() on them,
         // but the _.each() done in there does not play nice if the store contains
         // ImmutableJS data. To avoid that, we serialize ourselves.
-        res.pushData('redux-initial-state', JSON.stringify(reduxStore.getState()));
+        InjectData.pushData(res, 'redux-initial-state', JSON.stringify(reduxStore.getState()));
       }
 
       if (Package['nfl:react-helmet']) {
@@ -249,7 +259,7 @@ function generateSSRData(serverOptions, context, req, res, renderProps) {
       Meteor.subscribe = originalSubscribe;
     });
 
-    res.pushData('fast-render-data', context.getData());
+    InjectData.pushData(res, 'fast-render-data', context.getData());
   } catch(err) {
     console.error('error while server-rendering', err.stack);
   }
@@ -296,6 +306,22 @@ function SSRSubscribe(context) {
       Mongo.Collection._isSSR = true;
     }
 
+    // Fire the onReady callback immediately.
+    if (params.length) {
+      var callbacks = {};
+      var lastParam = params[params.length - 1];
+      if (_.isFunction(lastParam)) {
+        callbacks.onReady = params.pop();
+      } else if (lastParam &&
+          // XXX COMPAT WITH 1.0.3.1 onError used to exist, but now we use
+          // onStop with an error callback instead.
+        _.any([lastParam.onReady, lastParam.onError, lastParam.onStop],
+          _.isFunction)) {
+        callbacks = params.pop();
+      }
+      callbacks.onReady && callbacks.onReady();
+    }
+
     return {
       stop() {}, // Nothing to stop on server-rendering
       ready() { return true; } // server gets the data straight away
@@ -311,7 +337,7 @@ function moveScripts(data) {
   const $ = Cheerio.load(data, {
     decodeEntities: false
   });
-  const heads = $('head script');
+  const heads = $('head script:not([data-dont-move])');
   $('body').append(heads);
 
   // Remove empty lines caused by removing scripts
@@ -334,7 +360,14 @@ if (Package.mongo && !Package.autopublish) {
       return originalFindOne.apply(this, args);
     }
 
-    return this._getSSRCollection().findOne(...args);
+    // collection transforms compatibility
+    const selector = args.length === 0 ? {} : args[0];
+    let options = args.length < 2 ? {} : args[1];
+
+    if (typeof this._transform === 'function') {
+      options.transform = this._transform;
+    }
+    return this._getSSRCollection().findOne(selector, options);
   };
 
   Mongo.Collection.prototype.find = function(...args) {
@@ -342,7 +375,15 @@ if (Package.mongo && !Package.autopublish) {
       return originalFind.apply(this, args);
     }
 
-    return this._getSSRCollection().find(...args);
+    // collection transforms compatibility
+    const selector = args.length === 0 ? {} : args[0];
+    let options = args.length < 2 ? {} : args[1];
+
+    if (typeof this._transform === 'function') {
+      options.transform = this._transform;
+    }
+
+    return this._getSSRCollection().find(selector, options);
   };
 
   Mongo.Collection._fakePublish = function(data) {
@@ -378,3 +419,5 @@ if (Package.mongo && !Package.autopublish) {
     });
   }
 }
+
+export { ReactRouterSSR };
