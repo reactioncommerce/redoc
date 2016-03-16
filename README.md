@@ -1,4 +1,7 @@
 # redoc
+
+[![Circle CI](https://circleci.com/gh/reactioncommerce/redoc/tree/master.svg?style=svg)](https://circleci.com/gh/reactioncommerce/redoc/tree/master)
+
 **redoc** is a [Meteor](https://meteor.com) application that can be used to present styled markdown from multiple Github repositories.
 
 **redoc** fetches content from GitHub and [renders markdown](https://github.com/markdown-it/markdown-it), caching the HTML to be managed with a Table of Contents and stylized with theme packages.
