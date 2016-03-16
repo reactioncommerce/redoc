@@ -1,6 +1,6 @@
 # used for CircleCI curl tests
 
-reaction:
+redoc:
   image: reactioncommerce/redoc:ci
   links:
     - mongo
