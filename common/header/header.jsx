@@ -55,28 +55,33 @@ export default DocView = React.createClass({
   render() {
     return (
       <div className="redoc header">
-        <div className="brand">
-          <button className="redoc menu-button" onClick={this.handleMenuToggle}>
-            <i className="fa fa-bars"></i>
-          </button>
-          <a className="title" href={Meteor.settings.public.redoc.logo.link.href}>
-            <img className="logo" src={Meteor.settings.public.redoc.logo.image} />
-            {Meteor.settings.public.redoc.logo.link.value}
-          </a>
-        </div>
+
         <div className="navigation">
           {this.renderMainNavigationLinks('Docs')}
         </div>
-        <div className="filters">
-          <div className="item">
-            <BranchSelect
-              repo={this.props.params.repo}
-              currentBranch={this.props.params.branch || Meteor.settings.public.redoc.branch || "master"}
-              onBranchSelect={this.handleBranchSelect}
-            />
+
+        <div className="main-header">
+          <div className="brand">
+            <button className="redoc menu-button" onClick={this.handleMenuToggle}>
+              <i className="fa fa-bars"></i>
+            </button>
+            <a className="title" href={Meteor.settings.public.redoc.logo.link.href}>
+              <img className="logo" src={Meteor.settings.public.redoc.logo.image} />
+              {Meteor.settings.public.redoc.logo.link.value}
+            </a>
           </div>
-          <div className="item">
-            <SearchField />
+
+          <div className="filters">
+            <div className="item">
+              <BranchSelect
+                repo={this.props.params.repo}
+                currentBranch={this.props.params.branch || Meteor.settings.public.redoc.branch || "master"}
+                onBranchSelect={this.handleBranchSelect}
+              />
+            </div>
+            <div className="item">
+              <SearchField />
+            </div>
           </div>
         </div>
       </div>

@@ -149,10 +149,10 @@
 // -----------------------------------------------------
 .redoc.docs .content {
   .display(flex);
-  .justify-content(center);
+  // .justify-content(center);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  background-color: white;
+  // background-color: white;
 
   .flex(1 1 auto);
   .section {
@@ -203,6 +203,9 @@
   padding: 40px 40px 60px;
   // padding-bottom: 60px;
   max-width: 800px;
+  background: @white;
+  height: 100%;
+  border-right: 1px solid @border-color;
 
   @media screen and (max-width: @screen-xs-max) {
     padding: 20px 20px 80px;

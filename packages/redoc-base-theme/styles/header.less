@@ -1,11 +1,24 @@
 
 .redoc.header {
+  // display: flex;
+  // flex: 0 0 auto;
+  // align-items: center;
+  // height: 60px;
+  // width: 100%;
+  // border-bottom: 1px solid @black10;
+  box-shadow: 0 0 7px rgba(0,0,0,0.2);
+  z-index: 1;
+  //
+}
+
+.redoc.header .main-header {
   display: flex;
   flex: 0 0 auto;
   align-items: center;
   height: 60px;
   width: 100%;
-  border-bottom: 1px solid @black10;
+  // border-bottom: 1px solid @black10;
+  background-color: @white;
 }
 
 .redoc.header .title {
@@ -70,7 +83,9 @@
   align-items: center;
   flex: 1 1 auto;
   padding-right: 20px;
-  height: 100%;
+  height: 40px;
+  background-color: @light-background-color;
+
 
   @media screen and (max-width: @screen-xs-max) {
     display: none;
@@ -93,7 +108,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  flex: 0 0 auto;
+  justify-content: flex-end;
+  flex: 1 1 auto;
   padding-right: 20px;
 }
 
@@ -102,7 +118,7 @@
 }
 
 @media screen and (max-width: @screen-xs-max) {
-  .redoc.header {
+  .redoc.header .main-header {
     display: block;
     height: auto;
   }
