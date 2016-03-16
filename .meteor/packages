@@ -17,7 +17,6 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 audit-argument-checks   # enforce parameter checks on methods
 check                   # utils to check params
 ejson                   # ejson required for oauth/github
-react                   # meteor react
 service-configuration   # meteor accounts service configuration methods
 
 # accounts-base
@@ -30,12 +29,11 @@ ongoworks:spiderable
 #kadira:flow-router
 #kadira:blaze-layout
 #kadira:react-layout
-nfl:react-helmet
 
-reactrouter:react-router
 reactrouter:react-router-ssr
 meteorhacks:search-source
 fortawesome:fontawesome
+react-meteor-data
 
 # ReDoc packages
 reactioncommerce:redoc-core

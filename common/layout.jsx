@@ -1,4 +1,7 @@
+import React from "react";
 import Header from "./header/header.jsx";
+import Helmet from "react-helmet";
+
 
 export default BaseLayout = React.createClass({
   mixins: [ReactMeteorData],
@@ -36,7 +39,7 @@ export default BaseLayout = React.createClass({
   render() {
     return (
       <div className="redoc page">
-        <ReactHelmet
+        <Helmet
           meta={[
             {name: "viewport", content: "width=device-width"},
             {property: "og:title", content: Meteor.settings.public.redoc.meta.title},

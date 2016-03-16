@@ -1,4 +1,4 @@
-
+import React from "react";
 
 export default SearchField = React.createClass({
   // mixins: [ReactMeteorData],

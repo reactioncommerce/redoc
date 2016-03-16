@@ -1,4 +1,5 @@
-import "underscore";
+import React from "react";
+import _ from "underscore";
 
 export default SearchResults = React.createClass({
   handleSearchClear() {

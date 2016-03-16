@@ -1,7 +1,12 @@
+import React from "react";
 import SearchField from "../search/search.jsx";
 import BranchSelect from "../docs/branchSelect.jsx";
 
 export default DocView = React.createClass({
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
   mixins: [ReactMeteorData],
 
   getMeteorData() {
@@ -22,7 +27,7 @@ export default DocView = React.createClass({
       const params = this.props.params;
       const url = `/${params.repo}/${branch}/${params.alias}`;
 
-      this.props.history.pushState(null, url);
+      this.context.router.push(url);
     }
   },
 
@@ -38,9 +43,10 @@ export default DocView = React.createClass({
 
   renderMainNavigationLinks(active) {
     let links = [];
+    let index = 0;
     for (link of Meteor.settings.public.redoc.mainNavigationLinks) {
       let className = (link.href === active || link.value === active) ? "nav-link active" : "nav-link";
-      links.push(<a className={className} href={link.href}>{link.value}</a>);
+      links.push(<a className={className} href={link.href} key={index++}>{link.value}</a>);
     }
     return links;
   },

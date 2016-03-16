@@ -1,9 +1,10 @@
-
-import ReMarkdown from "./markdown.jsx";
+import React from "react"
 import ReactDom from "react-dom";
+import Helmet from "react-helmet";
 import TableOfContents from "./toc.jsx";
 import SearchResults from "../search/searchResults.jsx";
-import "underscore";
+import { browserHistory } from 'react-router'
+import _ from "underscore";
 
 export default DocView = React.createClass({
   propTypes: {
@@ -12,6 +13,10 @@ export default DocView = React.createClass({
     history: React.PropTypes.object,
     repo: React.PropTypes.string,
     params: React.PropTypes.any
+  },
+
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
   },
 
   mixins: [ReactMeteorData],
@@ -32,8 +37,9 @@ export default DocView = React.createClass({
   },
 
   getMeteorData() {
+    const sub = Meteor.subscribe("CacheDocs", this.props.params);
+
     if (Meteor.isClient) {
-      const sub = Meteor.subscribe("CacheDocs", this.props.params);
       const search = DocSearch.getData({
         transform: (matchText, regExp) => {
           return matchText.replace(regExp, "<span class='highlight'>$&</span>");
@@ -49,6 +55,7 @@ export default DocView = React.createClass({
 
     if (Meteor.isServer) {
       return {
+        docIsLoaded: true,
         currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
         search: []
       };
@@ -59,7 +66,7 @@ export default DocView = React.createClass({
     if (href) {
       // strip tld to prevent pushState warning
       let path = "/" + href.replace(/^(?:\/\/|[^\/]+)*\//, "");
-      this.props.history.pushState(null, path);
+      this.context.router.push(path);
 
       // Close the TOC nav on mobile
       if (Meteor.isClient) {
@@ -130,7 +137,7 @@ export default DocView = React.createClass({
 
     return (
       <div className="redoc docs">
-        <ReactHelmet
+        <Helmet
           title={pageTitle}
         />
         <TableOfContents

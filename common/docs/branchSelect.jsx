@@ -1,3 +1,4 @@
+import React from "react";
 
 export default BranchSelect = React.createClass({
   mixins: [ReactMeteorData],

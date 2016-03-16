@@ -1,8 +1,11 @@
+import { render } from "react-dom";
+import React from "react";
+import {Route, IndexRoute} from "react-router";
 import Layout from "../common/layout.jsx";
 import Docs from "../common/docs/docs.jsx";
-import ReactCookie from "react-cookie";
+import { ReactRouterSSR } from "meteor/reactrouter:react-router-ssr";
+import { default as ReactCookie } from "react-cookie";
 
-const {Route, IndexRoute} = ReactRouter;
 const analytics = analytics || null;
 
 const AppRoutes = (
