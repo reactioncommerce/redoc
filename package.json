@@ -7,6 +7,12 @@
     "type": "git",
     "url": "https://github.com/reactioncommerce/redoc.git"
   },
+  "scripts": {
+    "test": "meteor test --driver-package avital:mocha",
+    "test-app": "meteor test --full-app --driver-package avital:mocha",
+    "test-ci": "spacejam test-packages --driver-package practicalmeteor:mocha-console-reporter",
+    "chimp-watch": "node_modules/.bin/chimp --ddp=http://localhost:3000 --watch --mocha --path=tests"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
@@ -29,5 +35,8 @@
     "react-select": "^1.0.0-beta8",
     "react-helmet": "^2.3.1",
     "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "chimp": "^0.30.0"
   }
 }
