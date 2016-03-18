@@ -4,6 +4,7 @@ import "highlight.js";
 import punycode from "punycode";
 import "underscore";
 import TOCParser from "../lib/plugins/toc";
+import APIParser from "../lib/plugins/api";
 
 export let hljs = require("highlight.js");
 
@@ -55,7 +56,8 @@ md = require("markdown-it")({
   }
 })
 .use(require("markdown-it-replace-link"))
-.use(TOCParser);
+.use(TOCParser)
+.use(APIParser);
 
 //
 // Meteor Methods
@@ -239,6 +241,9 @@ Meteor.methods({
     for (let tocItem of docTOC) {
       let docSourceUrl = `${docRepo.rawUrl}/${branch}/${tocItem.docPath}`;
       // lets fetch that Github repo
+      // if (tocItem.docPath !== "developer/core/import.md") continue;
+      // console.warn("Only processing: developer/core/import.md");
+
       Meteor.http.get(docSourceUrl, function (error, result) {
         if (error) return error;
         if (result.statusCode === 200) {

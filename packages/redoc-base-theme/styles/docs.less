@@ -41,6 +41,12 @@
   font-weight: 400;
 }
 
+.guide-sub-subnav-item.level-4 {
+  padding-left: 60px;
+  font-size: 12px;
+  font-weight: 400;
+}
+
 @media screen and (max-width: @screen-xs-max) {
   .redoc.docs .navigation {
     display: none;
@@ -155,9 +161,7 @@
   // background-color: white;
 
   .flex(1 1 auto);
-  .section {
-    padding: 0 2rem;
-  }
+
   p,
   > ul,
   blockquote {
@@ -178,16 +182,19 @@
   pre {
     background-color: @docs-code-background-color;
   }
-  h2,
+  h2 {
+
+  }
+
   h3,
   h4,
   h5,
   h6 {
-    margin-top: 40px;
-    margin-bottom: 20px;
-    padding-top: 20px;
-    width: 100%;
-    border-top: 1px solid darken(@docs-code-background-color, 5%);
+    // margin-top: 40px;
+    // margin-bottom: 20px;
+    // padding-top: 20px;
+    // width: 100%;
+    // border-top: 1px solid darken(@docs-code-background-color, 5%);
   }
   img {
     max-width: 70%;
@@ -200,14 +207,47 @@
 }
 
 .redoc.docs .content-html {
-  padding: 40px 40px 60px;
+  // padding: 40px 40px 60px;
   // padding-bottom: 60px;
-  max-width: 800px;
+  // width: 400px;
+  width: 100%;
   background: @white;
   height: 100%;
   border-right: 1px solid @border-color;
 
   @media screen and (max-width: @screen-xs-max) {
     padding: 20px 20px 80px;
+  }
+}
+
+.content-html .section {
+  display: flex;
+
+  border-bottom: 1px solid darken(@docs-code-background-color, 5%);
+}
+
+.content-html .section .section-content {
+  flex: 1 1 auto;
+  width: 50%;
+  padding: 3rem 2rem;
+
+  pre {
+    display: none;
+  }
+}
+
+.content-html .section .section-example {
+  flex: 1 1 auto;
+  width: 50%;
+  padding: 10rem 2rem 3rem;
+  background-color: @black02;
+}
+
+.content-html {
+  table {
+    .table();
+    background-color: #fff;
+    border-radius: @border-radius-base;
+    box-shadow: 0 0 0 1px @border-color;
   }
 }
