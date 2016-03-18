@@ -1,16 +1,15 @@
+# used for CircleCI curl tests
 
 redoc:
-  image: reactioncommerce/redoc:latest
-  ports:
-    - 80:80
+  image: reactioncommerce/redoc:ci
   links:
     - mongo
-  restart: always
+  ports:
+    - "80:80"
   environment:
-    ROOT_URL: "http://example.com"
+    ROOT_URL: "http://localhost"
     MONGO_URL: "mongodb://mongo:27017/redoc"
 
 mongo:
   image: mongo:latest
-  restart: always
   command: mongod --storageEngine=wiredTiger

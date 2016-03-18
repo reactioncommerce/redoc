@@ -1,5 +1,15 @@
+.codeclimate.yml
+.editorconfig
+.jsbeautifyrc
+circle.yml
+jsdoc*
+
 .meteor/local
 *.build/*
 *.npm/*
 
 node_modules
+
+# production configs with secrets
+docker-compose.prod.yml
+settings.prod.json

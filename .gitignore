@@ -2,6 +2,9 @@ node_modules
 .meteor/local
 .meteor/meteorite
 settings.json
-docker
 
 npm-debug.log
+
+# production configs with secrets
+docker-compose.prod.yml
+settings.prod.json

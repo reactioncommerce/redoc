@@ -1,1 +1,1 @@
-FROM ongoworks/meteord:devbuild
+docker/redoc.prod.docker
