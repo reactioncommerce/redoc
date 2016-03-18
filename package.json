@@ -11,6 +11,7 @@
     "test": "meteor test --driver-package avital:mocha",
     "test-app": "meteor test --full-app --driver-package avital:mocha",
     "test-ci": "spacejam test-packages --driver-package practicalmeteor:mocha-console-reporter",
+    "chimp": "node_modules/.bin/chimp --ddp=http://localhost:3000 --mocha --path=tests",
     "chimp-watch": "node_modules/.bin/chimp --ddp=http://localhost:3000 --watch --mocha --path=tests"
   },
   "author": "",
