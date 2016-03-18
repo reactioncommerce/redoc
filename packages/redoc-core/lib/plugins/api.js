@@ -13,26 +13,26 @@ function APIParser(md) {
       let token = new Token("section_open", "section", 1);
       token.block = true;
       token.attrs = attrs;
-      return t;
+      return token;
     }
 
     function closeSection() {
       let token = new Token("section_close", "section", -1);
       token.block = true;
-      return t;
+      return token;
     }
 
     function openContentBlock() {
       let token = new Token("div_open", "div", 1);
       token.block = true;
       token.attrs = [["class", "section-content"]];
-      return t;
+      return token;
     }
 
     function closeContentBlock() {
       let token = new Token("div_open", "div", -1);
       token.block = true;
-      return t;
+      return token;
     }
 
     function openExampleBlock() {
