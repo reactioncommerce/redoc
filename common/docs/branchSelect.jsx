@@ -36,6 +36,7 @@ export default BranchSelect = React.createClass({
             onChange={this.handleChange}
             ref="select"
             value={this.props.currentBranch}
+            id="branch-select"
           >
             {this.renderBranches()}
           </select>
