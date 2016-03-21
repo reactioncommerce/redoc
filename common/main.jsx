@@ -5,12 +5,14 @@ import Layout from "../common/layout.jsx";
 import Docs from "../common/docs/docs.jsx";
 import { ReactRouterSSR } from "meteor/reactrouter:react-router-ssr";
 import { default as ReactCookie } from "react-cookie";
+import { RedocAdmin } from "meteor/reactioncommerce:redoc-core/client/components/admin.jsx"
 
 const analytics = analytics || null;
 
 const AppRoutes = (
   <Route component={Layout} path="/">
     <Route component={Docs} path="/:repo/:branch/:alias" />
+    <Route component={RedocAdmin} path="/redoc" />
     <IndexRoute component={Docs} />
   </Route>
 );

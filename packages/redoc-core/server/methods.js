@@ -59,6 +59,85 @@ md = require("markdown-it")({
 .use(TOCParser)
 .use(APIParser);
 
+function getDoc(options) {
+  // get repo details
+  const docRepo = ReDoc.Collections.Repos.findOne({
+    repo: options.repo
+  });
+
+  // we need to have a repo
+  if (!docRepo) {
+    console.log(`redoc/getDocSet: Failed to load repo data for ${options.repo}`);
+    return false;
+  }
+
+  // TOC item for this doc
+  let tocItem = ReDoc.Collections.TOC.findOne({
+    alias: options.alias,
+    repo: options.repo
+  });
+
+  loadAndSaveDoc({
+    rawUrl: docRepo.rawUrl,
+    branch: options.branch || "development",
+    repo: options.repo,
+    docPath: tocItem.docPath,
+    alias: tocItem.alias
+  });
+}
+
+
+function loadAndSaveDoc(docData) {
+  const { alias, docPath, repo, rawUrl, branch } = docData;
+
+  let docSourceUrl = `${rawUrl}/${branch}/${docPath}`;
+
+  // lets fetch that Github repo
+  Meteor.http.get(docSourceUrl, function (error, result) {
+    if (error) return error;
+    if (result.statusCode === 200) {
+      // sensible defaults for every repo
+      let docSet = ReDoc.getPathParams(docSourceUrl);
+      docSet.docPage = docSourceUrl;
+      docSet.docPath = docPath;
+
+      // if TOC has different alias, we'll use that
+      if (alias) {
+        docSet.alias = alias;
+      }
+
+      // pre-process documentation
+      if (!result.content) {
+        console.log(`redoc/getDocSet: Docset not found for ${docSet.docPath}.`);
+        result.content = `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
+      }
+
+      docSet.docPageContent = result.content;
+      docSet.docPageContentHTML = md.render(result.content, {
+        rawUrl: rawUrl,
+        branch: branch,
+        alias: docSet.alias,
+        repo: repo
+      });
+
+      // insert new documentation into Cache
+      return ReDoc.Collections.Docs.upsert({
+        docPage: docSourceUrl
+      }, {
+        $set: docSet
+      });
+    }
+  });
+}
+
+
+
+
+
+
+
+
+
 //
 // Meteor Methods
 //
@@ -140,6 +219,19 @@ Meteor.methods({
     ReDoc.Collections.TOC.remove({});
     ReDoc.Collections.Docs.remove({});
     return Meteor.call("redoc/initRepoData");
+  },
+
+  /**
+   *  redoc/reloadDoc
+   *  fetch repo profile from github and store in RepoData collection
+   *  @param {Object} doc - mongo style selector for the doc
+   *  @returns {undefined} returns
+   */
+  "redoc/reloadDoc": function (docData) {
+    check(docData, Object);
+    if (this.userId) {
+      getDoc(docData);
+    }
   },
   /**
    *  redoc/getRepoData

@@ -50,6 +50,20 @@ Meteor.startup(function () {
         }
       }
     }
+
+    if (Meteor.settings.redoc && Meteor.settings.redoc.users) {
+      for (let user of Meteor.settings.redoc.users) {
+        const userData = Meteor.users.findOne({
+          "services.github.username": user.username
+        });
+
+        if (userData) {
+          Roles.addUsersToRoles(userData._id, user.roles, "redoc");
+        }
+      }
+
+    }
+
   }
   // Initialize Repo data
   Meteor.call("redoc/initRepoData");

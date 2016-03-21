@@ -2,6 +2,16 @@
 //   return ReDoc.Collections.Docs.find();
 // });
 
+Meteor.publish("userData", function () {
+  return Meteor.users.find({
+    _id: this.userId
+  }, {
+    fields: {
+      "services.github.id": 1
+    }
+  });
+});
+
 Meteor.publish("TOC", function () {
   return ReDoc.Collections.TOC.find({}, {
     sort: {

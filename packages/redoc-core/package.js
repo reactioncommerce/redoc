@@ -14,6 +14,7 @@ Package.onUse(function (api) {
   api.use("aldeed:simple-schema");
   api.use("percolate:synced-cron");
   api.use("mongo");
+  api.use("alanning:roles");
 
   // add default initRepoData
   api.addAssets("private/redoc.json", "server");
@@ -28,5 +29,9 @@ Package.onUse(function (api) {
   api.addFiles("server/startup.js", "server");
   // client
   api.addFiles("client/subscriptions.js", "client");
+
+  api.addFiles("client/components/admin.jsx", ["client", "server"], {isImport: true});
+
   api.export("ReDoc");
+  api.export("RedocAdmin");
 });

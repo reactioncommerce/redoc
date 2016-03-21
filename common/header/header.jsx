@@ -1,8 +1,9 @@
 import React from "react";
 import SearchField from "../search/search.jsx";
 import BranchSelect from "../docs/branchSelect.jsx";
+import { composeWithTracker } from 'react-komposer';
 
-export default DocView = React.createClass({
+const DocView = React.createClass({
   contextTypes: {
     router: React.PropTypes.object.isRequired
   },
@@ -10,6 +11,7 @@ export default DocView = React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData() {
+
     let data = {
       isMenuVisible: true
     };
@@ -52,6 +54,18 @@ export default DocView = React.createClass({
     return links;
   },
 
+  renderSignedInUser() {
+    if (this.props.user) {
+      const githubUserId = this.props.user.services.github.id;
+      const imageUrl = `https://avatars.githubusercontent.com/u/${githubUserId}?s=460`
+      return (
+        <div className="redoc profile-image">
+          <img src={imageUrl} />
+        </div>
+      );
+    }
+  },
+
   render() {
     return (
       <div className="redoc header">
@@ -83,8 +97,12 @@ export default DocView = React.createClass({
               <SearchField />
             </div>
           </div>
+
+          {this.renderSignedInUser()}
         </div>
       </div>
     );
   }
 });
+
+export default DocView;
