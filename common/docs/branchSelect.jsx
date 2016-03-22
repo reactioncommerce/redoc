@@ -12,9 +12,13 @@ export default BranchSelect = React.createClass({
       const isAdminUser = Roles.userIsInRole(Meteor.userId(), ["admin"], "redoc");
 
       for (branch of repo.branches) {
-        const isPublicBranch = _.contains(Meteor.settings.public.redoc.publicBranches, branch.name);
+        if (Meteor.settings.public.redoc.publicBranches) {
+          const isPublicBranch = _.contains(Meteor.settings.public.redoc.publicBranches, branch.name);
 
-        if (isPublicBranch || isAdminUser) {
+          if (isPublicBranch || isAdminUser) {
+            branches.push(branch.name);
+          }
+        } else {
           branches.push(branch.name);
         }
       }
