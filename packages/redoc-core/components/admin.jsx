@@ -19,6 +19,12 @@ class RedocAdmin extends React.Component {
       Meteor.logout();
       browserHistory.push("/");
     };
+
+    this.handleDocReload = () => {
+      if(confirm("Reload the docs? This may disrupt users currently browsing.")) {
+        Meteor.call("redoc/flushDocCache");
+      }
+    };
   }
 
   renderLogin() {
@@ -51,7 +57,7 @@ class RedocAdmin extends React.Component {
 
       return (
         <div className="redoc admin">
-          <div className="profile">
+          <div className="card">
             <div className="section primary">
               <Avatar githubUserId={githubUserId} />
             </div>
@@ -62,6 +68,15 @@ class RedocAdmin extends React.Component {
               <button className="btn btn-default" onClick={this.handleGithubSignIn}>Sign Out</button>
             </div>
           </div>
+
+          <div className="card">
+            <div className="section primary">
+              <h2>Tools</h2>
+            </div>
+            <div className="section">
+              <button className="btn btn-danger" onClick={this.handleDocReload}>Reload All Docs</button>
+            </div>
+          </div>
         </div>
       );
     }
@@ -69,10 +84,12 @@ class RedocAdmin extends React.Component {
     // Render Login
     return (
       <div className="redoc admin">
-        <div className="sign-in">
-          <button className="btn btn-default" onClick={this.handleGithubSignIn}>
-            <i className="fa fa-github"></i> {"Sign in with Github"}
-          </button>
+        <div className="card">
+          <div className="section">
+            <button className="btn btn-default" onClick={this.handleGithubSignIn}>
+              <i className="fa fa-github"></i> {"Sign in with Github"}
+            </button>
+          </div>
         </div>
       </div>
     );
