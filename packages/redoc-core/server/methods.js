@@ -85,8 +85,7 @@ Meteor.methods({
       if (Meteor.settings.redoc.initRepoData.repos) {
         initRepoData = Meteor.settings.redoc.initRepoData;
       } else {
-        throw new Meteor.Error(
-          "Meteor.settings.redoc.initRepoData should be an object or http url in settings.json");
+        throw new Meteor.Error("Meteor.settings.redoc.initRepoData should be an object or http url in settings.json");
       }
     }
 
@@ -98,9 +97,7 @@ Meteor.methods({
       let Repos = initRepoData.repos;
       // if no tocData has been defined, we'll show this projects docs
       if (!Repos) {
-        throw new Meteor.Error(
-          "No repos have been defined in Meteor.settings.redoc.initRepoData url or object neither in private/redoc.json"
-        );
+        throw new Meteor.Error("No repos have been defined in Meteor.settings.redoc.initRepoData url or object neither in private/redoc.json");
       }
       // for each Repo insert new repoData
       Repos.forEach(function (repoItem) {
@@ -109,24 +106,25 @@ Meteor.methods({
     }
     // populate TOC from settings
     let TOC = ReDoc.Collections.TOC.find();
-    if (TOC.count() === 0) {
-      let tocData = initRepoData.tocData;
-      // if no tocData has been defined, we'll show this projects docs
-      if (!tocData) {
-        throw new Meteor.Error(
-          "No tocData have been defined in Meteor.settings.redoc.initRepoData url or object neither in private/redoc.json"
-        );
-      }
+    if (TOC.count() === 0 && initRepoData.tocData) {
       // insert TOC fixtures
-      tocData.forEach(function (tocItem, index) {
+      initRepoData.tocData.forEach(function (tocItem, index) {
         ReDoc.Collections.TOC.insert({
           ...tocItem,
           position: index
         });
       });
+
+      // Run once will get all repo data for current repos
+      Meteor.call("redoc/getRepoData");
     }
-    // Run once will get all repo data for current repos
-    Meteor.call("redoc/getRepoData");
+
+    // If TOC is still empty, get TOC from Repository
+    if (ReDoc.Collections.TOC.find().count() === 0) {
+      ReDoc.Collections.Repos.find().forEach(function(repo) {
+        Meteor.call("redoc/getRepoTOC", repo.repo, Meteor.settings.public.redoc.branch || docRepo.defaultBranch);
+      })
+    }
   },
   /**
    *  redoc/flushDocCache
@@ -276,7 +274,7 @@ Meteor.methods({
         }
       });
     }
-  }
+  },
 
 /**
  *  redoc/getRepoTOC
@@ -285,7 +283,7 @@ Meteor.methods({
  *  @param {String} fetchBranch - optional branch
  *  @param {String} path - optional path
  *  @returns {undefined} returns
- */
+ **/
   "redoc/getRepoTOC": function (repo, fetchBranch, path) {
     this.unblock();
     check(repo, String);
