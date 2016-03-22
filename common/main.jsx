@@ -5,6 +5,7 @@ import Layout from "../common/layout.jsx";
 import Docs from "../common/docs/docs.jsx";
 import { ReactRouterSSR } from "meteor/reactrouter:react-router-ssr";
 import { default as ReactCookie } from "react-cookie";
+import { createHistory, useBasename } from 'history';
 
 const analytics = analytics || null;
 
@@ -14,6 +15,25 @@ const AppRoutes = (
     <IndexRoute component={Docs} />
   </Route>
 );
+
+let clientOptions = {
+  props: {
+    onUpdate() {
+      if (analytics) {
+        // Segment.com pageview
+        // TODO: figure out the best way to make this wait for the
+        // page title and location details to be ready
+        if (analytics.page) {
+          analytics.page({
+            path: window.location.pathname,
+            url: window.location.href,
+            title: Meteor.settings.public.redoc.title
+          });
+        }
+      }
+    }
+  }
+}
 
 let getBasename = function() {
   let el = document.createElement('a');
@@ -42,24 +62,7 @@ if (Meteor.isClient) {
   clientOptions.history = history
 }
 
-ReactRouterSSR.Run(AppRoutes, {
-  props: {
-    onUpdate() {
-      if (analytics) {
-        // Segment.com pageview
-        // TODO: figure out the best way to make this wait for the
-        // page title and location details to be ready
-        if (analytics.page) {
-          analytics.page({
-            path: window.location.pathname,
-            url: window.location.href,
-            title: Meteor.settings.public.redoc.title
-          });
-        }
-      }
-    }
-  }
-}, {
+ReactRouterSSR.Run(AppRoutes, clientOptions, {
   preRender: (req, res) => {
     ReactCookie.plugToRequest(req, res);
   }
