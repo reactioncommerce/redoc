@@ -15,6 +15,33 @@ const AppRoutes = (
   </Route>
 );
 
+let getBasename = function() {
+  let el = document.createElement('a');
+  el.href = __meteor_runtime_config__.ROOT_URL;
+  if (el.pathname.substr(-1) !== '/') {
+    return el.pathname + '/';
+  }
+  return el.pathname;
+}
+
+if (Meteor.isClient) {
+
+  // Run our app under the /base URL.
+  let history = useBasename(createHistory)({
+    basename: getBasename()
+  })
+
+  // At the /base/hello/world URL:
+  history.listen(function (location) {
+    if (location.basename !== getBasename()) {
+      location.pathname = "/";
+      location.basename = getBasename();
+    }
+  })
+
+  clientOptions.history = history
+}
+
 ReactRouterSSR.Run(AppRoutes, {
   props: {
     onUpdate() {
