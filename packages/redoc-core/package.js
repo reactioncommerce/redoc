@@ -30,7 +30,7 @@ Package.onUse(function (api) {
   // client
   api.addFiles("client/subscriptions.js", "client");
 
-  api.addFiles("client/components/admin.jsx", ["client", "server"], {isImport: true});
+  api.addFiles("components/admin.jsx", ["client", "server"], {isImport: true});
 
   api.export("ReDoc");
   api.export("RedocAdmin");

@@ -25,9 +25,9 @@ export default DocView = React.createClass({
     const {branch, alias, repo} = this.props;
     const {nBranch, nAlias, nRepo} = nextProps;
 
-    // if (branch === nBranch && alias === nAlias && repo === nRepo) {
-    //   return false;
-    // }
+    if (branch === nBranch && alias === nAlias && repo === nRepo) {
+      return false;
+    }
 
     return true;
   },
@@ -137,17 +137,16 @@ export default DocView = React.createClass({
   },
 
   renderAdminTools() {
-    console.log(Roles.userIsInRole(Meteor.userId(), ["admin"], "redoc"), this.data.currentDoc);
     if (Roles.userIsInRole(Meteor.userId(), ["admin"], "redoc") && this.data.currentDoc) {
       const { org, repo, branch, docPath} = this.data.currentDoc;
       const githubUrl = `https://github.com/${org}/${repo}/tree/${branch}/${docPath}`;
 
       return (
         <div className="redoc toolbar">
-          <a class="btn" href={githubUrl} target="_blank">
+          <a className="btn" href={githubUrl} target="_blank">
             Edit on Github
           </a>
-          <button onClick={this.handleDocRefresh}>
+          <button className="btn" onClick={this.handleDocRefresh}>
             Refresh Doc
           </button>
         </div>
@@ -157,7 +156,7 @@ export default DocView = React.createClass({
 
   render() {
     let label = "";
-    console.log(this.props);
+
     if (this.data.currentDoc) {
       label = this.data.currentDoc.label;
     }
