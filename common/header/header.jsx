@@ -63,9 +63,11 @@ const DocView = React.createClass({
       const githubUserId = this.props.user.services.github.id;
       const imageUrl = `https://avatars.githubusercontent.com/u/${githubUserId}?s=460`
       return (
-        <a href="/redoc">
-          <Avatar githubUserId={githubUserId} />
-        </a>
+        <div className="navbar-item user">
+          <a href="/redoc">
+            <Avatar githubUserId={githubUserId} />
+          </a>
+        </div>
       );
     }
   },
@@ -75,11 +77,11 @@ const DocView = React.createClass({
       <div className="redoc header">
 
         <div className="navigation">
-          {this.renderMainNavigationLinks('Docs')}
+          {this.renderMainNavigationLinks("Docs")}
         </div>
 
         <div className="main-header">
-          <div className="brand">
+          <div className="navbar-item brand">
             <button className="redoc menu-button" onClick={this.handleMenuToggle}>
               <i className="fa fa-bars"></i>
             </button>
@@ -89,7 +91,7 @@ const DocView = React.createClass({
             </a>
           </div>
 
-          <div className="filters">
+          <div className="navbar-item filters">
             <div className="item">
               <BranchSelect
                 repo={this.props.params.repo}

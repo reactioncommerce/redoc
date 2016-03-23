@@ -62,7 +62,10 @@ export default BaseLayout = React.createClass({
           params={this.props.params}
           user={this.data.user}
         />
-        {React.cloneElement(this.props.children, {user: this.data.user})}
+        {React.cloneElement(this.props.children, {
+          user: this.data.user,
+          isMenuVisible: this.data.isMenuVisible
+        })}
         {this.renderOverlayForMenu()}
       </div>
     );

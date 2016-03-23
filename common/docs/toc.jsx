@@ -101,7 +101,7 @@ export default DocView = React.createClass({
   render() {
     const classes = classnames({
       redoc: true,
-      navigation: true,
+      sidebar: true,
       visible: this.data.isMenuVisible
     });
 
