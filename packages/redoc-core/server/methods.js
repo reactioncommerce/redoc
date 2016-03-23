@@ -3,6 +3,7 @@
 import "highlight.js";
 import punycode from "punycode";
 import "underscore";
+import s from "underscore.string";
 import TOCParser from "../lib/plugins/toc";
 
 export let hljs = require("highlight.js");

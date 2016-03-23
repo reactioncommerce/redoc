@@ -1,6 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import "underscore";
+import s from "underscore.string";
 
 export default DocView = React.createClass({
   mixins: [ReactMeteorData],

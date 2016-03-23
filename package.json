@@ -24,10 +24,11 @@
     "react": "^0.14.7",
     "react-cookie": "^0.4.3",
     "react-dom": "^0.14.7",
+    "react-helmet": "^2.3.1",
     "react-lazy-load": "^2.0.2",
     "react-router": "2.0.1",
     "react-select": "^1.0.0-beta8",
-    "react-helmet": "^2.3.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "underscore.string": "^3.3.4"
   }
 }
