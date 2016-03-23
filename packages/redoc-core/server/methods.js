@@ -219,11 +219,12 @@ Meteor.methods({
   "redoc/getDocSet": function (repo, fetchBranch) {
     check(repo, String);
     check(fetchBranch, Match.Optional(String, null));
-    const branch = fetchBranch || "development";
     // get repo details
     const docRepo = ReDoc.Collections.Repos.findOne({
       repo: repo
     });
+
+    const branch = fetchBranch || Meteor.settings.public.redoc.branch || docRepo.defaultBranch || "master";
 
     // we need to have a repo
     if (!docRepo) {
