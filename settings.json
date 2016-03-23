@@ -38,7 +38,10 @@
   "services": [{
     "github": {
       "clientId": "",
-      "secret": ""
+      "secret": "",
+      "webhook": {
+        "updateDocs": ""
+      }
     }
   }],
   "redoc": {
