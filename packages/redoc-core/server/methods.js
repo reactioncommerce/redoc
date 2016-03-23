@@ -114,10 +114,10 @@ Meteor.methods({
           position: index
         });
       });
-
-      // Run once will get all repo data for current repos
-      Meteor.call("redoc/getRepoData");
     }
+
+    // Run once will get all repo data for current repos
+    Meteor.call("redoc/getRepoData");
 
     // If TOC is still empty, get TOC from Repository
     if (ReDoc.Collections.TOC.find().count() === 0) {
@@ -249,6 +249,18 @@ Meteor.methods({
           // if TOC has different alias, we'll use that
           if (tocItem.alias) {
             docSet.alias = tocItem.alias;
+          }
+
+           // if TOC has different label, we'll use that
+          if (tocItem.label) {
+            let label = tocItem.label;
+            if (tocItem.parentPath) {
+              parent = ReDoc.Collections.TOC.findOne({ docPath: tocItem.parentPath + "/README.md" });
+              if (parent) {
+                label = parent.label + " - " + label;
+              }
+            }
+            docSet.label = label;
           }
 
           // pre-process documentation

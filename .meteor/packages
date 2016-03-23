@@ -30,6 +30,7 @@ ongoworks:spiderable
 #kadira:blaze-layout
 #kadira:react-layout
 
+underscorestring:underscore.string
 reactrouter:react-router-ssr
 meteorhacks:search-source
 fortawesome:fontawesome
