@@ -37,14 +37,21 @@ Meteor.publish("CacheDocs", function (docParams) {
   });
 
   let params = {};
-  const defaultToc = ReDoc.Collections.TOC.findOne({
-    default: true
-  });
 
-  // Set params for doc fetching
-  params.repo = docParams.repo || defaultToc.repo;
+  // Set params defaults
+  params.repo = docParams.repo;
+  params.alias = docParams.alias;
   params.branch = docParams.branch || Meteor.settings.public.redoc.branch || "master";
-  params.alias = docParams.alias || defaultToc.alias;
+
+  // Set params for doc if docParams is empty using the default doc params
+  if (Object.keys(docParams).length === 0) {
+    const defaultToc = ReDoc.Collections.TOC.findOne({
+      default: true
+    });
+
+    params.repo = defaultToc.repo;
+    params.alias = defaultToc.alias;
+  }
 
   // get repo details
   let docRepo = ReDoc.Collections.Repos.findOne({
