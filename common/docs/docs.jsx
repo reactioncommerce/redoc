@@ -87,6 +87,15 @@ export default DocView = React.createClass({
     }
   },
 
+  handleDocRefresh() {
+    Meteor.call("redoc/reloadDoc", {
+      _id: this.data.currentDoc._id,
+      branch: this.props.params.branch,
+      alias: this.props.params.alias,
+      repo: this.props.params.repo
+    });
+  },
+
   renderContent() {
     if (Meteor.isClient && DocSearch.getCurrentQuery()) {
       if (DocSearch.getCurrentQuery().length > 0) {
@@ -138,8 +147,27 @@ export default DocView = React.createClass({
     }
   },
 
+  renderAdminTools() {
+    if (Roles.userIsInRole(Meteor.userId(), ["admin"], "redoc") && this.data.currentDoc) {
+      const { org, repo, branch, docPath} = this.data.currentDoc;
+      const githubUrl = `https://github.com/${org}/${repo}/tree/${branch}/${docPath}`;
+
+      return (
+        <div className="redoc toolbar">
+          <a className="btn" href={githubUrl} target="_blank">
+            Edit on Github
+          </a>
+          <button className="btn" onClick={this.handleDocRefresh}>
+            Refresh Doc
+          </button>
+        </div>
+    );
+    }
+  },
+
   render() {
     let label = "";
+
     if (this.data.currentDoc) {
       label = this.data.currentDoc.label;
     }
@@ -157,6 +185,7 @@ export default DocView = React.createClass({
         />
 
         <div className="content" id="main-content">
+          {this.renderAdminTools()}
           {this.renderContent()}
         </div>
       </div>

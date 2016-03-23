@@ -98,7 +98,10 @@ Package.onUse(function (api) {
     "styles/controls.less",
     "styles/docs.less",
     "styles/header.less",
-    "styles/search.less"
+    "styles/search.less",
+    "styles/toolbar.less",
+    "styles/admin.less",
+    "styles/sidebar.less"
   ], "client", {isImport: true});
 
   api.addFiles("theme.js", "server");

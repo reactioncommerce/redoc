@@ -33,7 +33,10 @@ Since we use this project to generate docs for [Reaction Commerce](https://react
       "room": "reactioncommerce/reaction"
     },
     "redoc": {
-      "branch": "master"
+      "branch": "master",
+      "publicBranches": [
+        "master"
+      ]
     }
   },
   "services": [{
@@ -43,6 +46,12 @@ Since we use this project to generate docs for [Reaction Commerce](https://react
     }
   }],
   "redoc": {
+    "users": [
+      {
+        "username": "github_username",
+        "roles": ["admin"]
+      }
+    ],
     "initRepoData": {
       "repos": [{
         "org": "reactioncommerce",
@@ -67,6 +76,56 @@ Since we use this project to generate docs for [Reaction Commerce](https://react
     }
   }
 }
+```
+
+## Document Structure
+
+Documents is split into one of two sides.
+Left - Explanation
+Right - Examples
+
+Heading levels (h1, h2, h3) create distinct sections.
+Heading level (h4) does not create a section, instead lives in the current heading section.
+Heading levels (h5, h6) create an example sub section within the current heading section.
+
+The following example shows how this works:
+
+```
+# h1 - (creates a section)
+Introduction Content
+
+##### h5 - (starts the example section for the h1)
+Example Content
+Example ends at the h2. h2 is a new section
+
+## h2 - (creates a section)
+Content for h2
+
+##### h5 - (starts the example section for the h2)
+Example Content
+Example ends at the h3. h3 is a new section
+
+### h3 - (creates a section)
+Content for h3
+
+#### h4
+#### h4
+#### h4
+
+##### h5 - (starts the example section for the h3, h4's are not distinct sections)
+code
+paragraph
+table
+list
+etc...
+
+###### h6 - (same effect as h5)
+content...
+Example ends at the h3. h3 is a new section
+
+### h3
+Content for h3
+Has no example content. The right hand side will be empty, and thats OK.
 ```
 
 The environment variable `METEOR_SETTINGS` can also be used.

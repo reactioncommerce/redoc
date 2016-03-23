@@ -34,6 +34,10 @@
   flex: 0 0 auto;
 }
 
+.redoc.header .user {
+  margin-left: 10px;
+}
+
 .redoc.header .logo {
   width: 32px;
   margin-right: 10px;
@@ -110,21 +114,30 @@
   align-items: center;
   justify-content: flex-end;
   flex: 1 1 auto;
-  padding-right: 20px;
 }
 
 .redoc.header .filters .item {
   margin-left: 10px;
 }
 
+.redoc.header .main-header .navbar-item:last-child {
+  padding-right: 20px;
+}
+
 @media screen and (max-width: @screen-xs-max) {
   .redoc.header .main-header {
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
     height: auto;
   }
 
+  .redoc.header .main-header .navbar-item:last-child {
+    padding-right: 0;
+  }
+
   .redoc.header .brand {
-    // padding-bottom: 20px;
+    order: 1;
+    flex: 1 1 auto;
     height: 60px;
     border-buttom: 1px solid @border-color;
   }
@@ -133,7 +146,15 @@
     display: flex;
   }
 
+  .redoc.header .main-header .navbar-item.user {
+    order: 2;
+    padding-right: 10px;
+  }
+
   .redoc.header .filters {
+    order: 3;
+    width: 100%;
+    flex: 0 0 auto;
     margin: 0;
     padding: 0;
   }
