@@ -58,7 +58,6 @@ export default DocView = React.createClass({
       }
 
       return {
-        docIsLoaded: sub.ready(),
         currentDoc: ReDoc.Collections.Docs.findOne(params),
         search: search
       };
@@ -66,7 +65,6 @@ export default DocView = React.createClass({
 
     if (Meteor.isServer) {
       return {
-        docIsLoaded: true,
         currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
         search: []
       };
@@ -107,24 +105,23 @@ export default DocView = React.createClass({
         );
       }
     }
-    if (this.data.docIsLoaded) {
-      // Render standard content
-      if (this.data.currentDoc && this.data.currentDoc.docPageContentHTML) {
-        let content = {
-          __html: this.data.currentDoc.docPageContentHTML
-        };
 
-        return (
-          <div className="content-html" dangerouslySetInnerHTML={content}></div>
-        );
-      }
+    // Render standard content
+    if (this.data.currentDoc && this.data.currentDoc.docPageContentHTML) {
+      let content = {
+        __html: this.data.currentDoc.docPageContentHTML
+      };
 
       return (
-        <div className="content-html">
-          <h2>{"Requested document not found for this version."}</h2>
-        </div>
+        <div className="content-html" dangerouslySetInnerHTML={content}></div>
       );
     }
+
+    return (
+      <div className="content-html">
+        <h2>{"Requested document not found for this version."}</h2>
+      </div>
+    );
   },
 
   scrollToElement() {

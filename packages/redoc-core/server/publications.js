@@ -29,6 +29,7 @@ Meteor.publish("Repos", function () {
  *  checks if request docs exists first then pulls new data if there is none
  */
 Meteor.publish("CacheDocs", function (params) {
+
   // some minor validation
   check(params, {
     repo: Match.Optional(String, null),
@@ -56,6 +57,14 @@ Meteor.publish("CacheDocs", function (params) {
   }
   if (!docRepo) {
     console.log("CacheDocs Publication: Failed to load repo data for document cache request", params);
+  }
+
+  if (!params.repo) {
+    params.repo = docRepo.repo;
+  }
+
+  if (!params.branch) {
+    params.branch = docRepo.default_branch || Meteor.settings.public.redoc.branch || "master";
   }
 
   // assemble TOC
