@@ -38,12 +38,12 @@ Meteor.publish("CacheDocs", function (params) {
 
   // if we have no params, we're the root document
   if (Object.keys(params).length === 0) {
-    defaultDoc = ReDoc.Collections.TOC.findOne({
+    defaultToc = ReDoc.Collections.TOC.findOne({
       default: true
     });
-    params.repo = defaultDoc.repo;
+    params.repo = defaultToc.repo;
     params.branch = Meteor.settings.public.redoc.branch || "master";
-    params.alias = defaultDoc.alias;
+    params.alias = defaultToc.alias;
   }
   // get repo details
   let docRepo = ReDoc.Collections.Repos.findOne({

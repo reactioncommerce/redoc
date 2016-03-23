@@ -1,6 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import "underscore";
+import s from "underscore.string";
 
 export default DocView = React.createClass({
   mixins: [ReactMeteorData],
@@ -57,15 +58,21 @@ export default DocView = React.createClass({
     return links;
   },
 
-  renderMenu() {
-    const items = this.data.docs.map((item) => {
+  renderMenu(parentPath) {
+    let items = [];
+    let parentItems = _.filter(this.data.docs, function(item) { return item.parentPath === parentPath });
+    if (parentItems.length === 0) {
+      return [];
+    }
+
+    for (let item of parentItems) {
       const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const url = `/${item.repo}/${branch}/${item.alias}`;
 
       let subList;
 
       if (item.documentTOC) {
-        const subItems = item.documentTOC.map((subItem, index) => {
+        subItems = item.documentTOC.map((subItem, index) => {
           const hashUrl = `${url}#${subItem.slug}`;
 
           return (
@@ -86,14 +93,16 @@ export default DocView = React.createClass({
         );
       }
 
-      return (
-        <li className={item.class} key={`${branch}-${item._id}`}>
+      const className = item.class || (parentPath ? 'guide-sub-nav-item' : 'guide-nav-item');
+      items.push (
+        <li className={className} key={`${branch}-${item._id}`}>
           <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
-
           {subList}
         </li>
       );
-    });
+      let currentPath = s.strLeftBack(item.docPath, '/README.md'); // Dirs path has /README.md attached to them
+      items = items.concat(this.renderMenu(currentPath));
+    }
 
     return items;
   },

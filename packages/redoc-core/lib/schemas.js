@@ -48,6 +48,10 @@ ReDoc.Schemas.Repos = new SimpleSchema({
   defaultBranch: {
     type: String,
     optional: true
+  },
+  contentsUrl: {
+    type: String,
+    optional: true
   }
 });
 
@@ -71,7 +75,8 @@ ReDoc.Schemas.DocumentTOC = new SimpleSchema({
 ReDoc.Schemas.TOC = new SimpleSchema({
   class: {
     type: String,
-    max: 60
+    max: 60,
+    optional: true
   },
   position: {
     type: Number,
@@ -88,6 +93,10 @@ ReDoc.Schemas.TOC = new SimpleSchema({
   },
   repo: {
     type: String
+  },
+  parentPath: {
+    type: String,
+    optional: true
   },
   documentTOC: {
     type: [ReDoc.Schemas.DocumentTOC],

@@ -15,6 +15,7 @@ Package.onUse(function (api) {
   api.use("percolate:synced-cron");
   api.use("mongo");
   api.use("alanning:roles");
+  api.use("url");
 
   // add default initRepoData
   api.addAssets("private/redoc.json", "server");
@@ -26,6 +27,7 @@ Package.onUse(function (api) {
   // server
   api.addFiles("server/methods.js", "server");
   api.addFiles("server/publications.js", "server");
+  api.addFiles("server/restivus.js", "server");
   api.addFiles("server/startup.js", "server");
   // client
   api.addFiles("client/subscriptions.js", "client");

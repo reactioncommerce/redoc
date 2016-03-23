@@ -46,9 +46,20 @@ export default DocView = React.createClass({
         }
       });
 
+      // If no params have been given, load params from default TOC
+      let params = this.props.params;
+      if (Object.keys(params).length === 0) {
+        let defaultToc = ReDoc.Collections.TOC.findOne({ default: true });
+        if (!!defaultToc) {
+          params.repo = defaultToc.repo;
+          params.branch = defaultToc.branch;
+          params.alias = defaultToc.alias;
+        }
+      }
+
       return {
         docIsLoaded: sub.ready(),
-        currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
+        currentDoc: ReDoc.Collections.Docs.findOne(params),
         search: search
       };
     }

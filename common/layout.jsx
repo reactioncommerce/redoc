@@ -18,6 +18,13 @@ export default BaseLayout = React.createClass({
       data.isMenuVisible = Session.equals("isMenuVisible", true);
     }
 
+    if (__meteor_runtime_config__ && __meteor_runtime_config__.ROOT_URL) {
+      data.rootURL = __meteor_runtime_config__.ROOT_URL;
+      if (data.rootURL.substr(-1) !== '/') {
+        data.rootURL += '/';
+      }
+    }
+
     return data;
   },
 
