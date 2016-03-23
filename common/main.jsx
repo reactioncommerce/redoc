@@ -1,12 +1,11 @@
-import { render } from "react-dom";
 import React from "react";
-import {Route, IndexRoute} from "react-router";
+import { Route, IndexRoute, useRouterHistory } from "react-router";
 import Layout from "../common/layout.jsx";
 import Docs from "../common/docs/docs.jsx";
 import { ReactRouterSSR } from "meteor/reactrouter:react-router-ssr";
 import { default as ReactCookie } from "react-cookie";
-import { RedocAdmin } from "meteor/reactioncommerce:redoc-core/components/admin.jsx"
-import { createHistory, useBasename } from "history";
+import { RedocAdmin } from "meteor/reactioncommerce:redoc-core/components/admin.jsx";
+import { createHistory } from "history";
 
 const analytics = analytics || null;
 
@@ -35,11 +34,11 @@ let clientOptions = {
       }
     }
   }
-}
+};
 
-let getBasename = function() {
+function getBasename() {
   let el = document.createElement("a");
-  el.href = __meteor_runtime_config__.ROOT_URL;
+  el.href = __meteor_runtime_config__.ROOT_URL; // eslint-disable-line camelcase
   if (el.pathname.substr(-1) !== "/") {
     return el.pathname + "/";
   }
@@ -47,11 +46,9 @@ let getBasename = function() {
 }
 
 if (Meteor.isClient) {
-
-  // Run our app under the /base URL.
-  let history = useBasename(createHistory)({
+  let history = useRouterHistory(createHistory)({
     basename: getBasename()
-  })
+  });
 
   // At the /base/hello/world URL:
   history.listen(function (location) {
@@ -59,9 +56,9 @@ if (Meteor.isClient) {
       location.pathname = "/";
       location.basename = getBasename();
     }
-  })
+  });
 
-  clientOptions.history = history
+  clientOptions.history = history;
 }
 
 ReactRouterSSR.Run(AppRoutes, clientOptions, {
