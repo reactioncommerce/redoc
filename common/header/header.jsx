@@ -28,9 +28,9 @@ const DocView = React.createClass({
 
   handleBranchSelect(selectedBranch) {
     if (this.context.router) {
+      const params = this.props.params;
       const repo = params.repo || this.data.defaultDoc.repo;
       const branch = selectedBranch || this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
-      const params = this.props.params;
       const alias = params.alias || this.data.defaultDoc.alias;
       let url = '';
 
