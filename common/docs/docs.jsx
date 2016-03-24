@@ -39,6 +39,17 @@ export default DocView = React.createClass({
   getMeteorData() {
     const sub = Meteor.subscribe("CacheDocs", this.props.params);
 
+    // If no params have been given, load params from default TOC
+    let params = this.props.params;
+    if (Object.keys(params).length === 0) {
+      let defaultToc = ReDoc.Collections.TOC.findOne({ default: true });
+      if (!!defaultToc) {
+        params.repo = defaultToc.repo;
+        params.branch = defaultToc.branch || Meteor.settings.public.redoc.branch || "master";
+        params.alias = defaultToc.alias;
+      }
+    }
+
     if (Meteor.isClient) {
       const search = DocSearch.getData({
         transform: (matchText, regExp) => {
@@ -48,7 +59,7 @@ export default DocView = React.createClass({
 
       return {
         docIsLoaded: sub.ready(),
-        currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
+        currentDoc: ReDoc.Collections.Docs.findOne(params),
         search: search
       };
     }
@@ -56,7 +67,7 @@ export default DocView = React.createClass({
     if (Meteor.isServer) {
       return {
         docIsLoaded: true,
-        currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
+        currentDoc: ReDoc.Collections.Docs.findOne(params),
         search: []
       };
     }
