@@ -1,6 +1,5 @@
 # redoc
-
-[![Circle CI](https://circleci.com/gh/reactioncommerce/redoc/tree/master.svg?style=svg)](https://circleci.com/gh/reactioncommerce/redoc/tree/master)
+[![Circle CI](https://circleci.com/gh/reactioncommerce/redoc/tree/master.svg?style=svg)](https://circleci.com/gh/reactioncommerce/redoc/tree/master) [![Code Climate](https://codeclimate.com/github/reactioncommerce/redoc/badges/gpa.svg)](https://codeclimate.com/github/reactioncommerce/redoc)
 
 **redoc** is a [Meteor](https://meteor.com) application that can be used to present styled markdown from multiple Github repositories.
 
@@ -79,14 +78,9 @@ Since we use this project to generate docs for [Reaction Commerce](https://react
 ```
 
 ## Document Structure
+Documents is split into one of two sides. Left - Explanation Right - Examples
 
-Documents is split into one of two sides.
-Left - Explanation
-Right - Examples
-
-Heading levels (h1, h2, h3) create distinct sections.
-Heading level (h4) does not create a section, instead lives in the current heading section.
-Heading levels (h5, h6) create an example sub section within the current heading section.
+Heading levels (h1, h2, h3) create distinct sections. Heading level (h4) does not create a section, instead lives in the current heading section. Heading levels (h5, h6) create an example sub section within the current heading section.
 
 The following example shows how this works:
 
@@ -180,13 +174,13 @@ docker build -f docker/redoc.dev.docker -t <your org>/redoc .
 ```
 
 Once you have built a production image, you can push it to your Docker Hub account:
+
 ```sh
 docker push <your org>/redoc
 ```
 
 ### Run
-Running the official Redoc image
-(assuming you're using `settings.json` in the project root and an external MongoDB):
+Running the official Redoc image (assuming you're using `settings.json` in the project root and an external MongoDB):
 
 ```sh
 docker run -d \
