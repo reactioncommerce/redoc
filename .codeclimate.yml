@@ -1,6 +1,7 @@
 exclude_paths:
 - ".meteor/*"
 - "packages/meteor-react-router-ssr/*"
+- "packages/redoc-base-theme/lib/*"
 engines:
   duplication:
     enabled: true
