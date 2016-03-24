@@ -78,7 +78,6 @@ oauth@1.1.8-rc.4
 oauth2@1.1.7-rc.4
 observe-sequence@1.0.9-rc.4
 ongoworks:security@1.3.0
-ongoworks:spiderable@1.0.7
 ordered-dict@1.0.5-rc.4
 percolate:synced-cron@1.3.0
 promise@0.6.4-rc.4
