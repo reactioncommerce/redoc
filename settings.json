@@ -3,9 +3,6 @@
     "segment": {
       "writeKey": ""
     },
-    "ga": {
-      "account": ""
-    },
     "gitter": {
       "room": "reactioncommerce/redoc"
     },
@@ -18,13 +15,22 @@
         "image": "https://docs.reactioncommerce.com/images/facebook-reaction-profile.png",
         "favicon": "/favicon.png"
       },
-      "mainNavigationLinks": [
-        { "href": "https://reactioncommerce.com/features", "value": "Features" },
-        { "href": "https://reactioncommerce.com/partners", "value": "Partners" },
-        { "href": "https://docs.reactioncommerce.com", "value": "Docs" },
-        { "href": "https://reactioncommerce.com/about", "value": "About" },
-        { "href": "http://blog.reactioncommerce.com", "value": "Blog" }
-      ],
+      "mainNavigationLinks": [{
+        "href": "https://reactioncommerce.com/features",
+        "value": "Features"
+      }, {
+        "href": "https://reactioncommerce.com/partners",
+        "value": "Partners"
+      }, {
+        "href": "https://docs.reactioncommerce.com",
+        "value": "Docs"
+      }, {
+        "href": "https://reactioncommerce.com/about",
+        "value": "About"
+      }, {
+        "href": "http://blog.reactioncommerce.com",
+        "value": "Blog"
+      }],
       "logo": {
         "image": "/images/logo.png",
         "link": {
@@ -32,7 +38,11 @@
           "value": "Reaction"
         }
       },
-      "branch": "master"
+      "branch": "master",
+      "publicBranches": [
+        "master",
+        "development"
+      ]
     }
   },
   "services": [{
@@ -46,6 +56,10 @@
   }],
   "redoc": {
     "schedule": "every 4 hours",
-    "initRepoData": "https://raw.githubusercontent.com/reactioncommerce/redoc/master/private/redoc.json"
+    "initRepoData": "https://raw.githubusercontent.com/reactioncommerce/redoc/master/private/redoc.json",
+    "users": [{
+      "username": "",
+      "roles": ["admin"]
+    }]
   }
 }

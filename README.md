@@ -41,7 +41,10 @@ Since we use this project to generate docs for [Reaction Commerce](https://react
   "services": [{
     "github": {
       "clientId": "",
-      "secret": ""
+      "secret": "",
+      "webhook": {
+        "updateDocs": ""
+      }
     }
   }],
   "redoc": {
