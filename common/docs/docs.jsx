@@ -39,23 +39,23 @@ export default DocView = React.createClass({
   getMeteorData() {
     const sub = Meteor.subscribe("CacheDocs", this.props.params);
 
+    // If no params have been given, load params from default TOC
+    let params = this.props.params;
+    if (Object.keys(params).length === 0) {
+      let defaultToc = ReDoc.Collections.TOC.findOne({ default: true });
+      if (!!defaultToc) {
+        params.repo = defaultToc.repo;
+        params.branch = defaultToc.branch || Meteor.settings.public.redoc.branch || "master";
+        params.alias = defaultToc.alias;
+      }
+    }
+
     if (Meteor.isClient) {
       const search = DocSearch.getData({
         transform: (matchText, regExp) => {
           return matchText.replace(regExp, "<span class='highlight'>$&</span>");
         }
       });
-
-      // If no params have been given, load params from default TOC
-      let params = this.props.params;
-      if (Object.keys(params).length === 0) {
-        let defaultToc = ReDoc.Collections.TOC.findOne({ default: true });
-        if (!!defaultToc) {
-          params.repo = defaultToc.repo;
-          params.branch = defaultToc.branch;
-          params.alias = defaultToc.alias;
-        }
-      }
 
       return {
         currentDoc: ReDoc.Collections.Docs.findOne(params),
@@ -65,7 +65,7 @@ export default DocView = React.createClass({
 
     if (Meteor.isServer) {
       return {
-        currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
+        currentDoc: ReDoc.Collections.Docs.findOne(params),
         search: []
       };
     }
