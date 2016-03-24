@@ -12,152 +12,24 @@
   height: 400px;
 }
 
-.redoc.docs .navigation {
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 auto;
-  width: 300px;
-  max-width: 300px;
-  // height: 100vh;
-  border-right: 1px solid @black10;
-  background-color: @black02;// fadeout(@docs-navigation-background-color, 30%);
-  background-color: @white;
-}
-
-
-.guide-sub-subnav-item.level-1 {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.guide-sub-subnav-item.level-2 {
-  padding-left: 20px;
-  font-size: 14px
-}
-
-.guide-sub-subnav-item.level-3 {
-  padding-left: 40px;
-  font-size: 12px;
-  font-weight: 400;
-}
-
-@media screen and (max-width: @screen-xs-max) {
-  .redoc.docs .navigation {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 300px;
-    height: 100vh;
-
-    box-shadow: 0 0 30px rgba(0,0,0,.15);
-
-    z-index: 100;
-  }
-
-  .redoc.docs .navigation.visible {
-    display: flex;
-  }
-}
-
-.redoc.docs .menu {
-  padding: 20px 20px 80px;
-  flex: 1 1 auto;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.redoc.docs .menu ul {
-  padding-left: 0;
-  list-style-type: none;
-}
-
-.redoc.docs .menu ul li > ul {}
-
-.redoc.docs .menu ul li {
-  a {
-    display: inline-block;
-    padding: 2px 4px;
-  }
-}
-
-.redoc.docs .menu ul li.selected {
-  a {
-    color: @brand-dark-color;
-    text-decoration: none;
-  }
-  &:hover {
-    color: @brand-dark-color;
-  }
-}
-
-.redoc.docs .menu .guide-nav-item {
-  font-size: 1.6rem;
-  margin-bottom: 10px;
-  margin-top: 40px;
-  text-transform: uppercase;
-  font-weight: 600;
-  color: @black;
-  &:hover {
-    color: @black;
-  }
-}
-
-.redoc.docs .menu .reaction-nav-item {
-  display: none;
-  font-size: 1.6rem;
-  text-transform: uppercase;
-  font-weight: 600;
-  color: @black;
-  &:hover {
-    color: @black;
-  }
-
-  @media screen and (max-width: @screen-xs-max) {
-    display: block;
-  }
-}
-
-.redoc.docs .menu .reaction-nav-item.primary {
-  border-bottom: 1px solid @black10;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
-}
-.redoc.docs .menu .reaction-nav-item.primary img {
-  width: 32px;
-}
-
-
-.redoc.docs .menu .guide-nav-item:first-child {
-  margin-top: 0;
-}
-
-
-
-.redoc.docs .menu .guide-sub-nav-item a {
-  color: @black;
-  &:hover {
-    color: @black;
-    text-decoration: underline;
-  }
-}
-
 .doc-spinner {
   padding: 75px 0 0 75;
 }
 
 // -----------------------------------------------------
 .redoc.docs .content {
-  .display(flex);
+  // .display(flex);
   // .justify-content(center);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   // background-color: white;
 
   .flex(1 1 auto);
-  .section {
-    padding: 0 2rem;
-  }
+
+
+}
+
+.content-html {
   p,
   > ul,
   blockquote {
@@ -167,27 +39,22 @@
   a {
     color: blue;
   }
-}
-
-.content-html {
-  p,
-  ul,
-  blockquote {
-
-  }
   pre {
     background-color: @docs-code-background-color;
   }
-  h2,
+  h2 {
+
+  }
+
   h3,
   h4,
   h5,
   h6 {
-    margin-top: 40px;
-    margin-bottom: 20px;
-    padding-top: 20px;
-    width: 100%;
-    border-top: 1px solid darken(@docs-code-background-color, 5%);
+    // margin-top: 40px;
+    // margin-bottom: 20px;
+    // padding-top: 20px;
+    // width: 100%;
+    // border-top: 1px solid darken(@docs-code-background-color, 5%);
   }
   img {
     max-width: 70%;
@@ -200,14 +67,67 @@
 }
 
 .redoc.docs .content-html {
-  padding: 40px 40px 60px;
+  // padding: 40px 40px 60px;
   // padding-bottom: 60px;
-  max-width: 800px;
+  // width: 400px;
+  width: 100%;
   background: @white;
   height: 100%;
   border-right: 1px solid @border-color;
 
   @media screen and (max-width: @screen-xs-max) {
-    padding: 20px 20px 80px;
+
+  }
+}
+
+.redoc.docs .content-html {
+  table {
+    .table();
+    background-color: #fff;
+    border-radius: @border-radius-base;
+    box-shadow: 0 0 0 1px @border-color;
+  }
+}
+
+.content-html .section {
+  display: flex;
+  border-bottom: 1px solid darken(@docs-code-background-color, 5%);
+
+  @media screen and (max-width: @screen-sm-max) {
+    display: block;
+    padding-bottom: 3rem;
+  }
+}
+
+.content-html .section .section-content {
+  flex: 1 1 auto;
+  width: 50%;
+  padding: 0 2rem 2rem;
+
+  pre {
+    display: none;
+  }
+
+  @media screen and (max-width: @screen-sm-max) {
+    padding-bottom: 0;
+    width: 100%;
+  }
+}
+
+.content-html .section .section-example {
+  flex: 1 1 auto;
+  width: 50%;
+  padding: 6rem 2rem 3rem;
+  background-color: @black02;
+
+  h5 {
+    font-weight: 700;
+  }
+
+  @media screen and (max-width: @screen-sm-max) {
+    background-color: @white;
+    width: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }

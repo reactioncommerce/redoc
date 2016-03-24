@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "underscore";
 
 export default BranchSelect = React.createClass({
   mixins: [ReactMeteorData],
@@ -6,19 +7,33 @@ export default BranchSelect = React.createClass({
   getMeteorData() {
     let branches = [];
     let repo = ReDoc.Collections.Repos.findOne({ repo: this.props.repo }) || ReDoc.Collections.Repos.findOne();
+
     if (repo && repo.branches) {
-      branches = repo.branches.map(function(branch) {
-        return branch.name;
-      })
+      const isAdminUser = Roles.userIsInRole(Meteor.userId(), ["admin"], "redoc");
+
+      for (branch of repo.branches) {
+        if (Meteor.settings.public.redoc.publicBranches) {
+          const isPublicBranch = _.contains(Meteor.settings.public.redoc.publicBranches, branch.name);
+
+          if (isPublicBranch || isAdminUser) {
+            branches.push(branch.name);
+          }
+        } else {
+          branches.push(branch.name);
+        }
+      }
     }
+
     return {
       branches: branches
     };
   },
 
   renderBranches() {
-    return this.data.branches.map(function(branch, index) {
-      return <option key={index} value={branch}>{branch}</option>
+    return this.data.branches.map((branch, index) => {
+      return (
+        <option key={index} value={branch}>{branch}</option>
+      );
     });
   },
 
@@ -45,10 +60,10 @@ export default BranchSelect = React.createClass({
           </div>
         </div>
       );
-    } else {
-      return (
-        <div className="loading">Loading...</div>
-      );
     }
+
+    return (
+      <div className="loading">{"Loading..."}</div>
+    );
   }
 });

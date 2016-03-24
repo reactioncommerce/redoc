@@ -3,7 +3,9 @@
 import "highlight.js";
 import punycode from "punycode";
 import "underscore";
+import s from "underscore.string";
 import TOCParser from "../lib/plugins/toc";
+import APIParser from "../lib/plugins/api";
 
 export let hljs = require("highlight.js");
 
@@ -55,7 +57,87 @@ md = require("markdown-it")({
   }
 })
 .use(require("markdown-it-replace-link"))
-.use(TOCParser);
+.use(TOCParser)
+.use(APIParser);
+
+function getDoc(options) {
+  // get repo details
+  const docRepo = ReDoc.Collections.Repos.findOne({
+    repo: options.repo
+  });
+
+  // we need to have a repo
+  if (!docRepo) {
+    console.log(`redoc/getDocSet: Failed to load repo data for ${options.repo}`);
+    return false;
+  }
+
+  // TOC item for this doc
+  let tocItem = ReDoc.Collections.TOC.findOne({
+    alias: options.alias,
+    repo: options.repo
+  });
+
+  loadAndSaveDoc({
+    rawUrl: docRepo.rawUrl,
+    branch: options.branch || "development",
+    repo: options.repo,
+    docPath: tocItem.docPath,
+    alias: tocItem.alias
+  });
+}
+
+
+function loadAndSaveDoc(docData) {
+  const { alias, docPath, repo, rawUrl, branch } = docData;
+
+  let docSourceUrl = `${rawUrl}/${branch}/${docPath}`;
+
+  // lets fetch that Github repo
+  Meteor.http.get(docSourceUrl, function (error, result) {
+    if (error) return error;
+    if (result.statusCode === 200) {
+      // sensible defaults for every repo
+      let docSet = ReDoc.getPathParams(docSourceUrl);
+      docSet.docPage = docSourceUrl;
+      docSet.docPath = docPath;
+
+      // if TOC has different alias, we'll use that
+      if (alias) {
+        docSet.alias = alias;
+      }
+
+      // pre-process documentation
+      if (!result.content) {
+        console.log(`redoc/getDocSet: Docset not found for ${docSet.docPath}.`);
+        result.content = `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
+      }
+
+      docSet.docPageContent = result.content;
+      docSet.docPageContentHTML = md.render(result.content, {
+        rawUrl: rawUrl,
+        branch: branch,
+        alias: docSet.alias,
+        repo: repo
+      });
+
+      // insert new documentation into Cache
+      return ReDoc.Collections.Docs.upsert({
+        docPage: docSourceUrl
+      }, {
+        $set: docSet
+      });
+    }
+  });
+}
+
+
+
+
+
+
+
+
 
 //
 // Meteor Methods
@@ -85,8 +167,7 @@ Meteor.methods({
       if (Meteor.settings.redoc.initRepoData.repos) {
         initRepoData = Meteor.settings.redoc.initRepoData;
       } else {
-        throw new Meteor.Error(
-          "Meteor.settings.redoc.initRepoData should be an object or http url in settings.json");
+        throw new Meteor.Error("Meteor.settings.redoc.initRepoData should be an object or http url in settings.json");
       }
     }
 
@@ -98,9 +179,7 @@ Meteor.methods({
       let Repos = initRepoData.repos;
       // if no tocData has been defined, we'll show this projects docs
       if (!Repos) {
-        throw new Meteor.Error(
-          "No repos have been defined in Meteor.settings.redoc.initRepoData url or object neither in private/redoc.json"
-        );
+        throw new Meteor.Error("No repos have been defined in Meteor.settings.redoc.initRepoData url or object neither in private/redoc.json");
       }
       // for each Repo insert new repoData
       Repos.forEach(function (repoItem) {
@@ -109,24 +188,25 @@ Meteor.methods({
     }
     // populate TOC from settings
     let TOC = ReDoc.Collections.TOC.find();
-    if (TOC.count() === 0) {
-      let tocData = initRepoData.tocData;
-      // if no tocData has been defined, we'll show this projects docs
-      if (!tocData) {
-        throw new Meteor.Error(
-          "No tocData have been defined in Meteor.settings.redoc.initRepoData url or object neither in private/redoc.json"
-        );
-      }
+    if (TOC.count() === 0 && initRepoData.tocData) {
       // insert TOC fixtures
-      tocData.forEach(function (tocItem, index) {
+      initRepoData.tocData.forEach(function (tocItem, index) {
         ReDoc.Collections.TOC.insert({
           ...tocItem,
           position: index
         });
       });
     }
+
     // Run once will get all repo data for current repos
     Meteor.call("redoc/getRepoData");
+
+    // If TOC is still empty, get TOC from Repository
+    if (ReDoc.Collections.TOC.find().count() === 0) {
+      ReDoc.Collections.Repos.find().forEach(function(repo) {
+        Meteor.call("redoc/getRepoTOC", repo.repo, Meteor.settings.public.redoc.branch || docRepo.defaultBranch);
+      })
+    }
   },
   /**
    *  redoc/flushDocCache
@@ -138,6 +218,19 @@ Meteor.methods({
     ReDoc.Collections.TOC.remove({});
     ReDoc.Collections.Docs.remove({});
     return Meteor.call("redoc/initRepoData");
+  },
+
+  /**
+   *  redoc/reloadDoc
+   *  fetch repo profile from github and store in RepoData collection
+   *  @param {Object} doc - mongo style selector for the doc
+   *  @returns {undefined} returns
+   */
+  "redoc/reloadDoc": function (docData) {
+    check(docData, Object);
+    if (this.userId) {
+      getDoc(docData);
+    }
   },
   /**
    *  redoc/getRepoData
@@ -199,7 +292,8 @@ Meteor.methods({
                 rawUrl: rawUrl,
                 release: releaseData.data,
                 branches: branchesData.data,
-                defaultBranch: repoData.data.default_branch
+                defaultBranch: repoData.data.default_branch,
+                contentsUrl: repoData.data.contents_url
               }
             });
           }
@@ -219,11 +313,12 @@ Meteor.methods({
   "redoc/getDocSet": function (repo, fetchBranch) {
     check(repo, String);
     check(fetchBranch, Match.Optional(String, null));
-    const branch = fetchBranch || "development";
     // get repo details
     const docRepo = ReDoc.Collections.Repos.findOne({
       repo: repo
     });
+
+    const branch = fetchBranch || Meteor.settings.public.redoc.branch || docRepo.defaultBranch || "master";
 
     // we need to have a repo
     if (!docRepo) {
@@ -239,6 +334,9 @@ Meteor.methods({
     for (let tocItem of docTOC) {
       let docSourceUrl = `${docRepo.rawUrl}/${branch}/${tocItem.docPath}`;
       // lets fetch that Github repo
+      // if (tocItem.docPath !== "developer/core/import.md") continue;
+      // console.warn("Only processing: developer/core/import.md");
+
       Meteor.http.get(docSourceUrl, function (error, result) {
         if (error) return error;
         if (result.statusCode === 200) {
@@ -250,6 +348,18 @@ Meteor.methods({
           // if TOC has different alias, we'll use that
           if (tocItem.alias) {
             docSet.alias = tocItem.alias;
+          }
+
+           // if TOC has different label, we'll use that
+          if (tocItem.label) {
+            let label = tocItem.label;
+            if (tocItem.parentPath) {
+              parent = ReDoc.Collections.TOC.findOne({ docPath: tocItem.parentPath + "/README.md" });
+              if (parent) {
+                label = parent.label + " - " + label;
+              }
+            }
+            docSet.label = label;
           }
 
           // pre-process documentation
@@ -275,5 +385,96 @@ Meteor.methods({
         }
       });
     }
+  },
+
+/**
+ *  redoc/getRepoTOC
+ *  fetch all docs for a specified repo / branch starting at path
+ *  @param {String} repo - repo
+ *  @param {String} fetchBranch - optional branch
+ *  @param {String} path - optional path
+ *  @returns {undefined} returns
+ **/
+  "redoc/getRepoTOC": function (repo, fetchBranch, path) {
+    this.unblock();
+    check(repo, String);
+    check(fetchBranch,  Match.Optional(String, null));
+    check(path,  Match.Optional(String, null));
+
+    // get repo details
+    const docRepo = ReDoc.Collections.Repos.findOne({
+      repo: repo
+    });
+
+    // we need to have a repo
+    if (!docRepo) {
+      console.log(`redoc/getRepoTOC: Failed to load repo data for ${repo}`);
+      return false;
+    }
+
+    let branch;
+    if (fetchBranch) {
+      branch = fetchBranch;
+    } else if (docRepo.branches && docRepo.branches.length > 0) {
+      for (let branch of docRepo.branches) {
+        Meteor.call("redoc/getRepoTOC", repo, branch.name, path);
+      }
+    } else {
+      branch = docRepo.defaultBranch || "master";
+    }
+
+    if (branch) {
+
+      // assemble TOC
+      let requestUrl = docRepo.contentsUrl.replace("{+path}", path ? encodeURIComponent(path) : "") + authString + '&ref=' + branch;
+      let contentData = Meteor.http.get(requestUrl, {
+        headers: {
+          "User-Agent": "ReDoc/1.0"
+        }
+      });
+
+      if (contentData && contentData.data) {
+        for (let sortIndex in contentData.data) {
+          let tocItem = contentData.data[sortIndex];
+
+          if (tocItem.type === 'file' && tocItem.path !== "README.md" && (tocItem.name.indexOf('.md') === -1 || tocItem.name === "README.md")) {
+            continue;
+          }
+
+          let matches, sort;
+          if (matches = tocItem.name.match(/^(\d+)/)) {
+            sort = s.toNumber(matches[1]);
+          } else {
+            sort = parseInt(sortIndex);
+          }
+          let tocData = {
+            alias: s.slugify(s.strLeftBack(tocItem.path, '.md').replace(/^(\d+)[ \.]+/, '')),
+            label: s.strLeftBack(tocItem.name, '.md').replace(/^(\d+)[ \.]+/, ''),
+            repo: repo,
+            branch: branch,
+            position: sort,
+            docPath: encodeURIComponent(tocItem.path)
+          };
+          // First README.md, on root
+          if (tocItem.path === "README.md") {
+            tocData.alias = 'welcome';
+            tocData.label = 'Welcome';
+            tocData.position = 0;
+            tocData.default = true;
+          }
+          if (path) {
+            tocData.parentPath = encodeURIComponent(path);
+          }
+          if (tocItem.type === 'dir') {
+            tocData.docPath += '/README.md';
+          }
+          ReDoc.Collections.TOC.insert(tocData);
+          if (tocItem.type === 'dir') {
+            Meteor.call("redoc/getRepoTOC", repo, branch, tocItem.path);
+          }
+        }
+      }
+    }
+    Meteor.call("redoc/getRepoData");
   }
 });

@@ -1,8 +1,10 @@
 import React from "react";
 import SearchField from "../search/search.jsx";
 import BranchSelect from "../docs/branchSelect.jsx";
+import { composeWithTracker } from 'react-komposer';
+import Avatar from "meteor/reactioncommerce:redoc-core/components/avatar.jsx"
 
-export default DocView = React.createClass({
+const DocView = React.createClass({
   contextTypes: {
     router: React.PropTypes.object.isRequired
   },
@@ -10,8 +12,11 @@ export default DocView = React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData() {
+    Meteor.subscribe("TOC");
+
     let data = {
-      isMenuVisible: true
+      isMenuVisible: true,
+      defaultDoc: ReDoc.Collections.TOC.findOne({default: true})
     };
 
     if (Meteor.isClient) {
@@ -25,9 +30,10 @@ export default DocView = React.createClass({
     if (this.context.router) {
       const branch = selectedBranch || this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const params = this.props.params;
-      const url = `/${params.repo}/${branch}/${params.alias}`;
+      const repo = params.repo || this.data.defaultDoc.repo;
+      const alias = params.alias || this.data.defaultDoc.alias;
+      const url = `/${repo}/${branch}/${alias}`;
 
-      // this.context.router.push(url);
       window.location.href = url;
     }
   },
@@ -52,16 +58,30 @@ export default DocView = React.createClass({
     return links;
   },
 
+  renderSignedInUser() {
+    if (this.props.user && this.props.user.services) {
+      const githubUserId = this.props.user.services.github.id;
+      const imageUrl = `https://avatars.githubusercontent.com/u/${githubUserId}?s=460`
+      return (
+        <div className="navbar-item user">
+          <a href="/redoc">
+            <Avatar githubUserId={githubUserId} />
+          </a>
+        </div>
+      );
+    }
+  },
+
   render() {
     return (
       <div className="redoc header">
 
         <div className="navigation">
-          {this.renderMainNavigationLinks('Docs')}
+          {this.renderMainNavigationLinks("Docs")}
         </div>
 
         <div className="main-header">
-          <div className="brand">
+          <div className="navbar-item brand">
             <button className="redoc menu-button" onClick={this.handleMenuToggle}>
               <i className="fa fa-bars"></i>
             </button>
@@ -71,7 +91,7 @@ export default DocView = React.createClass({
             </a>
           </div>
 
-          <div className="filters">
+          <div className="navbar-item filters">
             <div className="item">
               <BranchSelect
                 repo={this.props.params.repo}
@@ -83,8 +103,12 @@ export default DocView = React.createClass({
               <SearchField />
             </div>
           </div>
+
+          {this.renderSignedInUser()}
         </div>
       </div>
     );
   }
 });
+
+export default DocView;

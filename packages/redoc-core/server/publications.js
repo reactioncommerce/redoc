@@ -2,6 +2,16 @@
 //   return ReDoc.Collections.Docs.find();
 // });
 
+Meteor.publish("userData", function () {
+  return Meteor.users.find({
+    _id: this.userId
+  }, {
+    fields: {
+      "services.github.id": 1
+    }
+  });
+});
+
 Meteor.publish("TOC", function () {
   return ReDoc.Collections.TOC.find({}, {
     sort: {
@@ -18,23 +28,31 @@ Meteor.publish("Repos", function () {
  *  CacheDocs returns all docs, filter by branch
  *  checks if request docs exists first then pulls new data if there is none
  */
-Meteor.publish("CacheDocs", function (params) {
+Meteor.publish("CacheDocs", function (docParams) {
   // some minor validation
-  check(params, {
+  check(docParams, {
     repo: Match.Optional(String, null),
     branch: Match.Optional(String, null),
     alias: Match.Optional(String, null)
   });
 
-  // if we have no params, we're the root document
-  if (Object.keys(params).length === 0) {
-    defaultDoc = ReDoc.Collections.TOC.findOne({
+  let params = {};
+
+  // Set params defaults
+  params.repo = docParams.repo;
+  params.alias = docParams.alias;
+  params.branch = docParams.branch || Meteor.settings.public.redoc.branch || "master";
+
+  // Set params for doc if docParams is empty using the default doc params
+  if (Object.keys(docParams).length === 0) {
+    const defaultToc = ReDoc.Collections.TOC.findOne({
       default: true
     });
-    params.repo = defaultDoc.repo;
-    params.branch = Meteor.settings.public.redoc.branch || "master";
-    params.alias = defaultDoc.alias;
+
+    params.repo = defaultToc.repo;
+    params.alias = defaultToc.alias;
   }
+
   // get repo details
   let docRepo = ReDoc.Collections.Repos.findOne({
     repo: params.repo
@@ -66,9 +84,5 @@ Meteor.publish("CacheDocs", function (params) {
     Meteor.call("redoc/getDocSet", params.repo, params.branch);
   }
   // return cache doc
-  return ReDoc.Collections.Docs.find({
-    repo: params.repo,
-    branch: params.branch,
-    alias: params.alias
-  });
+  return cacheDoc;
 });

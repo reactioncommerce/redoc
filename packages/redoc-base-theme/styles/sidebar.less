@@ -1,0 +1,135 @@
+
+.redoc.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  width: 300px;
+  max-width: 300px;
+  border-right: 1px solid @black10;
+  background-color: @black02;
+  background-color: @white;
+}
+
+
+.guide-sub-subnav-item.level-1 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.guide-sub-subnav-item.level-2 {
+  padding-left: 20px;
+  font-size: 14px
+}
+
+.guide-sub-subnav-item.level-3 {
+  padding-left: 40px;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.guide-sub-subnav-item.level-4 {
+  padding-left: 60px;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+@media screen and (max-width: @screen-xs-max) {
+  .redoc.sidebar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100vh;
+
+    box-shadow: 0 0 30px rgba(0,0,0,.15);
+
+    z-index: 100;
+  }
+
+  .redoc.sidebar.visible {
+    display: flex;
+  }
+}
+
+.redoc.sidebar .menu {
+  padding: 20px 20px 80px;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.redoc.sidebar .menu ul {
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.redoc.sidebar .menu ul li > ul {}
+
+.redoc.sidebar .menu ul li {
+  a {
+    display: inline-block;
+    padding: 2px 4px;
+  }
+}
+
+.redoc.sidebar .menu ul li.selected {
+  a {
+    color: @brand-dark-color;
+    text-decoration: none;
+  }
+  &:hover {
+    color: @brand-dark-color;
+  }
+}
+
+.redoc.sidebar .menu .guide-nav-item {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+  margin-top: 40px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: @black;
+  &:hover {
+    color: @black;
+  }
+}
+
+.redoc.sidebar .menu .reaction-nav-item {
+  display: none;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: @black;
+  &:hover {
+    color: @black;
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    display: block;
+  }
+}
+
+.redoc.sidebar .menu .reaction-nav-item.primary {
+  border-bottom: 1px solid @black10;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+.redoc.sidebar .menu .reaction-nav-item.primary img {
+  width: 32px;
+}
+
+
+.redoc.sidebar .menu .guide-nav-item:first-child {
+  margin-top: 0;
+}
+
+
+
+.redoc.sidebar .menu .guide-sub-nav-item a {
+  color: @black;
+  &:hover {
+    color: @black;
+    text-decoration: underline;
+  }
+}

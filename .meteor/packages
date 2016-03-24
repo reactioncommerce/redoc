@@ -19,13 +19,14 @@ check                   # utils to check params
 ejson                   # ejson required for oauth/github
 service-configuration   # meteor accounts service configuration methods
 
-# accounts-base
+accounts-base
+accounts-ui
+accounts-github
 # accounts-password
-# accounts-ui
 
 # Community packages
 percolate:synced-cron
-ongoworks:spiderable
+
 #kadira:flow-router
 #kadira:blaze-layout
 #kadira:react-layout
@@ -46,6 +47,8 @@ aldeed:collection2
 ongoworks:security
 standard-minifier-css
 standard-minifier-js
+alanning:roles
+nimble:restivus
 
 # Testing packages
 avital:mocha

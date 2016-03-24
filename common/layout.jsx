@@ -7,12 +7,22 @@ export default BaseLayout = React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData() {
+    Meteor.subscribe("userData");
+
     let data = {
-      isMenuVisible: false
+      isMenuVisible: false,
+      user: Meteor.user()
     };
 
     if (Meteor.isClient) {
       data.isMenuVisible = Session.equals("isMenuVisible", true);
+    }
+
+    if (__meteor_runtime_config__ && __meteor_runtime_config__.ROOT_URL) {
+      data.rootURL = __meteor_runtime_config__.ROOT_URL;
+      if (data.rootURL.substr(-1) !== '/') {
+        data.rootURL += '/';
+      }
     }
 
     return data;
@@ -57,8 +67,12 @@ export default BaseLayout = React.createClass({
         <Header
           history={this.props.history}
           params={this.props.params}
+          user={this.data.user}
         />
-        {this.props.children}
+        {React.cloneElement(this.props.children, {
+          user: this.data.user,
+          isMenuVisible: this.data.isMenuVisible
+        })}
         {this.renderOverlayForMenu()}
       </div>
     );
