@@ -39,6 +39,17 @@ export default DocView = React.createClass({
   getMeteorData() {
     const sub = Meteor.subscribe("CacheDocs", this.props.params);
 
+    // If no params have been given, load params from default TOC
+    let params = this.props.params;
+    if (Object.keys(params).length === 0) {
+      let defaultToc = ReDoc.Collections.TOC.findOne({ default: true });
+      if (!!defaultToc) {
+        params.repo = defaultToc.repo;
+        params.branch = defaultToc.branch || Meteor.settings.public.redoc.branch || "master";
+        params.alias = defaultToc.alias;
+      }
+    }
+
     if (Meteor.isClient) {
       const search = DocSearch.getData({
         transform: (matchText, regExp) => {
@@ -46,19 +57,7 @@ export default DocView = React.createClass({
         }
       });
 
-      // If no params have been given, load params from default TOC
-      let params = this.props.params;
-      if (Object.keys(params).length === 0) {
-        let defaultToc = ReDoc.Collections.TOC.findOne({ default: true });
-        if (!!defaultToc) {
-          params.repo = defaultToc.repo;
-          params.branch = defaultToc.branch;
-          params.alias = defaultToc.alias;
-        }
-      }
-
       return {
-        docIsLoaded: sub.ready(),
         currentDoc: ReDoc.Collections.Docs.findOne(params),
         search: search
       };
@@ -66,8 +65,7 @@ export default DocView = React.createClass({
 
     if (Meteor.isServer) {
       return {
-        docIsLoaded: true,
-        currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
+        currentDoc: ReDoc.Collections.Docs.findOne(params),
         search: []
       };
     }
@@ -107,24 +105,23 @@ export default DocView = React.createClass({
         );
       }
     }
-    if (this.data.docIsLoaded) {
-      // Render standard content
-      if (this.data.currentDoc && this.data.currentDoc.docPageContentHTML) {
-        let content = {
-          __html: this.data.currentDoc.docPageContentHTML
-        };
 
-        return (
-          <div className="content-html" dangerouslySetInnerHTML={content}></div>
-        );
-      }
+    // Render standard content
+    if (this.data.currentDoc && this.data.currentDoc.docPageContentHTML) {
+      let content = {
+        __html: this.data.currentDoc.docPageContentHTML
+      };
 
       return (
-        <div className="content-html">
-          <h2>{"Requested document not found for this version."}</h2>
-        </div>
+        <div className="content-html" dangerouslySetInnerHTML={content}></div>
       );
     }
+
+    return (
+      <div className="content-html">
+        <h2>{"Requested document not found for this version."}</h2>
+      </div>
+    );
   },
 
   scrollToElement() {

@@ -1,3 +1,6 @@
+import s from "underscore.string";
+import url from "url";
+
 Meteor.startup(function () {
   // default public settings
   if (Meteor.settings.public.redoc === undefined) {
@@ -49,4 +52,6 @@ Meteor.startup(function () {
       room: "reactioncommerce/redoc"
     };
   }
+
+  global.baseURL = s.rtrim(url.parse(__meteor_runtime_config__.ROOT_URL).pathname, '/');
 });

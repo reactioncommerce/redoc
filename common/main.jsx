@@ -6,19 +6,27 @@ import Docs from "../common/docs/docs.jsx";
 import { ReactRouterSSR } from "meteor/reactrouter:react-router-ssr";
 import { default as ReactCookie } from "react-cookie";
 import { RedocAdmin } from "meteor/reactioncommerce:redoc-core/components/admin.jsx"
-import { createHistory, useBasename } from "history";
+import s from 'underscore.string';
+import url from 'url';
 
 const analytics = analytics || null;
 
+const baseURL = s.rtrim(url.parse(__meteor_runtime_config__.ROOT_URL).pathname, '/') || '';
 const AppRoutes = (
   <Route component={Layout} path="/">
-    <Route component={Docs} path="/:repo/:branch/:alias" />
     <Route component={RedocAdmin} path="/redoc" />
+    <Route component={Docs} path={baseURL} />
+    <Route component={Docs} path="/:alias" />
+    <Route component={Docs} path={`${baseURL}/:alias`} />
+    <Route component={Docs} path="/:branch/:alias" />
+    <Route component={Docs} path={`${baseURL}/:branch/:alias`} />
+    <Route component={Docs} path="/:repo/:branch/:alias" />
+    <Route component={Docs} path={`${baseURL}/:repo/:branch/:alias`} />
     <IndexRoute component={Docs} />
   </Route>
 );
 
-let clientOptions = {
+ReactRouterSSR.Run(AppRoutes, {
   props: {
     onUpdate() {
       if (analytics) {
@@ -35,36 +43,7 @@ let clientOptions = {
       }
     }
   }
-}
-
-let getBasename = function() {
-  let el = document.createElement("a");
-  el.href = __meteor_runtime_config__.ROOT_URL;
-  if (el.pathname.substr(-1) !== "/") {
-    return el.pathname + "/";
-  }
-  return el.pathname;
-}
-
-if (Meteor.isClient) {
-
-  // Run our app under the /base URL.
-  let history = useBasename(createHistory)({
-    basename: getBasename()
-  })
-
-  // At the /base/hello/world URL:
-  history.listen(function (location) {
-    if (location.basename !== getBasename()) {
-      location.pathname = "/";
-      location.basename = getBasename();
-    }
-  })
-
-  clientOptions.history = history
-}
-
-ReactRouterSSR.Run(AppRoutes, clientOptions, {
+}, {
   preRender: (req, res) => {
     ReactCookie.plugToRequest(req, res);
   }
