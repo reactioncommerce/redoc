@@ -32,7 +32,12 @@ const DocView = React.createClass({
       const params = this.props.params;
       const repo = params.repo || this.data.defaultDoc.repo;
       const alias = params.alias || this.data.defaultDoc.alias;
-      const url = `/${repo}/${branch}/${alias}`;
+      let url = '';
+      if (Meteor.settings.public.redoc.repoInLinks) {
+        url += `${global.baseURL}/${repo}/${branch}/${params.alias}`;
+      } else {
+        url += `${global.baseURL}/${branch}/${params.alias}`;
+      }
 
       window.location.href = url;
     }
