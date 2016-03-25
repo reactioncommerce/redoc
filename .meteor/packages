@@ -49,3 +49,10 @@ standard-minifier-css
 standard-minifier-js
 alanning:roles
 nimble:restivus
+
+# Testing packages
+avital:mocha
+dburles:factory
+practicalmeteor:sinon
+tmeasday:acceptance-test-driver
+xolvio:cleaner

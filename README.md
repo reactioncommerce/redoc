@@ -11,9 +11,16 @@ cd redoc && npm install
 meteor --settings settings.json
 ```
 
+To run tests:
+
+`npm run test` - run unit tests
+`npm run test-app` - run "full app" tests
+`npm run chimp`  run browser tests (while app running)
+`npm run chimp-watch` run browser tests in watch mode (while app running)
+
 **redoc** is the application used for the [Reaction](https://reactioncommerce.com) documentation.
 
-**redoc** is using `meteor --release 1.3-modules-beta.4`, with imported [npm](https://www.npmjs.com/) dependencies. It also uses [react](https://facebook.github.io/react/) and [react-router](https://github.com/rackt/react-router) to render HTML server-side for the docs.
+**redoc** is using `meteor 1.3`, with imported [npm](https://www.npmjs.com/) dependencies. It also uses [react](https://facebook.github.io/react/) and [react-router](https://github.com/rackt/react-router) to render HTML server-side for the docs.
 
 Since we use this project to generate docs for [Reaction Commerce](https://reactioncommerce.com/), we've included our `settings.json` and `redoc.json` that we use to generate our documentation as an example.
 
@@ -136,12 +143,34 @@ You can supply a url in `initRepoData` as well, and we'll fetch from the remote 
 }
 ```
 
-### Custom prefix
-You can set doc prefix using Meteor.settings `ROOT_URL`.
+`initRepoData` can also be an object defining the initRepoData.
+
+#### TOC Example Data
 
 ```
-ROOT_URL="http://localhost/docs" meteor --settings settings.json
+{
+  "repos": [{
+    "org": "reactioncommerce",
+    "repo": "reaction-docs",
+    "label": "Reaction",
+    "description": "Reaction Commerce Guide"
+  }, {
+    "org": "reactioncommerce",
+    "class": "guide-sub-nav-item",
+    "repo": "reaction-braintree",
+    "label": "Braintree",
+    "docPath": "README.md"
+  }, {
+    "class": "guide-sub-nav-item",
+    "org": "reactioncommerce",
+    "repo": "reaction-paypal",
+    "label": "Paypal",
+    "docPath": "README.md"
+  }
+}
 ```
+
+If you supply only a repo, the TOC data will be generated from the repo's folder/file structure.
 
 ## Theme
 To customize the theme, copy the `packages/reaction-doc-theme` to a new package folder, and update the packages.js with your new theme package name.
