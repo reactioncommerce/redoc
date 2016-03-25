@@ -13,7 +13,7 @@ printf "\n[-] Building Meteor application...\n\n"
 cd $APP_SOURCE_DIR
 
 # Install app deps (Meteor 1.3 style)
-npm install
+npm install --production
 
 # build the source
 mkdir -p $APP_BUNDLE_DIR
