@@ -1,9 +1,8 @@
-import { Meteor } from "meteor/meteor";
+import {Meteor} from "meteor/meteor";
 import React from "react";
-import { browserHistory } from "react-router";
-import Avatar from "./avatar.jsx"
+import {browserHistory} from "react-router";
+import Avatar from "./avatar.jsx";
 import classnames from "classnames";
-
 
 class RedocAdmin extends React.Component {
   constructor(props) {
@@ -12,6 +11,7 @@ class RedocAdmin extends React.Component {
     this.handleGithubSignIn = () => {
       Meteor.loginWithGithub({}, (error) => {
         if (error) {
+          /* eslint no-console: 0 */
           console.log(error);
         }
       });
@@ -23,58 +23,52 @@ class RedocAdmin extends React.Component {
     };
 
     this.handleDocReload = () => {
-      if(confirm("Reload the docs? This may disrupt users currently browsing.")) {
+      if (confirm("Reload the docs? This may disrupt users currently browsing.")) {
         Meteor.call("redoc/flushDocCache");
       }
     };
   }
 
-  renderLogin() {
-
-  }
+  renderLogin() {}
 
   renderNavigation() {
-    const classes = classnames({
-      redoc: true,
-      sidebar: true,
-      visible: this.props.isMenuVisible
-    });
+    const classes = classnames({redoc: true, sidebar: true, visible: this.props.isMenuVisible});
 
-    let rootUrl = "/"
-
+    let rootUrl = "/";
+    /* eslint camelcase: 0 */
     if (__meteor_runtime_config__ && __meteor_runtime_config__.ROOT_URL) {
-      rootUrl = __meteor_runtime_config__.ROOT_URL
+      rootUrl = __meteor_runtime_config__.ROOT_URL;
     }
 
     const links = [
-      { label: "Homepage", href: rootUrl }
+      {
+        label: "Homepage",
+        href: rootUrl
+      }
     ];
 
     let menu = links.map((link, index) => {
-      const linkClassName = classnames(link, {
-        "guide-nav-item": true
-      });
+      const linkClassName = classnames(link, {"guide-nav-item": true});
 
       return (
         <li className={linkClassName} key={index}>
           <a href={link.href}>{link.label}</a>
         </li>
-      )
+      );
     });
 
-
     return (
-        <div className={classes}>
-            <div className="menu">
-              <ul>
-                <li className="reaction-nav-item primary" key="tocHeader">
-                  <img className="logo" src={Meteor.settings.public.redoc.logo.image} />
-                  <a className="nav-link" href={Meteor.settings.public.redoc.logo.link.href}>{Meteor.settings.public.redoc.logo.link.value}</a>
-                </li>
-                {menu}
-              </ul>
-            </div>
+      <div className={classes}>
+        <div className="menu">
+          <ul>
+            <li className="reaction-nav-item primary" key="tocHeader">
+              <img className="logo" src={Meteor.settings.public.redoc.logo.image}/>
+              <a className="nav-link" href={Meteor.settings.public.redoc.logo.link.href}>{Meteor.settings.public.redoc.logo.link.value}</a>
+            </li>
+            {menu}
+          </ul>
         </div>
+      </div>
     );
   }
 
@@ -84,21 +78,17 @@ class RedocAdmin extends React.Component {
       let badges = [];
 
       if (Roles.userIsInRole(Meteor.userId(), "admin", "redoc")) {
-        badges.push(
-          <i className="fa fa-star" />
-        );
+        badges.push(<i className="fa fa-star"/>);
       }
 
       if (Roles.userIsInRole(Meteor.userId(), "paparazzi", "redoc")) {
-        badges.push(
-          <i className="fa fa-camera-retro" />
-        );
+        badges.push(<i className="fa fa-camera-retro"/>);
       }
 
       let githubUserId = "";
 
       if (this.props.user && this.props.user.services) {
-        const { github } = this.props.user.services;
+        const {github} = this.props.user.services;
         githubUserId = github.id;
       }
 
@@ -109,7 +99,7 @@ class RedocAdmin extends React.Component {
           <div className="content" id="main-content">
             <div className="card">
               <div className="section primary">
-                <Avatar githubUserId={githubUserId} />
+                <Avatar githubUserId={githubUserId}/>
               </div>
               <div className="badges section primary">
                 {badges}
@@ -138,7 +128,8 @@ class RedocAdmin extends React.Component {
         <div className="card">
           <div className="section">
             <button className="btn btn-default" onClick={this.handleGithubSignIn}>
-              <i className="fa fa-github"></i> {"Sign in with Github"}
+              <i className="fa fa-github"></i>
+              {"Sign in with Github"}
             </button>
           </div>
         </div>
@@ -152,4 +143,4 @@ RedocAdmin.propTypes = {
 };
 
 export default RedocAdmin;
-export { RedocAdmin };
+export {RedocAdmin};
