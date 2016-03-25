@@ -2,6 +2,7 @@ node_modules
 .meteor/local
 .meteor/meteorite
 settings.json
+.idea
 
 npm-debug.log
 

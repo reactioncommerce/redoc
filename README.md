@@ -11,6 +11,13 @@ cd redoc && npm install
 meteor --settings settings.json
 ```
 
+To run tests:
+
+`npm run test` - run unit tests
+`npm run test-app` - run "full app" tests
+`npm run chimp`  run browser tests (while app running)
+`npm run chimp-watch` run browser tests in watch mode (while app running)
+
 **redoc** is the application used for the [Reaction](https://reactioncommerce.com) documentation.
 
 **redoc** is using `meteor 1.3`, with imported [npm](https://www.npmjs.com/) dependencies. It also uses [react](https://facebook.github.io/react/) and [react-router](https://github.com/rackt/react-router) to render HTML server-side for the docs.
