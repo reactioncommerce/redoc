@@ -66,6 +66,14 @@ Meteor.publish("CacheDocs", function (docParams) {
     console.log("CacheDocs Publication: Failed to load repo data for document cache request", params);
   }
 
+  if (!params.repo) {
+    params.repo = docRepo.repo;
+  }
+
+  if (!params.branch) {
+    params.branch = docRepo.default_branch || Meteor.settings.public.redoc.branch || "master";
+  }
+
   // assemble TOC
   let docTOC = ReDoc.Collections.TOC.findOne({
     alias: params.alias,

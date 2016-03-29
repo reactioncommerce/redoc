@@ -94,6 +94,10 @@ ReDoc.Schemas.TOC = new SimpleSchema({
   repo: {
     type: String
   },
+  branch: {
+    type: String,
+    optional: true
+  },
   parentPath: {
     type: String,
     optional: true
