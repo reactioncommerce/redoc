@@ -21,17 +21,6 @@ export default DocView = React.createClass({
 
   mixins: [ReactMeteorData],
 
-  shouldComponentUpdate(nextProps) {
-    const {branch, alias, repo} = this.props;
-    const {nBranch, nAlias, nRepo} = nextProps;
-
-    if (branch === nBranch && alias === nAlias && repo === nRepo) {
-      return false;
-    }
-
-    return true;
-  },
-
   componentDidUpdate() {
     this.scrollToElement();
   },
