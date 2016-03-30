@@ -89,7 +89,12 @@ ReDoc.Schemas.TOC = new SimpleSchema({
     type: String
   },
   docPath: {
-    type: String
+    type: String,
+    optional: true
+  },
+  docPaths: {
+    type: [String],
+    optional: true
   },
   repo: {
     type: String

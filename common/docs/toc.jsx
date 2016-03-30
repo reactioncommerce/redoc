@@ -93,14 +93,20 @@ export default DocView = React.createClass({
         );
       }
 
-      const className = item.class || (parentPath ? 'guide-sub-nav-item' : 'guide-nav-item');
-      items.push (
-        <li className={className} key={`${branch}-${item._id}`}>
+      const className = item.class || (parentPath ? "guide-sub-nav-item" : "guide-nav-item");
+      const classes = classnames({
+        [className]: true,
+        active: this.props.params.alias === item.alias
+      });
+
+      items.push(
+        <li className={classes} key={`${branch}-${item._id}`}>
           <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
           {subList}
         </li>
       );
-      let currentPath = s.strLeftBack(item.docPath, '/README.md'); // Dirs path has /README.md attached to them
+
+      let currentPath = s.strLeftBack(item.docPath, "/README.md"); // Dirs path has /README.md attached to them
       items = items.concat(this.renderMenu(currentPath));
     }
 

@@ -333,10 +333,8 @@ Meteor.methods({
 
     for (let tocItem of docTOC) {
       let docSourceUrl = `${docRepo.rawUrl}/${branch}/${tocItem.docPath}`;
-      // lets fetch that Github repo
-      // if (tocItem.docPath !== "developer/core/import.md") continue;
-      // console.warn("Only processing: developer/core/import.md");
 
+      // lets fetch that doc from the Github repo
       Meteor.http.get(docSourceUrl, function (error, result) {
         if (error) return error;
         if (result.statusCode === 200) {
@@ -368,8 +366,29 @@ Meteor.methods({
             result.content = `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
           }
 
-          docSet.docPageContent = result.content;
-          docSet.docPageContentHTML = md.render(result.content, {
+          let documentContent = result.content;
+
+          // If there are sub documents, lets concact all of them together to make
+          // one long document
+          if (tocItem.docPaths) {
+            documentContent += "\n";
+
+            for (let subDocPath of tocItem.docPaths) {
+              const subDocUrl = `${docRepo.rawUrl}/${branch}/${subDocPath}`;
+
+              try {
+                const subDocResult = Meteor.http.get(subDocUrl);
+                if (subDocResult.content) {
+                  documentContent += subDocResult.content + "\n";
+                }
+              } catch (e) {
+                console.warn(e);
+              }
+            }
+          }
+
+          docSet.docPageContent = documentContent;
+          docSet.docPageContentHTML = md.render(documentContent, {
             rawUrl: docRepo.rawUrl,
             branch: branch,
             alias: tocItem.alias,
