@@ -1,3 +1,4 @@
+import { check } from "meteor/check";
 import initRepoData from "./initRepoData";
 import processDoc from "./processDoc";
 
@@ -15,12 +16,14 @@ function flushDocCache() {
 }
 
 /**
- *  redoc/reloadDoc
+ *  getDoc
  *  fetch repo profile from github and store in RepoData collection
  *  @param {Object} doc - mongo style selector for the doc
  *  @returns {undefined} returns
  */
 function getDoc(options) {
+  check(options, Object);
+
   // get repo details
   const docRepo = ReDoc.Collections.Repos.findOne({
     repo: options.repo
