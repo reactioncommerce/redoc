@@ -2,7 +2,7 @@ import initRepoData from "./methods/initRepoData";
 import getRepoData from "./methods/getRepoData";
 import getDocSet from "./methods/getDocSet";
 import getRepoToc from "./methods/getRepoToc";
-import getDoc, {flushDocCache} from "./methods/getDoc";
+import getDoc, { flushDocCache } from "./methods/getDoc";
 
 // Meteor Methods
 Meteor.methods({
