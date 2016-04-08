@@ -22,7 +22,7 @@ export default DocView = React.createClass({
   mixins: [ReactMeteorData],
 
   componentDidUpdate() {
-    this.scrollToElement();
+    // this.scrollToElement();
   },
 
   getMeteorData() {
@@ -63,6 +63,10 @@ export default DocView = React.createClass({
         DocSearch.search("");
       }
     }
+
+    if (href.indexOf("#") > -1) {
+      this.scrollToElement();
+    }
   },
 
   handleDocRefresh() {
@@ -72,6 +76,27 @@ export default DocView = React.createClass({
       alias: this.props.params.alias,
       repo: this.props.params.repo
     });
+  },
+
+  scrollToElement() {
+    if (Meteor.isClient) {
+      if (window.location.hash) {
+        console.log("winow", window.location.hash);
+        const hashParts = window.location.hash.split("#");
+
+        if (hashParts.length >= 2) {
+          const hash = hashParts[hashParts.length - 1];
+          const element = document.getElementById(hash);
+
+          if (element) {
+            const top = Math.floor(element.getBoundingClientRect().top);
+            const content = document.getElementById("main-content");
+
+            content.scrollTop = top;
+          }
+        }
+      }
+    }
   },
 
   renderContent() {
@@ -99,29 +124,11 @@ export default DocView = React.createClass({
 
       return (
         <div className="content-html">
-          <h2>{"Requested document not found for this version."}</h2>
+          <div className="redoc spinner-container">
+            <div className="redoc spinner"></div>
+          </div>
         </div>
       );
-    }
-  },
-
-  scrollToElement() {
-    if (Meteor.isClient) {
-      if (window.location.hash) {
-        const hashParts = window.location.hash.split("#");
-
-        if (hashParts.length >= 2) {
-          const hash = hashParts[hashParts.length - 1];
-          const element = document.getElementById(hash);
-
-          if (element) {
-            const top = Math.floor(element.getBoundingClientRect().top);
-            const content = document.getElementById("main-content");
-
-            content.scrollTop = top;
-          }
-        }
-      }
     }
   },
 
