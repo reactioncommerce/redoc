@@ -36,7 +36,7 @@ function TOCParser(md) {
           const nextToken = state.tokens[index + 1];
           const headingLevel = parseInt(blockToken.tag.replace("h", ""), 10);
 
-          if (headingLevel <= 1 || headingLevel > 4) {
+          if (headingLevel < 2 || headingLevel > 3) {
             return;
           }
 
