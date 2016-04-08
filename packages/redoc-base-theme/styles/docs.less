@@ -3,7 +3,7 @@
 @docs-content-padding-left: 2vw;
 @docs-code-width: 26vw;
 @docs-content-bg-width: 44vw;
-@docs-code-background-color: #fff;
+@docs-code-background-color: #f8f8f8;
 @docs-navigation-background-color: #2196F3;
 
 .redoc.docs {
@@ -22,7 +22,7 @@
   // .justify-content(center);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  // background-color: white;
+  background-color: white;
 
   .flex(1 1 auto);
 
@@ -41,17 +41,50 @@
   }
   pre {
     background-color: @docs-code-background-color;
+    border: none;
+    border-radius: 0;
+    padding: 2rem
   }
+
+  h1 {
+    font-weight: 400;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
   h2 {
+    font-weight: 400;
+    font-size: 1.3rem;
+    // margin-top: 3rem;
+    margin-bottom: 1rem;
 
+    color: @black80;
   }
 
-  h3,
-  h4,
-  h5,
+  h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  h4 {
+    font-size: 1rem;
+  }
+
+  h5 {
+    font-size: 0.95rem;
+    color: @black80;
+  }
+
   h6 {
-    // margin-top: 40px;
-    // margin-bottom: 20px;
+    font-size: 0.95rem;
+    color: @black60;
+  }
+
+
+
+  h3, h4, h5, h6 {
+    padding-top: 1rem;
+    margin-bottom: 20px;
     // padding-top: 20px;
     // width: 100%;
     // border-top: 1px solid darken(@docs-code-background-color, 5%);
@@ -64,16 +97,20 @@
     margin-top: 30px;
     margin-bottom: 30px;
   }
+
+  blockquote {
+    font-size: 1rem;
+  }
 }
 
 .redoc.docs .content-html {
-  // padding: 40px 40px 60px;
+  padding: 40px 40px 60px;
   // padding-bottom: 60px;
-  // width: 400px;
-  width: 100%;
+  max-width: 900px;
+  // width: 100%;
   background: @white;
   height: 100%;
-  border-right: 1px solid @border-color;
+  // border-right: 1px solid @border-color;
 
   @media screen and (max-width: @screen-xs-max) {
 
@@ -89,8 +126,30 @@
   }
 }
 
+.redoc.docs .content-html article {
+  position: relative;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+
+  border-bottom: 1px solid @border-color;
+
+
+}
+
+.redoc.docs .content-html article > header {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  a {
+    font-size: 0.9rem;
+    color: @black60;
+  }
+}
+
+
 .content-html .section {
-  display: flex;
+  // display: flex;
   border-bottom: 1px solid darken(@docs-code-background-color, 5%);
 
   @media screen and (max-width: @screen-sm-max) {
@@ -100,8 +159,8 @@
 }
 
 .content-html .section .section-content {
-  flex: 1 1 auto;
-  width: 50%;
+  // flex: 1 1 auto;
+  // width: 50%;
   padding: 0 2rem 2rem;
 
   @media screen and (max-width: @screen-sm-max) {
@@ -111,10 +170,10 @@
 }
 
 .content-html .section .section-example {
-  flex: 1 1 auto;
-  width: 50%;
+  // flex: 1 1 auto;
+  // width: 50%;
   padding: 6rem 2rem 3rem;
-  background-color: @black02;
+  // background-color: @black02;
 
   h5 {
     font-weight: 700;

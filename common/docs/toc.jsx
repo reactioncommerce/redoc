@@ -77,7 +77,7 @@ export default DocView = React.createClass({
 
           return (
             <li className={subItem.className} key={index}>
-              <a href={hashUrl} >{subItem.label}</a>
+              <a href={hashUrl}>{subItem.label}</a>
             </li>
           );
         });

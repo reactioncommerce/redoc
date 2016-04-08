@@ -52,6 +52,11 @@ ReDoc.Schemas.Repos = new SimpleSchema({
   contentsUrl: {
     type: String,
     optional: true
+  },
+  default: {
+    type: Boolean,
+    optional: true,
+    defaultValue: false
   }
 });
 
@@ -86,13 +91,14 @@ ReDoc.Schemas.TOC = new SimpleSchema({
     type: String
   },
   label: {
-    type: String
+    type: String,
+    optional: true
   },
   docPath: {
     type: String,
     optional: true
   },
-  docPaths: {
+  docIncludes: {
     type: [String],
     optional: true
   },

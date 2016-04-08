@@ -33,7 +33,8 @@ Meteor.publish("CacheDocs", function (docParams) {
   check(docParams, {
     repo: Match.Optional(String, null),
     branch: Match.Optional(String, null),
-    alias: Match.Optional(String, null)
+    alias: Match.Optional(String, null),
+    subdoc: Match.Optional(String, null)
   });
 
   let params = {};
@@ -41,6 +42,9 @@ Meteor.publish("CacheDocs", function (docParams) {
   // Set params defaults
   params.repo = docParams.repo;
   params.alias = docParams.alias;
+  if (docParams.subdoc) {
+    params.alias = `${docParams.alias}/${docParams.subdoc}`
+  }
   params.branch = docParams.branch || Meteor.settings.public.redoc.branch || "master";
 
   // Set params for doc if docParams is empty using the default doc params
