@@ -9,7 +9,6 @@ import processDoc from "./processDoc";
  *  @returns {undefined} returns
  */
 function flushDocCache() {
-  ReDoc.Collections.Repos.remove({});
   ReDoc.Collections.TOC.remove({});
   ReDoc.Collections.Docs.remove({});
 
