@@ -3,7 +3,7 @@ import { Router, RouterContext, match } from "react-router";
 import ReactDOMServer from "react-dom/server";
 import url from "url";
 import cookieParser from "cookie-parser";
-import Cheerio from 'cheerio';
+import Cheerio from "cheerio";
 
 // meteor algorithm to check if this is a meteor serving http request or not
 function IsAppUrl(req) {
