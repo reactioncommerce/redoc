@@ -17,7 +17,7 @@ Package.onTest(function(api) {
 });
 
 function configurePackage(api) {
-  api.versionsFrom('METEOR@0.9.2');
+  api.versionsFrom('METEOR@1.3.1');
 
   api.use([
     'ecmascript',
