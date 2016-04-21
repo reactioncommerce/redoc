@@ -1,6 +1,9 @@
 import React from "react";
-// import ReactCookie from "react-cookie";
-// import {Router as RouterContext} from "react-router";
+import { Router, RouterContext, match } from "react-router";
+import ReactDOMServer from "react-dom/server";
+import url from "url";
+import cookieParser from "cookie-parser";
+import Cheerio from "cheerio";
 
 // meteor algorithm to check if this is a meteor serving http request or not
 function IsAppUrl(req) {
@@ -25,15 +28,6 @@ function IsAppUrl(req) {
   }
   return true;
 }
-const ReactRouter = Npm.require('react-router');
-const ReactCookie = Npm.require("react-cookie");
-const ReactDOMServer = require('react-dom/server');
-// ReactRouter.history = Npm.require('history');
-
-const { RouterContext } = ReactRouter;
-const url = Npm.require('url');
-const Fiber = Npm.require('fibers');
-const cookieParser = Npm.require('cookie-parser');
 
 const ReactRouterSSR = {};
 
@@ -80,7 +74,7 @@ ReactRouterSSR.Run = function(routes, clientOptions, serverOptions) {
       Meteor.user = () => undefined;
 
       // On the server, no route should be async (I guess we trust the app)
-      ReactRouter.match({ routes, location: req.url }, Meteor.bindEnvironment((err, redirectLocation, renderProps) => {
+      match({ routes, location: req.url }, Meteor.bindEnvironment((err, redirectLocation, renderProps) => {
         if (err) {
           res.writeHead(500);
           res.write(err.messages);
@@ -210,7 +204,7 @@ function generateSSRData(serverOptions, context, req, res, renderProps) {
       if (typeof serverOptions.createReduxStore !== 'undefined') {
         // Create a history and set the current path, in case the callback wants
         // to bind it to the store using redux-simple-router's syncReduxAndRouter().
-        const history = ReactRouter.history.useQueries(ReactRouter.history.createMemoryHistory)();
+        const history = Router.history.useQueries(Router.history.createMemoryHistory)();
         history.replace(req.url);
         // Create the store, with no initial state.
         reduxStore = serverOptions.createReduxStore(undefined, history);
@@ -331,7 +325,6 @@ function SSRSubscribe(context) {
 
 // Thank you FlowRouter for this wonderful idea :)
 // https://github.com/kadirahq/flow-router/blob/ssr/server/route.js
-const Cheerio = Npm.require('cheerio');
 
 function moveScripts(data) {
   const $ = Cheerio.load(data, {

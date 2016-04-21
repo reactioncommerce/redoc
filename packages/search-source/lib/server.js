@@ -1,6 +1,7 @@
+import bodyParser from 'body-parser';
+
 SearchSource = {};
 SearchSource._sources = {};
-var bodyParser = Npm.require('body-parser');
 
 SearchSource.defineSource = function(name, callback) {
   SearchSource._sources[name] = callback;
