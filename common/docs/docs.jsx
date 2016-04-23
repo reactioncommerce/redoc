@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import ReactDom from "react-dom";
 import Helmet from "react-helmet";
 import TableOfContents from "./toc.jsx";
