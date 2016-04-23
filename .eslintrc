@@ -5,6 +5,9 @@
     "node": true,
     "meteor": true
   },
+  "globals": {
+    "React": true
+  },
   "ecmaFeatures": {
     "arrowFunctions": true,
     "blockBindings": true,
@@ -41,7 +44,7 @@
     "react/jsx-no-duplicate-props": 1,
     "react/jsx-no-literals": 1,
     "react/jsx-no-undef": 1,
-    "react/jsx-quotes": 1,
+    // "react/jsx-quotes": 1,  rule doesn't exist?
     "react/jsx-sort-prop-types": 1,
     "react/jsx-sort-props": 1,
     "react/jsx-uses-react": 1,
@@ -204,14 +207,13 @@
       "before": false,
       "after": true
     }],
-    "space-after-keywords": 2, // http://eslint.org/docs/rules/space-after-keywords
     "space-before-blocks": 2, // http://eslint.org/docs/rules/space-before-blocks
     "space-before-function-paren": [2, {
       "anonymous": "always",
       "named": "never"
     }], // http://eslint.org/docs/rules/space-before-function-paren
     "space-infix-ops": 2, // http://eslint.org/docs/rules/space-infix-ops
-    "space-return-throw-case": 2, // http://eslint.org/docs/rules/space-return-throw-case
+    "keyword-spacing": 2, // http://eslint.org/docs/rules/space-return-throw-case
     "space-in-parens": [2, "never"], // http://eslint.org/docs/rules/space-in-parens
     "spaced-comment": [2, "always"], // http://eslint.org/docs/rules/spaced-comment
   }

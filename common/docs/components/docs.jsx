@@ -1,55 +1,11 @@
-import React from "react"
-import ReactDom from "react-dom";
+import React from "react";
 import Helmet from "react-helmet";
-import TableOfContents from "./toc.jsx";
-import SearchResults from "../search/searchResults.jsx";
-import { browserHistory } from 'react-router'
-import _ from "underscore";
+import { Meteor } from "meteor/meteor";
+import { Roles } from "meteor/alanning:roles";
+import TableOfContents from "../containers/toc";
+import SearchResults from "/common/search/searchResults.jsx";
 
-export default DocView = React.createClass({
-  propTypes: {
-    alias: React.PropTypes.string,
-    branch: React.PropTypes.string,
-    history: React.PropTypes.object,
-    repo: React.PropTypes.string,
-    params: React.PropTypes.any
-  },
-
-  contextTypes: {
-    router: React.PropTypes.object.isRequired
-  },
-
-  mixins: [ReactMeteorData],
-
-  componentDidUpdate() {
-    // this.scrollToElement();
-  },
-
-  getMeteorData() {
-    const sub = Meteor.subscribe("CacheDocs", this.props.params);
-
-    if (Meteor.isClient) {
-      const search = DocSearch.getData({
-        transform: (matchText, regExp) => {
-          return matchText.replace(regExp, "<span class='highlight'>$&</span>");
-        }
-      });
-
-      return {
-        docIsLoaded: sub.ready(),
-        currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
-        search: search
-      };
-    }
-
-    if (Meteor.isServer) {
-      return {
-        docIsLoaded: true,
-        currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
-        search: []
-      };
-    }
-  },
+export default class Docs extends React.Component {
 
   handleDocNavigation(href) {
     if (href) {
@@ -67,21 +23,22 @@ export default DocView = React.createClass({
     if (href.indexOf("#") > -1) {
       this.scrollToElement();
     }
-  },
+  }
 
   handleDocRefresh() {
+    const { currentDoc, params } = this.props;
+
     Meteor.call("redoc/reloadDoc", {
-      _id: this.data.currentDoc._id,
-      branch: this.props.params.branch,
-      alias: this.props.params.alias,
-      repo: this.props.params.repo
+      _id: currentDoc._id,
+      branch: params.branch,
+      alias: params.alias,
+      repo: params.repo
     });
-  },
+  }
 
   scrollToElement() {
     if (Meteor.isClient) {
       if (window.location.hash) {
-        console.log("winow", window.location.hash);
         const hashParts = window.location.hash.split("#");
 
         if (hashParts.length >= 2) {
@@ -97,7 +54,7 @@ export default DocView = React.createClass({
         }
       }
     }
-  },
+  }
 
   renderContent() {
     if (Meteor.isClient && DocSearch.getCurrentQuery()) {
@@ -105,16 +62,16 @@ export default DocView = React.createClass({
         return (
           <SearchResults
             branch={this.props.params.branch}
-            results={this.data.search}
+            results={this.props.search}
           />
         );
       }
     }
-    if (this.data.docIsLoaded) {
+    if (this.props.docIsLoaded) {
       // Render standard content
-      if (this.data.currentDoc && this.data.currentDoc.docPageContentHTML) {
+      if (this.props.currentDoc && this.props.currentDoc.docPageContentHTML) {
         let content = {
-          __html: this.data.currentDoc.docPageContentHTML
+          __html: this.props.currentDoc.docPageContentHTML
         };
 
         return (
@@ -130,11 +87,11 @@ export default DocView = React.createClass({
         </div>
       );
     }
-  },
+  }
 
   renderAdminTools() {
-    if (Roles.userIsInRole(Meteor.userId(), ["admin"], "redoc") && this.data.currentDoc) {
-      const { org, repo, branch, docPath} = this.data.currentDoc;
+    if (Roles.userIsInRole(Meteor.userId(), ["admin"], "redoc") && this.props.currentDoc) {
+      const { org, repo, branch, docPath} = this.props.currentDoc;
       const githubUrl = `https://github.com/${org}/${repo}/tree/${branch}/${docPath}`;
 
       return (
@@ -148,13 +105,13 @@ export default DocView = React.createClass({
         </div>
     );
     }
-  },
+  }
 
   render() {
     let label = "";
 
-    if (this.data.currentDoc) {
-      label = this.data.currentDoc.label;
+    if (this.props.currentDoc) {
+      label = this.props.currentDoc.label;
     }
 
     const pageTitle = `${Meteor.settings.public.redoc.title} - ${label}`;
@@ -165,7 +122,7 @@ export default DocView = React.createClass({
           title={pageTitle}
         />
         <TableOfContents
-          onDocNavigation={this.handleDocNavigation}
+          onDocNavigation={this.handleDocNavigation.bind(this)}
           params={this.props.params}
         />
 
@@ -176,4 +133,20 @@ export default DocView = React.createClass({
       </div>
     );
   }
-});
+}
+
+Docs.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
+
+// TODO: fix propTypes check so it works properly across client/server
+// Docs.propTypes = {
+//   currentDoc: React.PropTypes.object,
+//   docIsLoaded: React.PropTypes.oneOfType([
+//     React.PropTypes.func,   // client
+//     React.PropTypes.boolean // server
+//   ]),
+//   history: React.PropTypes.object,
+//   params: React.PropTypes.object,
+//   search: React.PropTypes.array
+// };

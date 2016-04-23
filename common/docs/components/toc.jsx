@@ -3,38 +3,7 @@ import classnames from "classnames";
 import "underscore";
 import s from "underscore.string";
 
-export default DocView = React.createClass({
-  mixins: [ReactMeteorData],
-
-  getMeteorData() {
-    let data = {};
-    const tocSub = Meteor.subscribe("TOC");
-
-    if (Meteor.isClient) {
-      data = {
-        tocIsLoaded: tocSub.ready(),
-        docs: ReDoc.Collections.TOC.find({}, {
-          sort: {
-            position: 1
-          }
-        }).fetch(),
-        isMenuVisible: Session.get("isMenuVisible")
-      };
-    }
-
-    if (Meteor.isServer) {
-      data = {
-        tocIsLoaded: tocSub.ready(),
-        docs: ReDoc.Collections.TOC.find({}, {
-          sort: {
-            position: 1
-          }
-        }).fetch()
-      };
-    }
-
-    return data;
-  },
+export default class TableOfContents extends React.Component {
 
   handleDocNavigation(event) {
     event.preventDefault();
@@ -42,7 +11,7 @@ export default DocView = React.createClass({
     if (this.props.onDocNavigation) {
       this.props.onDocNavigation(event.currentTarget.href);
     }
-  },
+  }
 
   renderMainNavigationLinks(active) {
     let links = [];
@@ -56,11 +25,11 @@ export default DocView = React.createClass({
       );
     }
     return links;
-  },
+  }
 
   renderMenu(parentPath) {
     let items = [];
-    let parentItems = _.filter(this.data.docs, function(item) { return item.parentPath === parentPath });
+    let parentItems = _.filter(this.props.docs, function(item) { return item.parentPath === parentPath });
     if (parentItems.length === 0) {
       return [];
     }
@@ -101,7 +70,7 @@ export default DocView = React.createClass({
 
       items.push(
         <li className={classes} key={`${branch}-${item._id}`}>
-          <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
+          <a href={url} onClick={this.handleDocNavigation.bind(this)}>{item.label}</a>
           {subList}
         </li>
       );
@@ -111,13 +80,13 @@ export default DocView = React.createClass({
     }
 
     return items;
-  },
+  }
 
   render() {
     const classes = classnames({
       redoc: true,
       sidebar: true,
-      visible: this.data.isMenuVisible
+      visible: this.props.isMenuVisible
     });
 
     return (
@@ -135,4 +104,4 @@ export default DocView = React.createClass({
         </div>
     );
   }
-});
+}

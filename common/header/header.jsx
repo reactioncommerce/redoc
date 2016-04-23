@@ -1,8 +1,7 @@
 import React from "react";
 import SearchField from "../search/search.jsx";
-import BranchSelect from "../docs/branchSelect.jsx";
-import { composeWithTracker } from 'react-komposer';
-import Avatar from "meteor/reactioncommerce:redoc-core/components/avatar.jsx"
+import BranchSelect from "../docs/containers/branchSelect";
+import Avatar from "meteor/reactioncommerce:redoc-core/components/avatar.jsx";
 
 const DocView = React.createClass({
   contextTypes: {

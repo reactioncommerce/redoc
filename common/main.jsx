@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, IndexRoute, useRouterHistory } from "react-router";
 import Layout from "../common/layout.jsx";
-import Docs from "../common/docs/docs.jsx";
+import Docs from "../common/docs/containers/docs";
 import { ReactRouterSSR } from "meteor/reactrouter:react-router-ssr";
 import { default as ReactCookie } from "react-cookie";
 import { RedocAdmin } from "meteor/reactioncommerce:redoc-core/components/admin.jsx";
