@@ -1,6 +1,8 @@
 import React from "react";
 import Helmet from "react-helmet";
-import TableOfContents from "../toc.jsx";
+import { Meteor } from "meteor/meteor";
+import { Roles } from "meteor/alanning:roles";
+import TableOfContents from "../containers/toc";
 import SearchResults from "/common/search/searchResults.jsx";
 
 export default class Docs extends React.Component {
@@ -120,7 +122,7 @@ export default class Docs extends React.Component {
           title={pageTitle}
         />
         <TableOfContents
-          onDocNavigation={this.handleDocNavigation}
+          onDocNavigation={this.handleDocNavigation.bind(this)}
           params={this.props.params}
         />
 
@@ -132,3 +134,19 @@ export default class Docs extends React.Component {
     );
   }
 }
+
+Docs.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
+
+// TODO: fix propTypes check so it works properly across client/server
+// Docs.propTypes = {
+//   currentDoc: React.PropTypes.object,
+//   docIsLoaded: React.PropTypes.oneOfType([
+//     React.PropTypes.func,   // client
+//     React.PropTypes.boolean // server
+//   ]),
+//   history: React.PropTypes.object,
+//   params: React.PropTypes.object,
+//   search: React.PropTypes.array
+// };

@@ -5,7 +5,7 @@ import Docs from "../components/docs.jsx";
 
 export default createContainer(({ params }) => {
   const sub = Meteor.subscribe("CacheDocs", params);
-
+  
   if (Meteor.isClient) {
     const search = DocSearch.getData({
       transform: (matchText, regExp) => {
