@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { createContainer } from "meteor/react-meteor-data";
-import Docs from "../components/docs.jsx";
+import Docs from "../components/docs";
 
 
 export default createContainer(({ params }) => {

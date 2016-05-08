@@ -3,7 +3,7 @@ import Helmet from "react-helmet";
 import { Meteor } from "meteor/meteor";
 import { Roles } from "meteor/alanning:roles";
 import TableOfContents from "../containers/toc";
-import SearchResults from "/common/search/searchResults.jsx";
+import SearchResults from "./searchResults";
 
 export default class Docs extends React.Component {
 

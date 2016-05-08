@@ -1,7 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import { Roles } from "meteor/alanning:roles";
 import { createContainer } from "meteor/react-meteor-data";
-import BranchSelect from "../components/branchSelect.jsx";
+import BranchSelect from "../components/branchSelect";
 
 
 export default createContainer(({ repo }) => {
@@ -24,7 +24,5 @@ export default createContainer(({ repo }) => {
     }
   }
 
-  return {
-    branches: branches
-  };
+  return { branches };
 }, BranchSelect);

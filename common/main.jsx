@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, IndexRoute, useRouterHistory } from "react-router";
-import Layout from "../common/layout.jsx";
-import Docs from "../common/docs/containers/docs";
+import Layout from "./components/layout";
+import Docs from "./containers/docs";
 import { ReactRouterSSR } from "meteor/reactrouter:react-router-ssr";
 import { default as ReactCookie } from "react-cookie";
-import { RedocAdmin } from "meteor/reactioncommerce:redoc-core/components/admin.jsx";
+import { RedocAdmin } from "meteor/reactioncommerce:redoc-core/components/admin";
 import { createHistory } from "history";
 
 const analytics = analytics || null;

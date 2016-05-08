@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "./header/header.jsx";
 import Helmet from "react-helmet";
+import Header from "./header";
 
 
 export default BaseLayout = React.createClass({

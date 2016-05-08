@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { createContainer } from "meteor/react-meteor-data";
-import TOC from "../components/toc.jsx";
+import TOC from "../components/toc";
 
 
 export default createContainer(({ params }) => {
