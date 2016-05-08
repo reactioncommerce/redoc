@@ -5,9 +5,9 @@ import TOC from "../components/toc.jsx";
 
 export default createContainer(({ params }) => {
   let data = {};
-  const tocSub = Meteor.subscribe("TOC");
 
   if (Meteor.isClient) {
+    const tocSub = Meteor.subscribe("TOC");
     data = {
       tocIsLoaded: tocSub.ready(),
       docs: ReDoc.Collections.TOC.find({}, {
