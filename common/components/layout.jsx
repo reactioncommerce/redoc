@@ -3,40 +3,17 @@ import Helmet from "react-helmet";
 import Header from "./header";
 
 
-export default BaseLayout = React.createClass({
-  mixins: [ReactMeteorData],
-
-  getMeteorData() {
-    Meteor.subscribe("userData");
-
-    let data = {
-      isMenuVisible: false,
-      user: Meteor.user()
-    };
-
-    if (Meteor.isClient) {
-      data.isMenuVisible = Session.equals("isMenuVisible", true);
-    }
-
-    if (__meteor_runtime_config__ && __meteor_runtime_config__.ROOT_URL) {
-      data.rootURL = __meteor_runtime_config__.ROOT_URL;
-      if (data.rootURL.substr(-1) !== '/') {
-        data.rootURL += '/';
-      }
-    }
-
-    return data;
-  },
+export default class BaseLayout extends React.Component {
 
   handleOverlayClose() {
     if (Meteor.isClient) {
       Session.set("isMenuVisible", false);
     }
-  },
+  }
 
   // TODO: Make this better, smarter, useable for more than just the menu
   renderOverlayForMenu() {
-    if (this.data.isMenuVisible) {
+    if (this.props.isMenuVisible) {
       return (
         <div
           className="redoc overlay"
@@ -44,7 +21,7 @@ export default BaseLayout = React.createClass({
         />
       );
     }
-  },
+  }
 
   render() {
     return (
@@ -67,14 +44,14 @@ export default BaseLayout = React.createClass({
         <Header
           history={this.props.history}
           params={this.props.params}
-          user={this.data.user}
+          user={this.props.user}
         />
         {React.cloneElement(this.props.children, {
-          user: this.data.user,
-          isMenuVisible: this.data.isMenuVisible
+          user: this.props.user,
+          isMenuVisible: this.props.isMenuVisible
         })}
         {this.renderOverlayForMenu()}
       </div>
     );
   }
-});
+}
