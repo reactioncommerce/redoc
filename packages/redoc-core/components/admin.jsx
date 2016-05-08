@@ -32,23 +32,21 @@ class RedocAdmin extends React.Component {
   renderLogin() {}
 
   renderNavigation() {
-    const classes = classnames({redoc: true, sidebar: true, visible: this.props.isMenuVisible});
-
-    let rootUrl = "/";
-    /* eslint camelcase: 0 */
-    if (__meteor_runtime_config__ && __meteor_runtime_config__.ROOT_URL) {
-      rootUrl = __meteor_runtime_config__.ROOT_URL;
-    }
+    const classes = classnames({
+      redoc: true,
+      sidebar: true,
+      visible: this.props.isMenuVisible
+    });
 
     const links = [
       {
         label: "Homepage",
-        href: rootUrl
+        href: Meteor.absoluteUrl()
       }
     ];
 
     let menu = links.map((link, index) => {
-      const linkClassName = classnames(link, {"guide-nav-item": true});
+      const linkClassName = classnames(link, { "guide-nav-item": true });
 
       return (
         <li className={linkClassName} key={index}>
@@ -63,7 +61,9 @@ class RedocAdmin extends React.Component {
           <ul>
             <li className="reaction-nav-item primary" key="tocHeader">
               <img className="logo" src={Meteor.settings.public.redoc.logo.image}/>
-              <a className="nav-link" href={Meteor.settings.public.redoc.logo.link.href}>{Meteor.settings.public.redoc.logo.link.value}</a>
+              <a className="nav-link" href={Meteor.settings.public.redoc.logo.link.href}>
+                {Meteor.settings.public.redoc.logo.link.value}
+              </a>
             </li>
             {menu}
           </ul>
@@ -139,6 +139,7 @@ class RedocAdmin extends React.Component {
 }
 
 RedocAdmin.propTypes = {
+  isMenuVisible: React.PropTypes.bool,
   user: React.PropTypes.object
 };
 

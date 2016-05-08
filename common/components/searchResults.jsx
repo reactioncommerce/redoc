@@ -1,10 +1,10 @@
 import React from "react";
 import _ from "underscore";
 
-export default SearchResults = React.createClass({
+export default class SearchResults extends React.Component {
   handleSearchClear() {
     DocSearch.search("");
-  },
+  }
 
   renderResults() {
     if (_.isArray(this.props.results)) {
@@ -27,7 +27,7 @@ export default SearchResults = React.createClass({
 
       return results;
     }
-  },
+  }
 
   render() {
     return (
@@ -39,4 +39,4 @@ export default SearchResults = React.createClass({
       </div>
     );
   }
-});
+}
