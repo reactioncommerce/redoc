@@ -31,7 +31,7 @@ Meteor.startup(function () {
   // default server settings
   if (Meteor.settings.redoc === undefined) {
     Meteor.settings.redoc = {
-      schedule: "every 4 hours",
+      schedule: "every 48 hours",
       initRepoData: "https://raw.githubusercontent.com/reactioncommerce/redoc/master/private/redoc.json"
     };
   }
