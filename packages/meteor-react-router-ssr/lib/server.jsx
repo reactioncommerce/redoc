@@ -1,23 +1,24 @@
-import React from "react";
-import { Router, RouterContext, match } from "react-router";
-import ReactDOMServer from "react-dom/server";
-import url from "url";
-import cookieParser from "cookie-parser";
-import Cheerio from "cheerio";
+import React from 'react';
 
-// meteor algorithm to check if this is a meteor serving http request or not
+import {
+  match as ReactRouterMatch,
+  RouterContext,
+  createMemoryHistory
+} from 'react-router';
+
+import SsrContext from './ssr_context';
+import patchSubscribeData from './ssr_data';
+
+import ReactDOMServer from 'react-dom/server';
+import cookieParser from 'cookie-parser';
+import Cheerio from 'cheerio';
+
 function IsAppUrl(req) {
-  var url = req.url
+  var url = req.url;
   if(url === '/favicon.ico' || url === '/robots.txt') {
     return false;
   }
 
-  // NOTE: app.manifest is not a web standard like favicon.ico and
-  // robots.txt. It is a file name we have chosen to use for HTML5
-  // appcache URLs. It is included here to prevent using an appcache
-  // then removing it from poisoning an app permanently. Eventually,
-  // once we have server side routing, this won't be needed as
-  // unknown URLs with return a 404 automatically.
   if(url === '/app.manifest') {
     return false;
   }
@@ -29,15 +30,23 @@ function IsAppUrl(req) {
   return true;
 }
 
-const ReactRouterSSR = {};
-
 let webpackStats;
+
+const ReactRouterSSR = {};
+export default ReactRouterSSR;
+
+// creating some EnvironmentVariables that will be used later on
+ReactRouterSSR.ssrContext = new Meteor.EnvironmentVariable();
+ReactRouterSSR.inSubscription = new Meteor.EnvironmentVariable(); // <-- needed in ssr_data.js
 
 ReactRouterSSR.LoadWebpackStats = function(stats) {
   webpackStats = stats;
-}
+};
 
 ReactRouterSSR.Run = function(routes, clientOptions, serverOptions) {
+  // this line just patches Subscribe and find mechanisms
+  patchSubscribeData(ReactRouterSSR);
+
   if (!clientOptions) {
     clientOptions = {};
   }
@@ -51,7 +60,6 @@ ReactRouterSSR.Run = function(routes, clientOptions, serverOptions) {
   }
 
   Meteor.bindEnvironment(function() {
-    // Parse cookies for the login token
     WebApp.rawConnectHandlers.use(cookieParser());
 
     WebApp.connectHandlers.use(Meteor.bindEnvironment(function(req, res, next) {
@@ -66,45 +74,43 @@ ReactRouterSSR.Run = function(routes, clientOptions, serverOptions) {
       var headers = req.headers;
       var context = new FastRender._Context(loginToken, { headers });
 
-      const originalUserId = Meteor.userId;
-      const originalUser = Meteor.user;
 
-      // This should be the state of the client when he remount the app
-      Meteor.userId = () => context.userId;
-      Meteor.user = () => undefined;
+      FastRender.frContext.withValue(context, function() {
+        let history = createMemoryHistory(req.url);
 
-      // On the server, no route should be async (I guess we trust the app)
-      match({ routes, location: req.url }, Meteor.bindEnvironment((err, redirectLocation, renderProps) => {
-        if (err) {
-          res.writeHead(500);
-          res.write(err.messages);
-          res.end();
-        } else if (redirectLocation) {
-          res.writeHead(302, { Location: redirectLocation.pathname + redirectLocation.search })
-          res.end();
-        } else if (renderProps) {
-          sendSSRHtml(clientOptions, serverOptions, context, req, res, next, renderProps);
-        } else {
-          res.writeHead(404);
-          res.write('Not found');
-          res.end();
+        if (typeof serverOptions.historyHook === 'function') {
+          history = serverOptions.historyHook(history);
         }
-      }));
 
-      Meteor.userId = originalUserId;
-      Meteor.user = originalUser;
+        ReactRouterMatch({ history, routes, location: req.url }, Meteor.bindEnvironment((err, redirectLocation, renderProps) => {
+          if (err) {
+            res.writeHead(500);
+            res.write(err.messages);
+            res.end();
+          } else if (redirectLocation) {
+            res.writeHead(302, { Location: redirectLocation.pathname + redirectLocation.search });
+            res.end();
+          } else if (renderProps) {
+            sendSSRHtml(clientOptions, serverOptions, req, res, next, renderProps);
+          } else {
+            res.writeHead(404);
+            res.write('Not found');
+            res.end();
+          }
+        }));
+      });
     }));
   })();
 };
 
-function sendSSRHtml(clientOptions, serverOptions, context, req, res, next, renderProps) {
-  const { css, html, head } = generateSSRData(serverOptions, context, req, res, renderProps);
-  res.write = patchResWrite(clientOptions, serverOptions, res.write, css, html, head);
+function sendSSRHtml(clientOptions, serverOptions, req, res, next, renderProps) {
+  const { css, html } = generateSSRData(clientOptions, serverOptions, req, res, renderProps);
+  res.write = patchResWrite(clientOptions, serverOptions, res.write, css, html);
 
   next();
 }
 
-function patchResWrite(clientOptions, serverOptions, originalWrite, css, html, head) {
+function patchResWrite(clientOptions, serverOptions, originalWrite, css, html) {
   return function(data) {
     if(typeof data === 'string' && data.indexOf('<!DOCTYPE html>') === 0) {
       if (!serverOptions.dontMoveScripts) {
@@ -115,22 +121,13 @@ function patchResWrite(clientOptions, serverOptions, originalWrite, css, html, h
         data = data.replace('</head>', '<style id="' + (clientOptions.styleCollectorId || 'css-style-collector-data') + '">' + css + '</style></head>');
       }
 
-      if (head) {
-        // Add react-helmet stuff in the header (yay SEO!)
-        data = data.replace('<head>',
-          '<head>' + head.title + head.base + head.meta + head.link + head.script
-        );
+      if (typeof serverOptions.htmlHook === 'function') {
+        data = serverOptions.htmlHook(data);
       }
 
-      /*
-       To set multiple root element attributes such as class and style tags, simply pass it a 2-dimensional array
-       of attribute value pairs. I.e. [["class", "sidebar main"], ["style", "background-color: white"]]
-       */
       let rootElementAttributes = '';
       const attributes = clientOptions.rootElementAttributes instanceof Array ? clientOptions.rootElementAttributes : [];
-      // check if a 2-dimensional array was passed... if not, be nice and handle it anyway
       if(attributes[0] instanceof Array) {
-        // set as concatenated string attributes
         for(var i = 0; i < attributes.length; i++) {
           rootElementAttributes = rootElementAttributes + ' ' + attributes[i][0] + '="' + attributes[i][1] + '"';
         }
@@ -146,7 +143,7 @@ function patchResWrite(clientOptions, serverOptions, originalWrite, css, html, h
     }
 
     originalWrite.call(this, data);
-  }
+  };
 }
 
 function addAssetsChunks(serverOptions, data) {
@@ -163,7 +160,7 @@ function addAssetsChunks(serverOptions, data) {
 
   for (var i = 0; i < global.__CHUNK_COLLECTOR__.length; ++i) {
     if (typeof chunkNames[global.__CHUNK_COLLECTOR__[i]] !== 'undefined') {
-      var chunkSrc = (typeof chunkNames[global.__CHUNK_COLLECTOR__[i]] === 'string')?
+      chunkSrc = (typeof chunkNames[global.__CHUNK_COLLECTOR__[i]] === 'string')?
         chunkNames[global.__CHUNK_COLLECTOR__[i]] :
         chunkNames[global.__CHUNK_COLLECTOR__[i]][0];
 
@@ -174,22 +171,29 @@ function addAssetsChunks(serverOptions, data) {
   return data;
 }
 
-function generateSSRData(serverOptions, context, req, res, renderProps) {
-  let html, css, head;
+function generateSSRData(clientOptions, serverOptions, req, res, renderProps) {
+  let html, css;
 
-  try {
-    FastRender.frContext.withValue(context, function() {
-      const originalSubscribe = Meteor.subscribe;
-      Meteor.subscribe = SSRSubscribe(context);
+  // we're stealing all the code from FlowRouter SSR
+  // https://github.com/kadirahq/flow-router/blob/ssr/server/route.js#L61
+  const ssrContext = new SsrContext();
 
-      if (Package.mongo && !Package.autopublish) {
-        Mongo.Collection._isSSR = true;
-        Mongo.Collection._ssrData = {};
+  ReactRouterSSR.ssrContext.withValue(ssrContext, () => {
+    try {
+      const frData = InjectData.getData(res, 'fast-render-data');
+      if (frData) {
+        ssrContext.addData(frData.collectionData);
       }
-
       if (serverOptions.preRender) {
         serverOptions.preRender(req, res);
       }
+
+      // Uncomment these two lines if you want to easily trigger
+      // multiple client requests from different browsers at the same time
+
+      // console.log('sarted sleeping');
+      // Meteor._sleepForMs(5000);
+      // console.log('ended sleeping');
 
       global.__STYLE_COLLECTOR_MODULES__ = [];
       global.__STYLE_COLLECTOR__ = '';
@@ -199,73 +203,44 @@ function generateSSRData(serverOptions, context, req, res, renderProps) {
         ...serverOptions.props
       };
 
-      // If using redux, create the store.
-      let reduxStore;
-      if (typeof serverOptions.createReduxStore !== 'undefined') {
-        // Create a history and set the current path, in case the callback wants
-        // to bind it to the store using redux-simple-router's syncReduxAndRouter().
-        const history = Router.history.useQueries(Router.history.createMemoryHistory)();
-        history.replace(req.url);
-        // Create the store, with no initial state.
-        reduxStore = serverOptions.createReduxStore(undefined, history);
-        // Fetch components data.
-        fetchComponentData(renderProps, reduxStore);
-      }
-
-      // Wrap the <RouterContext> if needed before rendering it.
+      fetchComponentData(serverOptions, renderProps);
       let app = <RouterContext {...renderProps} />;
-      if (serverOptions.wrapper) {
-        const wrapperProps = {};
-        // Pass the redux store to the wrapper, which is supposed to be some
-        // flavour of react-redux's <Provider>.
-        if (reduxStore) {
-          wrapperProps.store = reduxStore;
-        }
-        app = <serverOptions.wrapper {...wrapperProps}>{app}</serverOptions.wrapper>;
+
+      if (typeof clientOptions.wrapperHook === 'function') {
+        app = clientOptions.wrapperHook(app);
       }
 
-      // Do the rendering.
-      html = ReactDOMServer.renderToString(app);
-
-      // If using redux, pass the resulting redux state to the client so that it
-      // can hydrate from there.
-      if (reduxStore) {
-        // inject-data accepts raw objects and calls EJSON.stringify() on them,
-        // but the _.each() done in there does not play nice if the store contains
-        // ImmutableJS data. To avoid that, we serialize ourselves.
-        InjectData.pushData(res, 'redux-initial-state', JSON.stringify(reduxStore.getState()));
-      }
-
-      if (Package['nfl:react-helmet']) {
-        head = ReactHelmet.rewind();
+      if (!serverOptions.disableSSR){
+        html = ReactDOMServer.renderToString(app);
+      } else if (serverOptions.loadingScreen){
+        html = serverOptions.loadingScreen;
       }
 
       css = global.__STYLE_COLLECTOR__;
+
+      if (typeof serverOptions.dehydrateHook === 'function') {
+        InjectData.pushData(res, 'dehydrated-initial-data', JSON.stringify(serverOptions.dehydrateHook()));
+      }
 
       if (serverOptions.postRender) {
         serverOptions.postRender(req, res);
       }
 
-      if (Package.mongo && !Package.autopublish) {
-        Mongo.Collection._isSSR = false;
-      }
-
-      Meteor.subscribe = originalSubscribe;
-    });
-
-    InjectData.pushData(res, 'fast-render-data', context.getData());
-  } catch(err) {
-    console.error('error while server-rendering', err.stack);
-  }
-
-  return { html, css, head };
+      // I'm pretty sure this could be avoided in a more elegant way?
+      const context = FastRender.frContext.get();
+      const data = context.getData();
+      InjectData.pushData(res, 'fast-render-data', data);
+    }
+    catch(err) {
+      console.error(new Date(), 'error while server-rendering', err.stack);
+    }
+  });
+  return { html, css };
 }
 
-function fetchComponentData(renderProps, reduxStore) {
+function fetchComponentData(serverOptions, renderProps) {
   const componentsWithFetch = renderProps.components
-    // Weed out 'undefined' routes.
     .filter(component => !!component)
-    // Only look at components with a static fetchData() method
     .filter(component => component.fetchData);
 
   if (!componentsWithFetch.length) {
@@ -277,140 +252,17 @@ function fetchComponentData(renderProps, reduxStore) {
     return;
   }
 
-  // Call the fetchData() methods, which lets the component dispatch possibly
-  // asynchronous actions, and collect the promises.
-  const promises = componentsWithFetch
-    .map(component => component.fetchData(reduxStore.getState, reduxStore.dispatch, renderProps));
-
-  // Wait until all promises have been resolved.
+  const promises = serverOptions.fetchDataHook(componentsWithFetch);
   Promise.awaitAll(promises);
 }
-
-function SSRSubscribe(context) {
-  return function(name, ...params) {
-    if (Package.mongo && !Package.autopublish) {
-      Mongo.Collection._isSSR = false;
-    }
-
-    // Even with autopublish, this is needed to load data in fast-render
-    const data = context.subscribe(name, ...params);
-
-    if (Package.mongo && !Package.autopublish) {
-      Mongo.Collection._fakePublish(data);
-      Mongo.Collection._isSSR = true;
-    }
-
-    // Fire the onReady callback immediately.
-    if (params.length) {
-      var callbacks = {};
-      var lastParam = params[params.length - 1];
-      if (_.isFunction(lastParam)) {
-        callbacks.onReady = params.pop();
-      } else if (lastParam &&
-          // XXX COMPAT WITH 1.0.3.1 onError used to exist, but now we use
-          // onStop with an error callback instead.
-        _.any([lastParam.onReady, lastParam.onError, lastParam.onStop],
-          _.isFunction)) {
-        callbacks = params.pop();
-      }
-      callbacks.onReady && callbacks.onReady();
-    }
-
-    return {
-      stop() {}, // Nothing to stop on server-rendering
-      ready() { return true; } // server gets the data straight away
-    };
-  }
-}
-
-// Thank you FlowRouter for this wonderful idea :)
-// https://github.com/kadirahq/flow-router/blob/ssr/server/route.js
 
 function moveScripts(data) {
   const $ = Cheerio.load(data, {
     decodeEntities: false
   });
-  const heads = $('head script:not([data-dont-move])');
+  const heads = $('head script');
   $('body').append(heads);
-
-  // Remove empty lines caused by removing scripts
   $('head').html($('head').html().replace(/(^[ \t]*\n)/gm, ''));
 
   return $.html();
 }
-
-if (Package.mongo && !Package.autopublish) {
-  // Protect against returning data that has not been published
-  const originalFind = Mongo.Collection.prototype.find;
-  const originalFindOne = Mongo.Collection.prototype.findOne;
-
-  Mongo.Collection.prototype._getSSRCollection = function() {
-    return Mongo.Collection._ssrData[this._name] || new LocalCollection(this._name);
-  };
-
-  Mongo.Collection.prototype.findOne = function(...args) {
-    if (!Mongo.Collection._isSSR) {
-      return originalFindOne.apply(this, args);
-    }
-
-    // collection transforms compatibility
-    const selector = args.length === 0 ? {} : args[0];
-    let options = args.length < 2 ? {} : args[1];
-
-    if (typeof this._transform === 'function') {
-      options.transform = this._transform;
-    }
-    return this._getSSRCollection().findOne(selector, options);
-  };
-
-  Mongo.Collection.prototype.find = function(...args) {
-    if (!Mongo.Collection._isSSR) {
-      return originalFind.apply(this, args);
-    }
-
-    // collection transforms compatibility
-    const selector = args.length === 0 ? {} : args[0];
-    let options = args.length < 2 ? {} : args[1];
-
-    if (typeof this._transform === 'function') {
-      options.transform = this._transform;
-    }
-
-    return this._getSSRCollection().find(selector, options);
-  };
-
-  Mongo.Collection._fakePublish = function(data) {
-    // Create a local collection and only add the published data
-    for (let name in data) {
-      if (!Mongo.Collection._ssrData[name]) {
-        Mongo.Collection._ssrData[name] = new LocalCollection(name);
-      }
-
-      for (let i = 0; i < data[name].length; ++i) {
-        data[name][i].forEach(doc => {
-          Mongo.Collection._ssrData[name].update({ _id: doc._id }, doc, { upsert: true });
-        });
-      }
-    }
-  };
-
-  // Support SSR for publish-counts
-  if (Package['tmeasday:publish-counts']) {
-    // Counts doesn't exist if we don't wait for startup (weird)
-    Meteor.startup(function() {
-      Counts.get = function(name) {
-        const collection = Mongo.Collection._ssrData.counts || new LocalCollection('counts');
-        const count = collection.findOne(name);
-
-        return count && count.count || 0;
-      };
-
-      Counts.has = function(name) {
-        const collection = Mongo.Collection._ssrData.counts || new LocalCollection('counts');
-        return !!collection.findOne(name);
-      }
-    });
-  }
-}
-
-export { ReactRouterSSR };

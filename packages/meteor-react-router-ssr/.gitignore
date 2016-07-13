@@ -1,2 +1,4 @@
 *.cached
 *.map
+node_modules/
+.npm

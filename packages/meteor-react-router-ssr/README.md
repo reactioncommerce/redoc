@@ -2,7 +2,7 @@ Server-side rendering for react-router and react-meteor-data rehydratating Meteo
 
 It has a protection against leaking your data. Only subscribed data will be available just the way it would be on the client.
 
-What about your SEO? Just add [`nfl:react-helmet`](https://atmospherejs.com/nfl/react-helmet) package and it will take care of adding your page title / meta tags on server-rendering.
+What about your SEO? Just `npm install react-helmet` and hook it with `prepareHtml(html): string` (see the example below).
 
 ## Install
 `meteor add reactrouter:react-router-ssr`
@@ -14,24 +14,28 @@ Read the [react-router documentation](https://github.com/rackt/react-router/tree
 
 #### routes
 Your main `<Route />` node of your application.<br />
-**Notice that their is no `<Router />` element, ReactRouterSSR takes care of creating it on the client and server with the correct parameters**
+**Notice that there is no `<Router />` element, ReactRouterSSR takes care of creating it on the client and server with the correct parameters**
 
 #### clientOptions (optional)
+- `historyHook`: [function(history) : newHistory] - Hook something into history client side.
+- `props` [object]: The additional arguments you would like to give to the `<Router />` component on the client.
+- `wrapperHook` [function(App) : Component]: You can wrap the react-router element with your own providers.
+- `rehydrateHook` [function(data)]: Receive the rehydrated object that was dehydrated during server side rendering.
 - `rootElement` [string]: The root element ID your React application is mounted with (defaults to `react-app`)
 - `rootElementType` [string]: Set the root element type (defaults to `div`)
 - `rootElementAttributes`[array]: Set the root element attributes as an array of tag-value pairs. I.e. `[['class', sidebar main], ['style', 'background-color: white']]`
-- `props` [object]: The additional arguments you would like to give to the `<Router />` component on the client.
-- `history`: History object to use. You can use `new ReactRouter.history.createHistory()`, `new ReactRouter.history.createHashHistory()` or `new ReactRouter.history.createMemoryHistory()`
-- `wrapper` [React component]: Wrapping your whole application client-side
-- `createReduxStore` [callback]: (if using Redux) A callback returning the application's redux store. See example below.
 
 #### serverOptions (optional)
 - `props` [object]: The additional arguments you would like to give to the `<Router />` component on the server.
+- `htmlHook` [function(html) : newHtml]: Prepare the HTML before sending it to the client
+- `historyHook` [function(history): newHistory]: Hook something on the history server side.
+- `dehydrateHook` [function() : data]: Supply data that should be dehydrated and sent to client.
+- `fetchDataHook` [function(components) : Array<Promise>]: Trigger the fetchData on your components that have it
 - `preRender` [function(req, res)]: Executed just before the renderToString
 - `postRender` [function(req, res)]: Executed just after the renderToString
 - `dontMoveScripts` [bool]: Keep the script inside the head tag instead of moving it at the end of the body
-- `wrapper` [React component]: Wrapping your whole application server-side
-- `createReduxStore` [callback]: (if using Redux) A callback returning the application's redux store. See example below.
+- `disableSSR` [bool]: Disable server-side rendering, in case the application depends on code which doesn't work on the server.
+- `loadingScreen` [string]: An HTML string to display while the page renders, in case the `disableSSR` option is set to true.
 
 ### Scripts
 Unless you disabled it, the scripts yo have in the header will be moved down at the end of the body tag.
@@ -44,7 +48,10 @@ To keep a particuliar code in the head, you can add the `data-dont-move` attribu
 
 ## Simple Example
 ```javascript
-const {IndexRoute, Route} = ReactRouter;
+import React, { Component } from 'react';
+import ReactMixin from 'react-mixin';
+import { IndexRoute, Route } from 'react-router';
+import { ReactRouterSSR } from 'meteor/reactrouter:react-router-ssr';
 
 AppRoutes = (
   <Route path="/" component={App}>
@@ -55,9 +62,8 @@ AppRoutes = (
   </Route>
 );
 
-HomePage = React.createClass({
-  mixins: [ReactMeteorData],
-
+@ReactMixin(ReactMeteorData)
+export default class HomePage extends Component
   getMeteorData() {
     Meteor.subscribe('profile');
 
@@ -76,7 +82,9 @@ ReactRouterSSR.Run(AppRoutes);
 
 ## Complex Example
 ```javascript
-const {IndexRoute, Route} = ReactRouter;
+import { IndexRoute, Route } from 'react-router';
+import ReactHelmet from 'react-helmet';
+import ReactCookie from 'react-cookie';
 
 AppRoutes = (
   <Route path="/" component={App}>
@@ -92,6 +100,10 @@ ReactRouterSSR.Run(AppRoutes, {
     onUpdate() {
       // Notify the page has been changed to Google Analytics
       ga('send', 'pageview');
+    },
+    htmlHook(html) {
+      const head = ReactHelmet.rewind();
+      return data.replace('<head>', '<head>' + head.title + head.base + head.meta + head.link + head.script);
     }
   }
 }, {
@@ -114,67 +126,51 @@ if (Meteor.isClient) {
 
 ## Example with Redux
 
-ReactRouterSSR supports applications that use Redux, using the `createReduxStore` and `wrapper` options in both clientOptions and serverOptions.
-- `createReduxStore` should be a callback in the shape `(initialState, history) => store`
-- `wrapper` should be the `Provider` component from react-redux (or some custom component wrapping the `Provider` and passing it the `store` prop it receives)
-
-On both server and client side, ReactRouterSSR.Run() takes care of calling the `createReduxStore` callback and passing the resulting store as a prop to the `wrapper` component.
+ReactRouterSSR supports applications that use Redux, using the `rehydrateHook` and `dehydrateHook` options in clientOptions and serverOptions respectively.
 
 ```javascript
-import { createStore } from 'redux';
-import { Provider } from 'react-redux'
-import reducers from './myAppReducers';
+import React from 'react';
+import { Provider } from 'react-redux';
 
-const {IndexRoute, Route} = ReactRouter;
+import routes from './routes';
+import configureStore from './store';
 
-AppRoutes = (
-  <Route path="/" component={App}>
-    <IndexRoute component={HomePage} />
-    <Route path="login" component={LoginPage} />
-    <Route path="*" component={NotFoundPage} />
-    {/* ... */}
-  </Route>
-);
+// Data that is populated by hooks during startup
+let history;
+let store;
+let initialState;
 
-// Simplest example:
-const createReduxStore = (initialState) => createStore(reducers, initialState);
+// Use history hook to get a reference to the history object
+const historyHook = newHistory => history = newHistory;
 
-// More advanced: the 'history' param is useful when using the react-router-redux
-// package (e.g. to be able to trigger route transistions using redux actions)
-import { applyMiddleware } from 'redux';
-import { syncHistory } from 'react-router-redux';
-const createReduxStore = (initialState, history) => {
-  // Create the react-router-redux middleware with the received 'history' object
-  // (on the server side, ReactRouterSSR.Run() automatically passes a memoryHistory,
-  // compatible with server execution)
-  const reduxRouterMiddleware = syncHistory(history);
-  const createStoreWithMiddleware = applyMiddleware(reduxRouterMiddleware)(createStore);
-  // Create the store.
-  return createStoreWithMiddleware(reducers, initialState);
+// Pass the state of the store as the object to be dehydrated server side
+const dehydrateHook = () => store.getState();
+
+// Take the rehydrated state and use it as the initial state client side
+const rehydrateHook = state => initialState = state;
+
+// Create a redux store and pass into the redux Provider wrapper
+const wrapperHook = app => {
+  store = configureStore(initialState, history);
+  return <Provider store={store}>{app}</Provider>;
 }
 
-Meteor.startup(() => {
-  const clientOptions = {
-    wrapper: Provider,
-    createReduxStore
-  };
-  // Use the same 'wrapper' and 'createReduxStore' in serverOptions, or adjust to your needs.
-  const serverOptions = clientOptions;
+const clientOptions = { historyHook, rehydrateHook, wrapperHook };
+const serverOptions = { historyHook, dehydrateHook };
 
-  ReactRouterSSR.Run(routes, clientOptions, serverOptions);
-});
+ReactRouterSSR.Run(routes, clientOptions, serverOptions);
 ```
 
-### Client-side store rehydration
-ReactRouterSSR automatically takes care of client-side store rehydration:
+### Client-side data rehydration
+ReactRouterSSR provides hooks to make use of client-side data rehydration:
 
-- On server side, once rendering is done, the resulting store state is serialized (using `JSON.stringify()`) and sent to the client as part of the generated HTML.
-- On the client side, that serialized state is automatically picked up and passed to the `createReduxStore` callback as the 'initialState'.
+- On server side, once rendering is done, the data returned from dehydrateHook is serialized (using `JSON.stringify()`) and sent to the client as part of the generated HTML.
+- On the client side, that serialized data is rehydrated and passed to the client via rehydrateHook.
 
-#### State serialization
-The `JSON.stringify()` serialization means that, if your reducers store "rich" domain objects with methods attached though prototypes or ES6 classes (for example documents fetched from Mongo collections with an associated transform, or [ImmutableJS](https://facebook.github.io/immutable-js) structures...), the client receives them downcasted to Plain Old Javascript Objects (without prototypes or methods) in the 'initialState'.
+#### Data serialization
+The `JSON.stringify()` serialization means that, if your data holds "rich" domain objects with methods attached though prototypes or ES6 classes (for example documents fetched from Mongo collections with an associated transform, or [ImmutableJS](https://facebook.github.io/immutable-js) structures...), the client receives them downcasted to Plain Old Javascript Objects (without prototypes or methods) in the 'data'.
 
-It is then the responsibility of the client code to "upcast" them back to the expected domain objects. It is recommended to handle that in each of the relevant reducers, by taking advantage of the fact that redux's `createStore()` dispatches an internal action with the 'initialState' it has been passed (which, in our case, is the unserialized state coming from the server rendering.)
+It is then the responsibility of the client code to "upcast" them back to the expected domain objects. In the case of redux it is recommended to handle that in each of the relevant reducers, by taking advantage of the fact that redux's `createStore()` dispatches an internal action with the 'initialState' it has been passed (which, in our case, is the unserialized state coming from the server rendering.)
 
 For example:
 
