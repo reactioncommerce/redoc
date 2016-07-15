@@ -32,11 +32,16 @@ function getRepoData() {
     // fetch repo release data
     if (repoData && repoData.data) {
       // get updated release tags
-      releaseData = Meteor.http.get(repoData.data.tags_url + authString, {
-        headers: {
-          "User-Agent": "ReDoc/1.0"
-        }
-      });
+      try {
+        releaseData = Meteor.http.get(repoData.data.tags_url + authString, {
+          headers: {
+            "User-Agent": "ReDoc/1.0"
+          }
+        });
+      } catch (error) {
+        console.log("Error fetching", repoData.data.tags_url);
+      }
+
       // get release data
       if (repoData && releaseData) {
         // fetch repo branches data
