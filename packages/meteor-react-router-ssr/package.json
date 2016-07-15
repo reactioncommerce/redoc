@@ -1,6 +1,6 @@
 {
   "name": "react-router-ssr",
-  "version": "2.0.4",
+  "version": "3.0.0",
   "description": "Server-side rendering for react-router and react-meteor-data rehydratating Meteor subscriptions",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -22,5 +22,15 @@
   "bugs": {
     "url": "https://github.com/thereactivestack/meteor-react-router-ssr/issues"
   },
-  "homepage": "https://github.com/thereactivestack/meteor-react-router-ssr#readme"
+  "homepage": "https://github.com/thereactivestack/meteor-react-router-ssr#readme",
+  "dependencies": {
+    "cheerio": "^0.20.0",
+    "cookie-parser": "^1.4.1",
+    "promise": "^7.1.1",
+    "react": "^0.14.8",
+    "react-dom": "^0.14.8",
+    "react-helmet": "^3.0.0",
+    "react-router": "^2.0.1",
+    "underscore": "^1.8.3"
+  }
 }
