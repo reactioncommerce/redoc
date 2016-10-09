@@ -16,9 +16,9 @@ rm -rf /tmp/*
 # clean source tree
 rm -rf $APP_SOURCE_DIR/.meteor/local
 rm -rf $APP_SOURCE_DIR/node_modules
-rm -rf $APP_SOURCE_DIR/packages/*/lib/bower
 rm -rf $APP_SOURCE_DIR/packages/*/.git
 rm -rf $APP_SOURCE_DIR/packages/*/.npm
+rm -rf $APP_SOURCE_DIR/packages/*/lib/bower
 
 # clean additional files created outside the source tree
 rm -rf /root/.npm /root/.cache /root/.config /root/.cordova /root/.local
@@ -30,10 +30,10 @@ rm -rf /opt/nodejs/bin/npm
 rm -rf /opt/nodejs/lib/node_modules/npm/
 
 # remove meteor
-rm -rf /usr/bin/meteor
+rm -rf /usr/local/bin/meteor
 rm -rf /root/.meteor
 
 # remove os dependencies
-apt-get -qq -y purge ca-certificates curl
+apt-get -qq -y purge ca-certificates curl bzip2
 apt-get -qq -y autoremove
 rm -rf /var/lib/apt/lists/*
