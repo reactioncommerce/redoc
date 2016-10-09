@@ -4,51 +4,47 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-base             # Packages every Meteor app needs to have
-mobile-experience       # Packages for a great mobile UX
-mongo                   # The database Meteor supports right now
-blaze-html-templates    # Compile .html files into Meteor Blaze views
-session                 # Client-side reactive dictionary for your app
-jquery                  # Helpful client-side library
-tracker                 # Meteor's client-side reactive programming library
-http                    # Meteor's http put/get
-es5-shim                # ECMAScript 5 compatibility for older browsers.
-ecmascript              # Enable ECMAScript2015+ syntax in app code
-audit-argument-checks   # enforce parameter checks on methods
-check                   # utils to check params
-ejson                   # ejson required for oauth/github
-service-configuration   # meteor accounts service configuration methods
+meteor-base@1.0.4
+audit-argument-checks@1.0.7
+blaze-html-templates@1.0.4
+check@1.2.3
+ecmascript@0.5.8_1
+ejson@1.0.12
+es5-shim@4.6.14_1
+http@1.2.9_1
+jquery@1.11.9
+mobile-experience@1.0.4
+mongo@1.1.12_1
+service-configuration@1.0.10
+session@1.1.6
+shell-server
+standard-minifier-js@1.2.0_1
+tracker@1.1.0
 
-accounts-base
-accounts-ui
-accounts-github
+accounts-base@1.2.11
+accounts-ui@1.1.9
+accounts-github@1.0.10
 # accounts-password
 
 # Community packages
-percolate:synced-cron
-
-#kadira:flow-router
-#kadira:blaze-layout
-#kadira:react-layout
-
-reactrouter:react-router-ssr
-meteorhacks:search-source
 fortawesome:fontawesome
+juliancwirko:postcss
+meteorhacks:search-source
+percolate:synced-cron
 react-meteor-data
+reactrouter:react-router-ssr
 
 # ReDoc packages
-reactioncommerce:redoc-core
 reactioncommerce:redoc-base-theme
+reactioncommerce:redoc-core
 reactioncommerce:redoc-default-theme
 reactioncommerce:redoc-gitter
 
 # ReDoc admin
-aldeed:collection2
-ongoworks:security
-standard-minifier-css
-standard-minifier-js
 alanning:roles
+aldeed:collection2
 nimble:restivus
+ongoworks:security
 
 # Testing packages
 avital:mocha
