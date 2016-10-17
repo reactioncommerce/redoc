@@ -9,7 +9,5 @@ reviewers:
   - mikemurray
   - zenweasel
   - kieckhafer
-  - Capt-Slow
-  - rymorgan
   name: pullapprove
-  required: 2
+  required: 1
