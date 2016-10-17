@@ -5,7 +5,7 @@ import Docs from "./containers/docs";
 import { ReactRouterSSR } from "meteor/reactrouter:react-router-ssr";
 import { default as ReactCookie } from "react-cookie";
 import { RedocAdmin } from "meteor/reactioncommerce:redoc-core/components/admin";
-import { createHistory } from "history";
+import createHistory from "history/createBrowserHistory";
 
 const analytics = analytics || null;
 

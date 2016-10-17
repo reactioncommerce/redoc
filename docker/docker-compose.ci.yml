@@ -1,7 +1,7 @@
 # used for CircleCI curl tests
 
 redoc:
-  image: reactioncommerce/redoc:ci
+  image: reactioncommerce/redoc:latest
   links:
     - mongo
   ports:
