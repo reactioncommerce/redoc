@@ -32,19 +32,19 @@ const md = MarkdownIt({
     // general link replacement for relative repo links
     if (!isImage && !hasProtocol) {
       switch (link.charAt(0)) {
-      case "#":
-        newLink = `/${env.repo}/${env.branch}/${env.alias}${link}`;
-        break;
-      case "/":
-        tocItem = ReDoc.Collections.TOC.findOne({
-          docPath: link.substring(1)
-        });
-        if (tocItem) {
-          newLink = `/${tocItem.repo}/${env.branch}/${tocItem.alias}`;
-        }
-        break;
-      default:
-        newlink = link;
+        case "#":
+          newLink = `/${env.repo}/${env.branch}/${env.alias}${link}`;
+          break;
+        case "/":
+          tocItem = ReDoc.Collections.TOC.findOne({
+            docPath: link.substring(1)
+          });
+          if (tocItem) {
+            newLink = `/${tocItem.repo}/${env.branch}/${tocItem.alias}`;
+          }
+          break;
+        default:
+          newlink = link;
       }
     }
     return newLink;
@@ -87,7 +87,7 @@ function processDoc({docRepo, tocItem, ...options}) {
     if (error) return error;
     if (result.statusCode === 200) {
       // sensible defaults for every repo
-      let docSet = ReDoc.getPathParams(docSourceUrl);
+      const docSet = ReDoc.getPathParams(docSourceUrl);
       docSet.docPage = docSourceUrl;
       docSet.docPath = docPath;
 
@@ -115,7 +115,7 @@ function processDoc({docRepo, tocItem, ...options}) {
         result.content = `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
       }
 
-      let documentContent = article({
+      const documentContent = article({
         docUrl: docRepoUrl,
         content: result.content
       });

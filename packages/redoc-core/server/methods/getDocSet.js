@@ -25,11 +25,11 @@ function getDocSet(repo, fetchBranch) {
   }
 
   // assemble TOC
-  let docTOC = ReDoc.Collections.TOC.find({
+  const docTOC = ReDoc.Collections.TOC.find({
     repo: repo
   }).fetch();
 
-  for (let tocItem of docTOC) {
+  for (const tocItem of docTOC) {
     processDoc({
       repo,
       branch,

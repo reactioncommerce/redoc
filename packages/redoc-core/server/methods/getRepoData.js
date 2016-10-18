@@ -16,7 +16,7 @@ function getRepoData() {
   }
 
   // gather multiple repo gh profiles
-  for (let repo of repos) {
+  for (const repo of repos) {
     let repoData;
     let releaseData;
     let branchesData;

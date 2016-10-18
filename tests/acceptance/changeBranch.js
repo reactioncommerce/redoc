@@ -8,7 +8,7 @@ describe("Change branches", function () {
       browser.waitForExist("select#branch-select");
       browser.click("select#branch-select");
       browser.selectByValue("select#branch-select", "development");
-      let branchUrl = browser.getUrl();
+      const branchUrl = browser.getUrl();
       assert.equal(branchUrl.indexOf("undefined"), 0, "URL contains `undefined`");
     });
   });
