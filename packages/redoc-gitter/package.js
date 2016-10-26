@@ -7,5 +7,5 @@ Package.describe({
 
 Package.onUse(function (api) {
   api.use("blaze-html-templates");
-  api.addFiles("head.html")
+  api.addFiles("head.html");
 });

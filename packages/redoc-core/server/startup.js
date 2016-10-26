@@ -6,7 +6,7 @@
 SyncedCron.add({
   name: "Update Repo Cache",
   schedule: function (parser) {
-    let schedule = Meteor.settings.redoc.schedule || "every 1 days";
+    const schedule = Meteor.settings.redoc.schedule || "every 1 days";
     return parser.text(schedule);
   },
   job: function () {
@@ -17,7 +17,7 @@ SyncedCron.add({
 SyncedCron.add({
   name: "Flush Docs Cache",
   schedule: function (parser) {
-    let schedule = Meteor.settings.redoc.schedule || "every 4 hours";
+    const schedule = Meteor.settings.redoc.schedule || "every 4 hours";
     return parser.text(schedule);
   },
   job: function () {
@@ -52,7 +52,7 @@ Meteor.startup(function () {
     }
 
     if (Meteor.settings.redoc && Meteor.settings.redoc.users) {
-      for (let user of Meteor.settings.redoc.users) {
+      for (const user of Meteor.settings.redoc.users) {
         const userData = Meteor.users.findOne({
           "services.github.username": user.username
         });
@@ -61,9 +61,7 @@ Meteor.startup(function () {
           Roles.addUsersToRoles(userData._id, user.roles, "redoc");
         }
       }
-
     }
-
   }
   // Initialize Repo data
   Meteor.call("redoc/initRepoData");

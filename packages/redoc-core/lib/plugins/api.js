@@ -6,44 +6,44 @@ function headingLevel(header) {
 function APIParser(md) {
   function addSections(state) {
     let tokens = [];  // output
-    let Token = state.Token;
+    const Token = state.Token;
     let sectionTokens = [];
 
     function openSection(attrs) {
-      let token = new Token("section_open", "section", 1);
+      const token = new Token("section_open", "section", 1);
       token.block = true;
       token.attrs = attrs;
       return token;
     }
 
     function closeSection() {
-      let token = new Token("section_close", "section", -1);
+      const token = new Token("section_close", "section", -1);
       token.block = true;
       return token;
     }
 
     function openContentBlock() {
-      let token = new Token("div_open", "div", 1);
+      const token = new Token("div_open", "div", 1);
       token.block = true;
       token.attrs = [["class", "section-content"]];
       return token;
     }
 
     function closeContentBlock() {
-      let token = new Token("div_open", "div", -1);
+      const token = new Token("div_open", "div", -1);
       token.block = true;
       return token;
     }
 
     function openExampleBlock() {
-      let token = new Token("aside_open", "aside", 1);
+      const token = new Token("aside_open", "aside", 1);
       token.block = true;
       token.attrs = [["class", "section-example"]];
       return token;
     }
 
     function closeExampleBlock() {
-      let token = new Token("aside_close", "aside", -1);
+      const token = new Token("aside_close", "aside", -1);
       token.block = true;
       return token;
     }

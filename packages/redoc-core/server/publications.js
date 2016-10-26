@@ -37,13 +37,13 @@ Meteor.publish("CacheDocs", function (docParams) {
     subdoc: Match.Optional(String, null)
   });
 
-  let params = {};
+  const params = {};
 
   // Set params defaults
   params.repo = docParams.repo;
   params.alias = docParams.alias;
   if (docParams.subdoc) {
-    params.alias = `${docParams.alias}/${docParams.subdoc}`
+    params.alias = `${docParams.alias}/${docParams.subdoc}`;
   }
   params.branch = docParams.branch || Meteor.settings.public.redoc.branch || "master";
 
@@ -71,13 +71,13 @@ Meteor.publish("CacheDocs", function (docParams) {
   }
 
   // assemble TOC
-  let docTOC = ReDoc.Collections.TOC.findOne({
+  const docTOC = ReDoc.Collections.TOC.findOne({
     alias: params.alias,
     repo: params.repo
   });
 
   // find specific branch in Docs
-  let cacheDoc = ReDoc.Collections.Docs.find({
+  const cacheDoc = ReDoc.Collections.Docs.find({
     repo: params.repo,
     branch: params.branch,
     alias: params.alias

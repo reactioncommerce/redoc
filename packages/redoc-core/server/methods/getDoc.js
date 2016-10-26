@@ -37,7 +37,7 @@ function getDoc(options) {
   }
 
   // TOC item for this doc
-  let tocItem = ReDoc.Collections.TOC.findOne({
+  const tocItem = ReDoc.Collections.TOC.findOne({
     alias: options.alias,
     repo: options.repo
   });

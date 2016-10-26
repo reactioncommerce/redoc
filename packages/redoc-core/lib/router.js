@@ -5,7 +5,7 @@
  */
 
 ReDoc.getPathParams = function (docPage) {
-  let params = {};
+  const params = {};
   // Example: https://github.com/reactioncommerce/reaction/blob/master/docs/developer/packages.md
   //         ---0--1-----2------------3-------------4------5-----6-----7------8---------9----XXX
   // sensible defaults for every repo

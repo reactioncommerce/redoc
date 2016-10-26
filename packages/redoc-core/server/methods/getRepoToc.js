@@ -29,28 +29,27 @@ function getRepoToc(repo, fetchBranch, path) {
   if (fetchBranch) {
     branch = fetchBranch;
   } else if (docRepo.branches && docRepo.branches.length > 0) {
-    for (let branch of docRepo.branches) {
-      Meteor.call("redoc/getRepoTOC", repo, branch.name, path);
+    for (const branches of docRepo.branches) {
+      Meteor.call("redoc/getRepoTOC", repo, branches.name, path);
     }
   } else {
     branch = docRepo.defaultBranch || "master";
   }
 
   if (branch) {
-
     // assemble TOC
-    let requestUrl = docRepo.contentsUrl.replace("{+path}", path ? encodeURIComponent(path) : "") + authString + '&ref=' + branch;
-    let contentData = Meteor.http.get(requestUrl, {
+    const requestUrl = docRepo.contentsUrl.replace("{+path}", path ? encodeURIComponent(path) : "") + authString + "&ref=" + branch;
+    const contentData = Meteor.http.get(requestUrl, {
       headers: {
         "User-Agent": "ReDoc/1.0"
       }
     });
 
     if (contentData && contentData.data) {
-      for (let sortIndex in contentData.data) {
-        let tocItem = contentData.data[sortIndex];
+      for (const sortIndex in contentData.data) {
+        const tocItem = contentData.data[sortIndex];
 
-        if (tocItem.type === 'file' && tocItem.path !== "README.md" && (tocItem.name.indexOf('.md') === -1 || tocItem.name === "README.md")) {
+        if (tocItem.type === "file" && tocItem.path !== "README.md" && (tocItem.name.indexOf(".md") === -1 || tocItem.name === "README.md")) {
           continue;
         }
 
@@ -60,9 +59,9 @@ function getRepoToc(repo, fetchBranch, path) {
         } else {
           sort = parseInt(sortIndex);
         }
-        let tocData = {
-          alias: s.slugify(s.strLeftBack(tocItem.path, '.md').replace(/^(\d+)[ \.]+/, '')),
-          label: s.strLeftBack(tocItem.name, '.md').replace(/^(\d+)[ \.]+/, ''),
+        const tocData = {
+          alias: s.slugify(s.strLeftBack(tocItem.path, ".md").replace(/^(\d+)[ \.]+/, "")),
+          label: s.strLeftBack(tocItem.name, ".md").replace(/^(\d+)[ \.]+/, ""),
           repo: repo,
           branch: branch,
           position: sort,
@@ -70,19 +69,19 @@ function getRepoToc(repo, fetchBranch, path) {
         };
         // First README.md, on root
         if (tocItem.path === "README.md") {
-          tocData.alias = 'welcome';
-          tocData.label = 'Welcome';
+          tocData.alias = "welcome";
+          tocData.label = "Welcome";
           tocData.position = 0;
           tocData.default = true;
         }
         if (path) {
           tocData.parentPath = encodeURIComponent(path);
         }
-        if (tocItem.type === 'dir') {
-          tocData.docPath += '/README.md';
+        if (tocItem.type === "dir") {
+          tocData.docPath += "/README.md";
         }
         ReDoc.Collections.TOC.insert(tocData);
-        if (tocItem.type === 'dir') {
+        if (tocItem.type === "dir") {
           Meteor.call("redoc/getRepoTOC", repo, branch, tocItem.path);
         }
       }

@@ -33,7 +33,7 @@ function initWithRepoData() {
   const existingRepos = ReDoc.Collections.Repos.find();
 
   if (existingRepos.count() === 0) {
-    let Repos = initRepoData.repos;
+    const Repos = initRepoData.repos;
     // if no tocData has been defined, we'll show this projects docs
     if (!Repos) {
       throw new Meteor.Error("No repos have been defined in Meteor.settings.redoc.initRepoData url or object neither in private/redoc.json");
@@ -68,9 +68,9 @@ function initWithRepoData() {
 
   // If TOC is still empty, get TOC from Repository
   if (ReDoc.Collections.TOC.find().count() === 0) {
-    ReDoc.Collections.Repos.find().forEach(function(repo) {
+    ReDoc.Collections.Repos.find().forEach(function (repo) {
       Meteor.call("redoc/getRepoTOC", repo.repo, Meteor.settings.public.redoc.branch || docRepo.defaultBranch);
-    })
+    });
   }
 }
 

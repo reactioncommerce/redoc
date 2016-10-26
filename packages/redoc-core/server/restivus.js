@@ -12,9 +12,9 @@ Meteor.startup(function () {
     if (serviceSettings && serviceSettings.github) {
       const settings = serviceSettings.github;
       if (settings.webhook && settings.webhook.updateDocs) {
-        let basename = s.rtrim(url.parse(__meteor_runtime_config__.ROOT_URL).pathname, "/");
+        const basename = s.rtrim(url.parse(__meteor_runtime_config__.ROOT_URL).pathname, "/");
 
-        let Api = new Restivus({
+        const Api = new Restivus({
           apiPath: basename + "/api"
         });
 

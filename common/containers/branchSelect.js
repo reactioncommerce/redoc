@@ -5,8 +5,8 @@ import BranchSelect from "../components/branchSelect";
 
 
 export default createContainer(({ repo }) => {
-  let branches = [];
-  let doc = ReDoc.Collections.Repos.findOne({ repo }) || ReDoc.Collections.Repos.findOne();
+  const branches = [];
+  const doc = ReDoc.Collections.Repos.findOne({ repo }) || ReDoc.Collections.Repos.findOne();
 
   if (doc && doc.branches) {
     const isAdminUser = Roles.userIsInRole(Meteor.userId(), ["admin"], "redoc");

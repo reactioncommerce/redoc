@@ -1,14 +1,14 @@
-import bodyParser from 'body-parser';
+import bodyParser from "body-parser";
 
 SearchSource = {};
 SearchSource._sources = {};
 
-SearchSource.defineSource = function(name, callback) {
+SearchSource.defineSource = function (name, callback) {
   SearchSource._sources[name] = callback;
 };
 
 Meteor.methods({
-  "search.source": function(name, query, options) {
+  "search.source": function (name, query, options) {
     check(name, String);
     check(query, Match.OneOf(String, null, undefined));
     check(options, Match.OneOf(Object, null, undefined));
@@ -20,7 +20,7 @@ Meteor.methods({
   }
 });
 
-var postRoutes = Picker.filter(function(req, res) {
+const postRoutes = Picker.filter(function (req, res) {
   return req.method == "POST";
 });
 
@@ -28,17 +28,17 @@ postRoutes.middleware(bodyParser.text({
   type: "text/ejson"
 }));
 
-postRoutes.route('/_search-source', function(params, req, res, next) {
-  if(req.body) {
-    var payload = EJSON.parse(req.body);
+postRoutes.route("/_search-source", function (params, req, res, next) {
+  if (req.body) {
+    const payload = EJSON.parse(req.body);
     try {
       // supporting the use of Meteor.userId()
-      var data = DDP._CurrentInvocation.withValue({userId: null}, function() {
+      const data = DDP._CurrentInvocation.withValue({userId: null}, function () {
         return getSourceData(payload.source, payload.query, payload.options);
       });
       sendData(res, null, data);
-    } catch(ex) {
-      if(ex instanceof Meteor.Error) {
+    } catch (ex) {
+      if (ex instanceof Meteor.Error) {
         var error = { code: ex.error, message: ex.reason };
       } else {
         var error = { message: ex.message };
@@ -52,7 +52,7 @@ postRoutes.route('/_search-source', function(params, req, res, next) {
 
 
 function sendData(res, err, data) {
-  var payload = {
+  const payload = {
     error: err,
     data: data
   };
@@ -61,8 +61,8 @@ function sendData(res, err, data) {
 }
 
 function getSourceData(name, query, options) {
-  var source = SearchSource._sources[name];
-  if(source) {
+  const source = SearchSource._sources[name];
+  if (source) {
     return source.call(this, query, options);
   } else {
     throw new Meteor.Error(404, "No such search source: " + name);

@@ -4,26 +4,26 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-base@1.0.4
-audit-argument-checks@1.0.7
-blaze-html-templates@1.0.4
-check@1.2.3
-ecmascript@0.5.8_1
-ejson@1.0.12
-es5-shim@4.6.14_1
-http@1.2.9_1
-jquery@1.11.9
-mobile-experience@1.0.4
-mongo@1.1.12_1
-service-configuration@1.0.10
-session@1.1.6
+meteor-base
+audit-argument-checks
+blaze-html-templates
+check
+ecmascript
+ejson
+es5-shim
+http
+jquery
+mobile-experience
+mongo
+service-configuration
+session
 shell-server
-standard-minifier-js@1.2.0_1
-tracker@1.1.0
+standard-minifier-js
+tracker
 
-accounts-base@1.2.11
-accounts-ui@1.1.9
-accounts-github@1.0.10
+accounts-base
+accounts-ui
+accounts-github
 # accounts-password
 
 # Community packages
@@ -47,8 +47,8 @@ nimble:restivus
 ongoworks:security
 
 # Testing packages
-avital:mocha
-dburles:factory
-practicalmeteor:sinon
-tmeasday:acceptance-test-driver
-xolvio:cleaner
+# avital:mocha
+# dburles:factory
+# practicalmeteor:sinon
+# tmeasday:acceptance-test-driver
+# xolvio:cleaner
