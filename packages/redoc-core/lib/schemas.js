@@ -87,6 +87,10 @@ ReDoc.Schemas.TOC = new SimpleSchema({
     type: Number,
     optional: true
   },
+  branch: {
+    type: String,
+    optional: true
+  },
   alias: {
     type: String
   },

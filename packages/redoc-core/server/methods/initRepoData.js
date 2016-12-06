@@ -40,12 +40,22 @@ function initWithRepoData() {
     }
     // for each Repo insert new repoData
     Repos.forEach(function (repoItem) {
+      console.log("repo item", repoItem);
       ReDoc.Collections.Repos.insert(repoItem);
     });
   }
 
   // populate TOC from settings
   const TOC = ReDoc.Collections.TOC.find();
+  const repos = ReDoc.Collections.Repos.find({}).fetch();
+
+  for (const repo of repos) {
+    console.log("repos", repo.branches);
+    for (const branch of repo.branches) {
+      Meteor.call("redoc/getRepoTOC", repo.repo, branch.name);
+    }
+  }
+
   const defaultRepo = ReDoc.Collections.Repos.findOne({default: true}) || {};
 
   if (TOC.count() === 0 && initRepoData.tocData) {
@@ -69,6 +79,7 @@ function initWithRepoData() {
   // If TOC is still empty, get TOC from Repository
   if (ReDoc.Collections.TOC.find().count() === 0) {
     ReDoc.Collections.Repos.find().forEach(function (repo) {
+      console.log(repo.branches);
       Meteor.call("redoc/getRepoTOC", repo.repo, Meteor.settings.public.redoc.branch || docRepo.defaultBranch);
     });
   }
