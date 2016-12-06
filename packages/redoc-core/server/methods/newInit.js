@@ -175,7 +175,7 @@ function getTOC() {
 
 function getTOCFromRemoteRepo(org, repoName, branch) {
   const rawUrl = `https://raw.githubusercontent.com/${org}/${repoName}/${branch}/redoc.json`;
-  console.log(rawUrl);
+  // console.log(rawUrl);
 
   try {
     return EJSON.parse(HTTP.get(rawUrl).content);
@@ -193,8 +193,12 @@ export function updateTOCFromSettings() {
   const TOC = ReDoc.Collections.TOC.find();
   const repos = ReDoc.Collections.Repos.find({}).fetch();
 
-  // Clean out old table-of-contents entries
-  cleanTOC();
+  // // Clean out old table-of-contents entries
+  // cleanTOC();
+
+  if (TOC.count() > 0) {
+    return;
+  }
 
   // Loop through all available repos
   if (Array.isArray(repos)) {
@@ -226,4 +230,8 @@ export function updateTOCFromSettings() {
       }
     }
   }
+}
+
+function getDoc() {
+
 }

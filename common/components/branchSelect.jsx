@@ -1,14 +1,28 @@
 import React from "react";
+import _ from "underscore";
 
 export default class BranchSelect extends React.Component {
 
   renderBranches() {
-    return this.props.branches.map((branch, index) => {
+    return _.map(this.props.branches, (branchGroup) => {
+      if (branchGroup.branches.length === 0) {
+        return null;
+      }
+
+      const branches = branchGroup.branches.map((branch, index) => {
+        return (
+          <option key={index} value={branch}>{branch}</option>
+        );
+      });
+
       return (
-        <option key={index} value={branch}>{branch}</option>
+        <optgroup label={branchGroup.name}>
+          {branches}
+        </optgroup>
       );
     });
   }
+
 
   handleChange(event) {
     if (this.props.onBranchSelect) {
@@ -17,7 +31,7 @@ export default class BranchSelect extends React.Component {
   }
 
   render() {
-    if (this.props.branches.length > 0) {
+    if (this.props.branches) {
       return (
         <div className="redoc control select">
           <select

@@ -11,5 +11,6 @@ Meteor.methods({
   "redoc/reloadDoc": getDoc,
   "redoc/getRepoData": getRepoData,
   "redoc/getDocSet": getDocSet,
+  "redoc/getDoc": getDoc,
   "redoc/getRepoTOC": getRepoToc
 });

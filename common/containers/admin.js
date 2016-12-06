@@ -5,7 +5,6 @@ import TOC from "../components/toc";
 
 export default createContainer(({ params }) => {
   let data = {};
-console.log(params);
   if (Meteor.isClient) {
     const tocSub = Meteor.subscribe("TOC");
     data = {

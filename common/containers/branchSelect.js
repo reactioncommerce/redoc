@@ -5,7 +5,16 @@ import BranchSelect from "../components/branchSelect";
 
 
 export default createContainer(({ repo }) => {
-  const branches = [];
+  const branches = {
+    default: {
+      name: "Default",
+      branches: []
+    },
+    preRelease: {
+      name: "Pre-Release",
+      branches: []
+    }
+  };
   const doc = ReDoc.Collections.Repos.findOne({ repo }) || ReDoc.Collections.Repos.findOne();
 
   if (doc && doc.branches) {
@@ -15,11 +24,13 @@ export default createContainer(({ repo }) => {
       if (Meteor.settings.public.redoc.publicBranches) {
         const isPublicBranch = _.contains(Meteor.settings.public.redoc.publicBranches, branch.name);
 
-        if (isPublicBranch || isAdminUser) {
-          branches.push(branch.name);
+        if (isPublicBranch) {
+          branches.default.branches.push(branch.name);
+        } else {
+          branches.preRelease.branches.push(branch.name);
         }
       } else {
-        branches.push(branch.name);
+        branches.default.branches.push(branch.name);
       }
     }
   }

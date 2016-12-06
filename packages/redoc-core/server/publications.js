@@ -82,10 +82,20 @@ Meteor.publish("CacheDocs", function (docParams) {
     branch: params.branch,
     alias: params.alias
   });
+  // console.log({
+  //   repo: params.repo,
+  //   branch: params.branch,
+  //   alias: params.alias
+  // });
 
-  // check if we need to fetch new docs
+  // If the doc is not cached, fetch it and then cache
   if (cacheDoc.count() === 0 && docTOC) {
-    Meteor.call("redoc/getDocSet", params.repo, params.branch);
+    // Meteor.call("redoc/getDocSet", params.repo, params.branch);
+    Meteor.call("redoc/getDoc", {
+      branch: params.branch,
+      repo: params.repo,
+      alias: params.alias
+    });
   }
   // return cache doc
   return cacheDoc;
