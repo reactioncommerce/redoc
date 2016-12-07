@@ -1,23 +1,38 @@
-import React from "react";
+import React, { Component, PropTypes } from "react";
 import _ from "underscore";
 
-export default class BranchSelect extends React.Component {
+export default class BranchSelect extends Component {
 
   renderBranches() {
-    return _.map(this.props.branches, (branchGroup) => {
-      if (branchGroup.branches.length === 0) {
-        return null;
+    return _.map(this.props.branches, (branchGroup, groupIndex) => {
+      let tags;
+      let branches;
+
+      if (Array.isArray(branchGroup.branches)) {
+        // if (branchGroup.branches.length === 0) {
+        //   return null;
+        // }
+
+        branches = branchGroup.branches.map((branch, index) => {
+          return (
+            <option key={`branch-${index}`} value={branch.commit || branch.name}>{branch.name}</option>
+          );
+        });
       }
 
-      const branches = branchGroup.branches.map((branch, index) => {
-        return (
-          <option key={index} value={branch}>{branch}</option>
-        );
-      });
+      if (Array.isArray(branchGroup.tags)) {
+        tags = branchGroup.tags.map((tag, index) => {
+          return (
+            <option key={`tag-${index}`} value={tag.url}>{tag.name}</option>
+          );
+        });
+      }
+
 
       return (
-        <optgroup label={branchGroup.name}>
+        <optgroup key={`group-${groupIndex}`} label={branchGroup.name}>
           {branches}
+          {tags}
         </optgroup>
       );
     });
@@ -43,7 +58,7 @@ export default class BranchSelect extends React.Component {
             {this.renderBranches()}
           </select>
           <div className="icon right">
-            <i className="fa fa-angle-down"></i>
+            <i className="fa fa-angle-down" />
           </div>
         </div>
       );
@@ -54,3 +69,7 @@ export default class BranchSelect extends React.Component {
     );
   }
 }
+
+BranchSelect.propTypes = {
+  branches: PropTypes.object
+};

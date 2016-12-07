@@ -2,16 +2,39 @@ import { Meteor } from "meteor/meteor";
 import { createContainer } from "meteor/react-meteor-data";
 import TOC from "../components/toc";
 
+function fetchDoc(params) {
+  return ReDoc.Collections.TOC.find({
+    $or: [
+      {
+        branch: params.branch || "master"
+      },
+      {
+        commit: params.branch
+      }
+    ]
+  }, {
+    sort: {
+      position: 1
+    }
+  });
+}
 
 export default createContainer(({ params }) => {
   let data = {};
-console.log(params);
+
   if (Meteor.isClient) {
     const tocSub = Meteor.subscribe("TOC");
     data = {
       tocIsLoaded: tocSub.ready(),
       docs: ReDoc.Collections.TOC.find({
-        branch: params.branch || "master"
+        $or: [
+          {
+            branch: params.branch || "master"
+          },
+          {
+            commit: params.branch
+          }
+        ]
       }, {
         sort: {
           position: 1
@@ -25,7 +48,14 @@ console.log(params);
     data = {
       tocIsLoaded: true,
       docs: ReDoc.Collections.TOC.find({
-        branch: params.branch || "master"
+        $or: [
+          {
+            branch: params.branch || "master"
+          },
+          {
+            commit: params.branch
+          }
+        ]
       }, {
         sort: {
           position: 1

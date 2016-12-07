@@ -28,7 +28,7 @@ export default class Docs extends React.Component {
   handleDocRefresh() {
     const { currentDoc, params } = this.props;
 
-    Meteor.call("redoc/reloadDoc", {
+    Meteor.call("redoc/getDoc", {
       _id: currentDoc._id,
       branch: params.branch,
       alias: params.alias,

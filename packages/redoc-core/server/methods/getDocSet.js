@@ -9,6 +9,7 @@ import processDoc from "./processDoc";
  *  @returns {undefined} returns
  */
 function getDocSet(repo, fetchBranch) {
+  this.unblock();
   check(repo, String);
   check(fetchBranch, Match.Optional(String, null));
   // get repo details

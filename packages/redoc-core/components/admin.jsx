@@ -88,7 +88,7 @@ class RedocAdmin extends React.Component {
       }
 
       let githubUserId = "";
-console.log(this.props.user);
+
       if (this.props.user && this.props.user.services) {
         const {github} = this.props.user.services;
         githubUserId = github.id;

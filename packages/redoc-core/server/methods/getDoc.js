@@ -1,20 +1,5 @@
 import { check } from "meteor/check";
-import initRepoData from "./initRepoData";
 import processDoc from "./processDoc";
-
-/**
- *  redoc/flushDocCache
- *  fetch repo profile from github and store in RepoData collection
- *  @param {Boolean} option - if true we'll flush the existing repo records first
- *  @returns {undefined} returns
- */
-function flushDocCache() {
-  ReDoc.Collections.Repos.remove({});
-  ReDoc.Collections.TOC.remove({});
-  ReDoc.Collections.Docs.remove({});
-
-  initRepoData();
-}
 
 /**
  *  getDoc

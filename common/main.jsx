@@ -13,6 +13,7 @@ const AppRoutes = (
   <Route component={Layout} path="/">
     <Route component={Docs} path="/:repo/:branch/:alias" />
     <Route component={Docs} path="/:repo/:branch/:alias/:subdoc" />
+    <Route component={Docs} path="/:repo/:release/:tag/:alias/:subdoc" />
     <Route component={RedocAdmin} path="/redoc" />
     <IndexRoute component={Docs} />
   </Route>

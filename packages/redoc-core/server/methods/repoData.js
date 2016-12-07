@@ -1,3 +1,4 @@
+import _ from "underscore";
 
 let authString = "";
 
@@ -9,8 +10,12 @@ function hasServices() {
   return Array.isArray(Meteor.settings.services);
 }
 
+export function getPublicBranches() {
+  return Meteor.settings.public.redoc.publicBranches || ["master"];
+}
+
 /**
- * Step 1: Configre github API and other services
+ * Configre github API and other services
  * @return {[type]} [description]
  */
 export function initServiceConfiguration() {
@@ -44,7 +49,7 @@ export function initServiceConfiguration() {
 }
 
 /**
- * Step 2: init any admin users in configuration
+ * Init any admin users in configuration
  * @return {[type]} [description]
  */
 export function initAdminUsers() {
@@ -100,7 +105,7 @@ function hasExistingRepoData() {
  * Updates repos settings from loaded configuration
  * @return {[type]} [description]
  */
-export function updateRepoDataFromSettings() {
+export function updateRepoData() {
   if (hasExistingRepoData() === false) {
     const repoData = getRepoData();
 
@@ -169,13 +174,8 @@ export function updateRepoDataFromSettings() {
   }
 }
 
-function getTOC() {
-  return ReDoc.Collections.TOC.find().fetch();
-}
-
 function getTOCFromRemoteRepo(org, repoName, branch) {
   const rawUrl = `https://raw.githubusercontent.com/${org}/${repoName}/${branch}/redoc.json`;
-  // console.log(rawUrl);
 
   try {
     return EJSON.parse(HTTP.get(rawUrl).content);
@@ -185,16 +185,17 @@ function getTOCFromRemoteRepo(org, repoName, branch) {
   }
 }
 
+export function getTOC() {
+  return ReDoc.Collections.TOC.find().fetch();
+}
+
 export function cleanTOC() {
   return ReDoc.Collections.TOC.remove({});
 }
 
-export function updateTOCFromSettings() {
+export function updateTOC() {
   const TOC = ReDoc.Collections.TOC.find();
   const repos = ReDoc.Collections.Repos.find({}).fetch();
-
-  // // Clean out old table-of-contents entries
-  // cleanTOC();
 
   if (TOC.count() > 0) {
     return;
@@ -203,7 +204,6 @@ export function updateTOCFromSettings() {
   // Loop through all available repos
   if (Array.isArray(repos)) {
     for (const repo of repos) {
-
       // Loop through all branches of all available repos
       for (const branch of repo.branches) {
         // Request TOC (redoc.json) from the root of that repo/branch
@@ -228,10 +228,97 @@ export function updateTOCFromSettings() {
           }
         }
       }
+
+      if (repo.release) {
+        for (const release of repo.release) {
+          const toc = getTOCFromRemoteRepo(repo.org, repo.repo, release.commit.sha);
+
+          if (toc) {
+            if (Array.isArray(toc.tocData)) {
+              // Loop through all entries and add them to the TOC collection
+              toc.tocData.forEach((tocItem, index) => {
+                const filename = tocItem.docPath.split("/").pop().replace(/\.[^/.]+$/, "");
+
+                ReDoc.Collections.TOC.insert({
+                  class: "guide-sub-nav-item",
+                  alias: filename,
+                  repo: repo.repo,
+                  branch: release.name,
+                  type: "release",
+                  commit: release.commit.sha,
+                  ...tocItem,
+                  position: index
+                });
+              });
+            }
+          }
+        }
+      }
+      //
     }
   }
 }
 
-function getDoc() {
+/**
+ * Clear and reload the repo data
+ * @return {void} no return value
+ */
+export function reloadRepoCache() {
+  ReDoc.Collections.repos.remove({});
+  updateRepoData();
+}
 
+/**
+ * Clear and reload the TOC data
+ * @return {void} no return value
+ */
+export function reloadTOCCache() {
+  ReDoc.Collections.TOC.remove({});
+  updateTOC();
+}
+
+
+/**
+ *  redoc/flushPrimaryDocCache
+ *  Flush all docs that are not related to a release
+ *
+ *  This will ensure that docs from release tags / branches are not deleted as they most likely
+ *  will not need to be udpated as they will not change.
+ *
+ *  @param {Boolean} option - if true we'll flush the existing repo records first
+ *  @returns {undefined} returns
+ */
+export function flushPrimaryDocCache() {
+  ReDoc.Collections.Docs.remove({
+    type: {
+      $ne: "release"
+    }
+  });
+}
+
+export function reloadPrimaryDocCache() {
+  flushPrimaryDocCache();
+  cachePrimaryDocs();
+}
+
+export function cachePrimaryDocs() {
+  // Update repo data and TOC if they are empty;
+  updateRepoData();
+  updateTOC();
+
+  const repos = ReDoc.Collections.Repos.find({}).fetch();
+
+  // Loop through all available repos
+  if (Array.isArray(repos)) {
+    for (const repo of repos) {
+      // Cache branch branches that meet the criteria
+      if (Array.isArray(repo.branches)) {
+        for (const branch of repo.branches) {
+          if (_.contains(getPublicBranches(), branch.name)) {
+            Meteor.call("redoc/getDocSet", repo.repo, branch.name);
+          }
+        }
+      }
+    }
+  }
 }
