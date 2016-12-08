@@ -1,4 +1,5 @@
 import { Meteor } from "meteor/meteor";
+import { check, Match } from "meteor/check";
 import { Roles } from "meteor/alanning:roles";
 
 
@@ -12,8 +13,16 @@ Meteor.publish("userData", function () {
   });
 });
 
-Meteor.publish("TOC", function () {
-  return ReDoc.Collections.TOC.find({}, {
+Meteor.publish("TOC", function (params) {
+  check(params, Match.OneOf(Object, null, undefined, void 0));
+
+  let selector = {};
+
+  selector = {
+    branch: params && params.branch || "master"
+  };
+
+  return ReDoc.Collections.TOC.find(selector, {
     sort: {
       position: 1
     }

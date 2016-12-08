@@ -1,4 +1,5 @@
 import _ from "underscore";
+// import getRepoTOC from "./getRepoTOC"
 
 let authString = "";
 
@@ -315,7 +316,14 @@ export function cachePrimaryDocs() {
       if (Array.isArray(repo.branches)) {
         for (const branch of repo.branches) {
           if (_.contains(getPublicBranches(), branch.name)) {
-            Meteor.call("redoc/getDocSet", repo.repo, branch.name);
+            const docCount = ReDoc.Collections.Docs.find({
+              repo: repo.repo,
+              branch: branch.name
+            }).count();
+
+            if (docCount === 0) {
+              Meteor.call("redoc/getDocSet", repo.repo, branch.name);
+            }
           }
         }
       }

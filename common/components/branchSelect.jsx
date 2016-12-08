@@ -15,19 +15,10 @@ export default class BranchSelect extends Component {
 
         branches = branchGroup.branches.map((branch, index) => {
           return (
-            <option key={`branch-${index}`} value={branch.commit || branch.name}>{branch.name}</option>
+            <option key={`branch-${index}`} value={branch.path}>{branch.name}</option>
           );
         });
       }
-
-      if (Array.isArray(branchGroup.tags)) {
-        tags = branchGroup.tags.map((tag, index) => {
-          return (
-            <option key={`tag-${index}`} value={tag.url}>{tag.name}</option>
-          );
-        });
-      }
-
 
       return (
         <optgroup key={`group-${groupIndex}`} label={branchGroup.name}>

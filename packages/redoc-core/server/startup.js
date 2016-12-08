@@ -5,7 +5,8 @@ import {
   updateTOC,
   reloadTOCCache,
   reloadRepoCache,
-  reloadPrimaryDocCache
+  reloadPrimaryDocCache,
+  cachePrimaryDocs
 } from "./methods/repoData";
 
 /*
@@ -51,6 +52,6 @@ Meteor.startup(function () {
   // Init TOC
   updateTOC();
 
-  //
-  reloadPrimaryDocCache();
+  // Cache primary docs if they are not already cached (publicBranches in settings)
+  cachePrimaryDocs();
 });

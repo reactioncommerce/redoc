@@ -1,5 +1,4 @@
 import { Meteor } from "meteor/meteor";
-import { Roles } from "meteor/alanning:roles";
 import { createContainer } from "meteor/react-meteor-data";
 import BranchSelect from "../components/branchSelect";
 
@@ -29,16 +28,19 @@ export default createContainer(({ repo }) => {
 
         if (isPublicBranch) {
           branches.default.branches.push({
-            name: branch.name
+            name: branch.name,
+            path: branch.name
           });
         } else {
           branches.preRelease.branches.push({
-            name: branch.name
+            name: branch.name,
+            path: branch.name
           });
         }
       } else {
         branches.default.branches.push({
-          name: branch.name
+          name: branch.name,
+          path: branch.name
         });
       }
     }
@@ -48,7 +50,7 @@ export default createContainer(({ repo }) => {
     for (const tag of doc.release) {
       branches.release.branches.push({
         name: tag.name,
-        commit: `${tag.commit.sha}`
+        path: tag.name
       });
     }
   }

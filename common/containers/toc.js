@@ -3,16 +3,13 @@ import { createContainer } from "meteor/react-meteor-data";
 import TOC from "../components/toc";
 
 function fetchDoc(params) {
-  return ReDoc.Collections.TOC.find({
-    $or: [
-      {
-        branch: params.branch || "master"
-      },
-      {
-        commit: params.branch
-      }
-    ]
-  }, {
+  let selector = {};
+
+  selector = {
+    branch: params && params.branch || "master"
+  };
+
+  return ReDoc.Collections.TOC.find(selector, {
     sort: {
       position: 1
     }
@@ -23,23 +20,11 @@ export default createContainer(({ params }) => {
   let data = {};
 
   if (Meteor.isClient) {
-    const tocSub = Meteor.subscribe("TOC");
+    const tocSub = Meteor.subscribe("TOC", params);
+
     data = {
       tocIsLoaded: tocSub.ready(),
-      docs: ReDoc.Collections.TOC.find({
-        $or: [
-          {
-            branch: params.branch || "master"
-          },
-          {
-            commit: params.branch
-          }
-        ]
-      }, {
-        sort: {
-          position: 1
-        }
-      }).fetch(),
+      docs: fetchDoc(params).fetch(),
       isMenuVisible: Session.get("isMenuVisible")
     };
   }
@@ -47,20 +32,7 @@ export default createContainer(({ params }) => {
   if (Meteor.isServer) {
     data = {
       tocIsLoaded: true,
-      docs: ReDoc.Collections.TOC.find({
-        $or: [
-          {
-            branch: params.branch || "master"
-          },
-          {
-            commit: params.branch
-          }
-        ]
-      }, {
-        sort: {
-          position: 1
-        }
-      }).fetch()
+      docs: fetchDoc(params).fetch()
     };
   }
 
