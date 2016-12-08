@@ -16,7 +16,7 @@ import {
 SyncedCron.add({
   name: "Update Repo Cache",
   schedule: function (parser) {
-    const schedule = Meteor.settings.redoc.schedule || "every 1 days";
+    const schedule = Meteor.settings.redoc.schedule || "every 5 days";
     return parser.text(schedule);
   },
   job: function () {
@@ -28,7 +28,7 @@ SyncedCron.add({
 SyncedCron.add({
   name: "Flush Docs Cache",
   schedule: function (parser) {
-    const schedule = Meteor.settings.redoc.schedule || "every 4 hours";
+    const schedule = Meteor.settings.redoc.schedule || "every 24 hours";
     return parser.text(schedule);
   },
   job: function () {
