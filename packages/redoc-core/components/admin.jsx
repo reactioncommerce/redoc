@@ -93,7 +93,7 @@ class RedocAdmin extends React.Component {
         const {github} = this.props.user.services;
         githubUserId = github.id;
       }
-      console.log("github userID", githubUserId);
+
       return (
         <div className="redoc admin">
           {this.renderNavigation()}
