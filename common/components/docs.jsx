@@ -99,7 +99,7 @@ export default class Docs extends React.Component {
           <a className="btn" href={githubUrl} target="_blank">
             Edit on Github
           </a>
-          <button className="btn" onClick={this.handleDocRefresh}>
+          <button className="btn" onClick={this.handleDocRefresh.bind(this)}>
             Refresh Doc
           </button>
         </div>
