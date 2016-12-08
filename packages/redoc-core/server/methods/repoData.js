@@ -181,7 +181,6 @@ function getTOCFromRemoteRepo(org, repoName, branch) {
   try {
     return EJSON.parse(HTTP.get(rawUrl).content);
   } catch (e) {
-    console.log("No redoc.json found. Skipping...");
     return false;
   }
 }
