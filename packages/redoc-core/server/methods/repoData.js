@@ -178,7 +178,8 @@ function getTOCFromRemoteRepo(org, repoName, branch) {
   try {
     return EJSON.parse(HTTP.get(rawUrl).content);
   } catch (e) {
-    return false;
+    return Meteor.settings.redoc.initRepoData;
+    // return false;
   }
 }
 
