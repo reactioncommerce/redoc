@@ -2,7 +2,7 @@
 redoc:
   image: reactioncommerce/redoc:latest
   ports:
-    - 80:80
+    - 80:3000
   links:
     - mongo
   restart: always
