@@ -1,9 +1,9 @@
-"use strict";
 
-import _ from "underscore"
+
+import _ from "underscore";
 
 function isBlankString(str) {
-  return !!(str||'').match(/^\s*$/);
+  return !!(str || "").match(/^\s*$/);
 }
 
 function replaceAttr(token, attrName, replace, env) {
@@ -28,7 +28,7 @@ function TOCParser(md) {
     function (state) {
       // var replace = md.options.replaceLink;
 
-      let documentTOC = [];
+      const documentTOC = [];
 
       state.tokens.forEach(function (blockToken, index) {
         // Look for open header tags
@@ -42,7 +42,7 @@ function TOCParser(md) {
 
           // This is the content of the heading
           if (nextToken.type === "inline" && nextToken.children) {
-            for (let node of nextToken.children) {
+            for (const node of nextToken.children) {
               if (node.type === "text" || nextToken.type === "inline") {
                 const data = {
                   level: headingLevel,

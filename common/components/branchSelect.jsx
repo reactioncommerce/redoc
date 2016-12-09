@@ -1,14 +1,34 @@
-import React from "react";
+import React, { Component, PropTypes } from "react";
+import _ from "underscore";
 
-export default class BranchSelect extends React.Component {
+export default class BranchSelect extends Component {
 
   renderBranches() {
-    return this.props.branches.map((branch, index) => {
+    return _.map(this.props.branches, (branchGroup, groupIndex) => {
+      let tags;
+      let branches;
+
+      if (Array.isArray(branchGroup.branches)) {
+        // if (branchGroup.branches.length === 0) {
+        //   return null;
+        // }
+
+        branches = branchGroup.branches.map((branch, index) => {
+          return (
+            <option key={`branch-${index}`} value={branch.path}>{branch.name}</option>
+          );
+        });
+      }
+
       return (
-        <option key={index} value={branch}>{branch}</option>
+        <optgroup key={`group-${groupIndex}`} label={branchGroup.name}>
+          {branches}
+          {tags}
+        </optgroup>
       );
     });
   }
+
 
   handleChange(event) {
     if (this.props.onBranchSelect) {
@@ -17,7 +37,7 @@ export default class BranchSelect extends React.Component {
   }
 
   render() {
-    if (this.props.branches.length > 0) {
+    if (this.props.branches) {
       return (
         <div className="redoc control select">
           <select
@@ -29,7 +49,7 @@ export default class BranchSelect extends React.Component {
             {this.renderBranches()}
           </select>
           <div className="icon right">
-            <i className="fa fa-angle-down"></i>
+            <i className="fa fa-angle-down" />
           </div>
         </div>
       );
@@ -40,3 +60,7 @@ export default class BranchSelect extends React.Component {
     );
   }
 }
+
+BranchSelect.propTypes = {
+  branches: PropTypes.object
+};

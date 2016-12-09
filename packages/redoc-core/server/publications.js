@@ -1,6 +1,7 @@
-// Meteor.publish("Docs", function () {
-//   return ReDoc.Collections.Docs.find();
-// });
+import { Meteor } from "meteor/meteor";
+import { check, Match } from "meteor/check";
+import { Roles } from "meteor/alanning:roles";
+
 
 Meteor.publish("userData", function () {
   return Meteor.users.find({
@@ -12,8 +13,16 @@ Meteor.publish("userData", function () {
   });
 });
 
-Meteor.publish("TOC", function () {
-  return ReDoc.Collections.TOC.find({}, {
+Meteor.publish("TOC", function (params) {
+  check(params, Match.OneOf(Object, null, undefined, void 0));
+
+  let selector = {};
+
+  selector = {
+    branch: params && params.branch || "master"
+  };
+
+  return ReDoc.Collections.TOC.find(selector, {
     sort: {
       position: 1
     }
@@ -37,13 +46,15 @@ Meteor.publish("CacheDocs", function (docParams) {
     subdoc: Match.Optional(String, null)
   });
 
-  let params = {};
+  // const isAdminUser = Roles.userIsInRole(Meteor.userId(), ["admin"], "redoc");
+  const params = {};
+
 
   // Set params defaults
   params.repo = docParams.repo;
   params.alias = docParams.alias;
   if (docParams.subdoc) {
-    params.alias = `${docParams.alias}/${docParams.subdoc}`
+    params.alias = `${docParams.alias}/${docParams.subdoc}`;
   }
   params.branch = docParams.branch || Meteor.settings.public.redoc.branch || "master";
 
@@ -71,21 +82,26 @@ Meteor.publish("CacheDocs", function (docParams) {
   }
 
   // assemble TOC
-  let docTOC = ReDoc.Collections.TOC.findOne({
+  const docTOC = ReDoc.Collections.TOC.findOne({
     alias: params.alias,
     repo: params.repo
   });
 
   // find specific branch in Docs
-  let cacheDoc = ReDoc.Collections.Docs.find({
+  const cacheDoc = ReDoc.Collections.Docs.find({
     repo: params.repo,
     branch: params.branch,
     alias: params.alias
   });
 
-  // check if we need to fetch new docs
+  // If the doc is not cached, fetch it and then cache
   if (cacheDoc.count() === 0 && docTOC) {
-    Meteor.call("redoc/getDocSet", params.repo, params.branch);
+    // Cache doc if it as not been cached yet
+    Meteor.call("redoc/getDoc", {
+      branch: params.branch,
+      repo: params.repo,
+      alias: params.alias
+    });
   }
   // return cache doc
   return cacheDoc;

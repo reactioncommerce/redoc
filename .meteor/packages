@@ -4,55 +4,51 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-base             # Packages every Meteor app needs to have
-mobile-experience       # Packages for a great mobile UX
-mongo                   # The database Meteor supports right now
-blaze-html-templates    # Compile .html files into Meteor Blaze views
-session                 # Client-side reactive dictionary for your app
-jquery                  # Helpful client-side library
-tracker                 # Meteor's client-side reactive programming library
-http                    # Meteor's http put/get
-es5-shim                # ECMAScript 5 compatibility for older browsers.
-ecmascript              # Enable ECMAScript2015+ syntax in app code
-audit-argument-checks   # enforce parameter checks on methods
-check                   # utils to check params
-ejson                   # ejson required for oauth/github
-service-configuration   # meteor accounts service configuration methods
+meteor-base@1.0.4
+audit-argument-checks@1.0.7
+blaze-html-templates
+check@1.2.4
+ecmascript@0.6.1
+ejson@1.0.13
+es5-shim@4.6.15
+http@1.2.10
+jquery@1.11.10
+mobile-experience@1.0.4
+mongo@1.1.14
+service-configuration@1.0.11
+session@1.1.7
+shell-server@0.2.1
+standard-minifier-js@1.2.1
+tracker@1.1.1
 
-accounts-base
-accounts-ui
-accounts-github
+accounts-base@1.2.14
+accounts-ui@1.1.9
+accounts-github@1.0.11
 # accounts-password
 
 # Community packages
-percolate:synced-cron
-
-#kadira:flow-router
-#kadira:blaze-layout
-#kadira:react-layout
-
-reactrouter:react-router-ssr
-meteorhacks:search-source
 fortawesome:fontawesome
+juliancwirko:postcss
+meteorhacks:search-source
+percolate:synced-cron
 react-meteor-data
+reactrouter:react-router-ssr
 
 # ReDoc packages
-reactioncommerce:redoc-core
 reactioncommerce:redoc-base-theme
+reactioncommerce:redoc-core
 reactioncommerce:redoc-default-theme
 reactioncommerce:redoc-gitter
 
 # ReDoc admin
-aldeed:collection2
-ongoworks:security
-standard-minifier-css
-standard-minifier-js
 alanning:roles
+aldeed:collection2
 nimble:restivus
+ongoworks:security
 
 # Testing packages
-avital:mocha
-dburles:factory
-practicalmeteor:sinon
-tmeasday:acceptance-test-driver
-xolvio:cleaner
+# avital:mocha
+# dburles:factory
+# practicalmeteor:sinon
+# tmeasday:acceptance-test-driver
+# xolvio:cleaner

@@ -1,1 +1,1 @@
-docker/redoc.prod.docker
+FROM jshimko/meteor-launchpad:latest

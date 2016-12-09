@@ -9,6 +9,7 @@ import processDoc from "./processDoc";
  *  @returns {undefined} returns
  */
 function getDocSet(repo, fetchBranch) {
+  this.unblock();
   check(repo, String);
   check(fetchBranch, Match.Optional(String, null));
   // get repo details
@@ -25,11 +26,11 @@ function getDocSet(repo, fetchBranch) {
   }
 
   // assemble TOC
-  let docTOC = ReDoc.Collections.TOC.find({
+  const docTOC = ReDoc.Collections.TOC.find({
     repo: repo
   }).fetch();
 
-  for (let tocItem of docTOC) {
+  for (const tocItem of docTOC) {
     processDoc({
       repo,
       branch,
