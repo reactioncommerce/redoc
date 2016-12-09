@@ -1,6 +1,6 @@
 Package.describe({
   name: "reactioncommerce:redoc-core",
-  version: "0.0.1",
+  version: "0.0.2",
   summary: "redoc - markdown rendered into collections",
   documentation: "README.md"
 });
@@ -17,13 +17,11 @@ Package.onUse(function (api) {
   api.use("alanning:roles");
   api.use("url");
 
-  // add default initRepoData
-  api.addAssets("private/redoc.json", "server");
   // common
   api.addFiles("lib/collections.js");
   api.addFiles("lib/router.js");
   api.addFiles("lib/schemas.js");
-  api.addFiles("lib/startup.js");
+
   // server
   api.addFiles("server/methods.js", "server");
   api.addFiles("server/publications.js", "server");

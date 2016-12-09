@@ -1,5 +1,5 @@
 import _ from "underscore";
-// import getRepoTOC from "./getRepoTOC"
+export { configureDefaults } from "./defaults";
 
 let authString = "";
 
@@ -86,11 +86,8 @@ function getRepoData() {
     } else {
       throw new Meteor.Error("Meteor.settings.redoc.initRepoData should be an object or http url in settings.json");
     }
-  } else {
-    // If we don't have settings we'll load the redoc defaults
-    repoData = EJSON.parse(Assets.getText("private/redoc.json"));
   }
-
+  if (!repoData) throw new Meteor.Error("RepoData not found. Check Meteor.settings.redoc.initRepoData");
   return repoData;
 }
 

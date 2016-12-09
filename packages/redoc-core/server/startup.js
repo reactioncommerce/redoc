@@ -1,4 +1,5 @@
 import {
+  configureDefaults,
   initServiceConfiguration,
   initAdminUsers,
   updateRepoData,
@@ -8,6 +9,9 @@ import {
   reloadPrimaryDocCache,
   cachePrimaryDocs
 } from "./methods/repoData";
+
+// set defaults to redoc data
+configureDefaults();
 
 /*
  * scheduled processes so that we don"t don"t endless hit
