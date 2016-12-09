@@ -4,26 +4,26 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-base
-audit-argument-checks
+meteor-base@1.0.4
+audit-argument-checks@1.0.7
 blaze-html-templates
-check
-ecmascript
-ejson
-es5-shim
-http
-jquery
-mobile-experience
-mongo
-service-configuration
-session
-shell-server
-standard-minifier-js
-tracker
+check@1.2.4
+ecmascript@0.6.1
+ejson@1.0.13
+es5-shim@4.6.15
+http@1.2.10
+jquery@1.11.10
+mobile-experience@1.0.4
+mongo@1.1.14
+service-configuration@1.0.11
+session@1.1.7
+shell-server@0.2.1
+standard-minifier-js@1.2.1
+tracker@1.1.1
 
-accounts-base
-accounts-ui
-accounts-github
+accounts-base@1.2.14
+accounts-ui@1.1.9
+accounts-github@1.0.11
 # accounts-password
 
 # Community packages

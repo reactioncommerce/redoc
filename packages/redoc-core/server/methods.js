@@ -1,15 +1,10 @@
-import initRepoData from "./methods/initRepoData";
-import getRepoData from "./methods/getRepoData";
 import getDocSet from "./methods/getDocSet";
-import getRepoToc from "./methods/getRepoToc";
-import getDoc, { flushDocCache } from "./methods/getDoc";
+import getDoc from "./methods/getDoc";
+import { flushPrimaryDocCache } from "./methods/repoData";
 
 // Meteor Methods
 Meteor.methods({
-  "redoc/initRepoData": initRepoData,
-  "redoc/flushDocCache": flushDocCache,
-  "redoc/reloadDoc": getDoc,
-  "redoc/getRepoData": getRepoData,
+  "redoc/flushDocCache": flushPrimaryDocCache,
   "redoc/getDocSet": getDocSet,
-  "redoc/getRepoTOC": getRepoToc
+  "redoc/getDoc": getDoc
 });

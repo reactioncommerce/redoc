@@ -17,16 +17,18 @@ class RedocAdmin extends React.Component {
       });
     };
 
-    this.handleSignOut = () => {
-      Meteor.logout();
-      browserHistory.push("/");
-    };
-
     this.handleDocReload = () => {
       if (confirm("Reload the docs? This may disrupt users currently browsing.")) {
         Meteor.call("redoc/flushDocCache");
       }
     };
+
+    this.handleSignOut = this.handleSignOut.bind(this);
+  }
+
+  handleSignOut() {
+    Meteor.logout();
+    browserHistory.push("/");
   }
 
   renderLogin() {}
@@ -105,7 +107,7 @@ class RedocAdmin extends React.Component {
                 {badges}
               </div>
               <div className="controls section">
-                <button className="btn btn-default" onClick={this.handleGithubSignIn}>Sign Out</button>
+                <button className="btn btn-default" onClick={this.handleSignOut}>Sign Out</button>
               </div>
             </div>
 
@@ -127,7 +129,7 @@ class RedocAdmin extends React.Component {
       <div className="redoc admin">
         <div className="card">
           <div className="section">
-            <button className="btn btn-default" onClick={this.handleGithubSignIn}>
+            <button className="btn btn-default" onClick={this.loginWithGithub}>
               <i className="fa fa-github"></i>
               {"Sign in with Github"}
             </button>

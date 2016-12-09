@@ -28,7 +28,7 @@ export default class Docs extends React.Component {
   handleDocRefresh() {
     const { currentDoc, params } = this.props;
 
-    Meteor.call("redoc/reloadDoc", {
+    Meteor.call("redoc/getDoc", {
       _id: currentDoc._id,
       branch: params.branch,
       alias: params.alias,
@@ -99,7 +99,7 @@ export default class Docs extends React.Component {
           <a className="btn" href={githubUrl} target="_blank">
             Edit on Github
           </a>
-          <button className="btn" onClick={this.handleDocRefresh}>
+          <button className="btn" onClick={this.handleDocRefresh.bind(this)}>
             Refresh Doc
           </button>
         </div>

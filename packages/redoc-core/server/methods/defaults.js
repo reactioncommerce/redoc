@@ -1,4 +1,12 @@
-Meteor.startup(function () {
+import { Meteor } from "meteor/meteor";
+
+/**
+ *  configureDefaults
+ *  fetch repo profile from github and store in RepoData collection
+ *  @param {Object} options - mongo style selector for the doc
+ *  @returns {undefined} returns
+ */
+export function configureDefaults() {
   // default public settings
   if (Meteor.settings.public.redoc === undefined) {
     Meteor.settings.public.redoc = {
@@ -32,7 +40,22 @@ Meteor.startup(function () {
   if (Meteor.settings.redoc === undefined) {
     Meteor.settings.redoc = {
       schedule: "every 48 hours",
-      initRepoData: "https://raw.githubusercontent.com/reactioncommerce/redoc/master/private/redoc.json"
+      initRepoData: {
+        repos: [{
+          org: "reactioncommerce",
+          repo: "redoc",
+          label: "Redoc",
+          description: "redoc documentation"
+        }],
+        tocData: [{
+          class: "guide-nav-item",
+          alias: "intro",
+          label: "Introduction",
+          repo: "redoc",
+          docPath: "README.md",
+          default: true
+        }]
+      }
     };
   }
 
@@ -49,4 +72,6 @@ Meteor.startup(function () {
       room: "reactioncommerce/redoc"
     };
   }
-});
+}
+
+export default configureDefaults;
