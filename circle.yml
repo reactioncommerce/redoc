@@ -8,12 +8,12 @@ dependencies:
 
   override:
     - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
-    - docker/build.sh
+    - docker build -t reactioncommerce/redoc:latest .
     - mkdir -p ~/docker; docker save reactioncommerce/redoc:latest > ~/docker/image.tar
 
 test:
   override:
-    - docker-compose -f docker/docker-compose.ci.yml up -d; sleep 30
+    - docker-compose up -d; sleep 20
     - curl --retry 10 --retry-delay 5 -v http://localhost
 
 deployment:
@@ -21,11 +21,9 @@ deployment:
     branch: development
     commands:
       - docker tag reactioncommerce/redoc:latest reactioncommerce/redoc:devel-latest
-      - docker tag reactioncommerce/redoc:base reactioncommerce/redoc:devel-base
       - docker tag reactioncommerce/redoc:latest reactioncommerce/redoc:devel-$CIRCLE_BUILD_NUM
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push reactioncommerce/redoc:devel-$CIRCLE_BUILD_NUM
-      - docker push reactioncommerce/redoc:devel-base
       - docker push reactioncommerce/redoc:devel-latest
 
   release:
@@ -34,5 +32,4 @@ deployment:
       - docker tag reactioncommerce/redoc:latest reactioncommerce/redoc:$CIRCLE_BUILD_NUM
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push reactioncommerce/redoc:$CIRCLE_BUILD_NUM
-      - docker push reactioncommerce/redoc:base
       - docker push reactioncommerce/redoc:latest
