@@ -262,7 +262,7 @@ export function updateTOC() {
  * @return {void} no return value
  */
 export function reloadRepoCache() {
-  ReDoc.Collections.repos.remove({});
+  ReDoc.Collections.Repos.remove({});
   updateRepoData();
 }
 
