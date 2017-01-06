@@ -287,6 +287,8 @@ export function reloadTOCCache() {
  *  @returns {undefined} returns
  */
 export function flushPrimaryDocCache() {
+  reloadRepoCache();
+  reloadTOCCache();
   ReDoc.Collections.Docs.remove({
     type: {
       $ne: "release"
