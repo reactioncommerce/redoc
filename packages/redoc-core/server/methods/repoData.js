@@ -262,7 +262,7 @@ export function updateTOC() {
  * @return {void} no return value
  */
 export function reloadRepoCache() {
-  ReDoc.Collections.repos.remove({});
+  ReDoc.Collections.Repos.remove({});
   updateRepoData();
 }
 
@@ -287,6 +287,8 @@ export function reloadTOCCache() {
  *  @returns {undefined} returns
  */
 export function flushPrimaryDocCache() {
+  reloadRepoCache();
+  reloadTOCCache();
   ReDoc.Collections.Docs.remove({
     type: {
       $ne: "release"
