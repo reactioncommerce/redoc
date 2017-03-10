@@ -34,7 +34,7 @@ export default class TableOfContents extends React.Component {
       return [];
     }
 
-    for (let item of parentItems) {
+    parentItems.forEach((item, parentIndex) => {
       const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const url = `/${item.repo}/${branch}/${item.alias}`;
 
@@ -43,9 +43,12 @@ export default class TableOfContents extends React.Component {
       if (item.documentTOC) {
         subItems = item.documentTOC.map((subItem, index) => {
           const hashUrl = `${url}#${subItem.slug}`;
-
+          const itemClassName = classnames([
+            subItem.className,
+            `${subItem.className}-${index}`
+          ])
           return (
-            <li className={subItem.className} key={index}>
+            <li className={itemClassName} key={index}>
               <a href={hashUrl}>{subItem.label}</a>
             </li>
           );
@@ -65,7 +68,8 @@ export default class TableOfContents extends React.Component {
       const className = item.class || (parentPath ? "guide-sub-nav-item" : "guide-nav-item");
       const classes = classnames({
         [className]: true,
-        active: this.props.params.alias === item.alias
+        active: this.props.params.alias === item.alias,
+        [`${className}-${parentIndex}`]: true
       });
 
       items.push(
@@ -77,7 +81,7 @@ export default class TableOfContents extends React.Component {
 
       let currentPath = s.strLeftBack(item.docPath, "/README.md"); // Dirs path has /README.md attached to them
       items = items.concat(this.renderMenu(currentPath));
-    }
+    });
 
     return items;
   }

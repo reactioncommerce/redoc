@@ -8,7 +8,7 @@
     border-left: 3px solid transparent;
     border-radius: 0;
   }
-  
+
 
   > li > a:hover,
   > li > a:focus {
@@ -16,7 +16,7 @@
     border-left: 3px solid @brand-vivid-color;
   }
 
-  > li.active > a, 
+  > li.active > a,
   > li.active > a:hover,
   > li.active > a:focus {
     background-color: transparent;
@@ -28,4 +28,123 @@
 
 .list-group-item.active {
   color: contrast(@brand-primary, @text-color, @white);
+}
+
+a.reaction-btn,
+button.reaction-btn,
+input.reaction-btn {
+  background-color: @aqua-color;
+  border: 8px solid @white;
+  border-radius: 35px;
+  color: @deep-blue;
+  display: inline-block;
+  font-size: .75rem;
+  font-weight: bold;
+  letter-spacing: 0.075rem;
+  padding: 1.25em 5.5em 1.25em 2.25em;
+  text-decoration: none;
+  text-transform: uppercase;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition: @transition-out ease-in-out background-color;
+
+  .btn__arrow {
+    position: absolute;
+    right: 2.25em;
+    top: 50%;
+    transition: @transition-out ease-in-out right;
+
+    &:after {
+      content: '';
+      display: block;
+      border-right: 2px solid @deep-blue;
+      border-bottom: 2px solid @deep-blue;
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      bottom: -6px;
+      right: 0px;
+      transform: rotate(-45deg);
+    }
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      right: 0px;
+      top: -1px;
+      height: 2px;
+      width: 18px;
+      background-color: @deep-blue;
+    }
+  }
+
+  .btn__icon {
+    position: absolute;
+    right: 2.25em;
+    top: 1em;
+    transition: @transition-out ease-in-out right;
+    img {
+      height: 1.7em;
+    }
+  }
+
+  &:hover {
+    transition-duration: @transition-in;
+    background-color: darken(@aqua-color, 5);
+
+    .btn__arrow {
+      right: 2em;
+      transition-duration: @transition-in;
+    }
+
+    &.btn-gray {
+      background-color: darken(@tope-color, 5);
+    }
+
+    &.btn-accent {
+      background-color: darken(@fire-color, 5);
+    }
+  }
+
+  &.btn-gray {
+    background-color: @tope-color;
+
+    @media screen and (max-width: @screen-xs-max) {
+      background-color: @white;
+      border: 1px solid @deep-blue;
+
+      &:hover {
+        background-color: @white;
+      }
+    }
+  }
+
+  &.btn-clear {
+    background-color: transparent;
+    border: 0;
+
+    @media screen and (max-width: @screen-xs-max) {
+      background-color: transparent;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
+
+  &.btn-accent {
+    background-color: @fire-color;
+    color: @white;
+
+    .btn__arrow {
+      &:after {
+        border-color: @white;
+      }
+      &:before {
+        background-color: @white;
+      }
+    }
+  }
 }

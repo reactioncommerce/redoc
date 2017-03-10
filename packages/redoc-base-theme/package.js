@@ -21,6 +21,7 @@ Package.onUse(function (api) {
     "default/panels.less",
     "default/popovers.less",
     "default/variables.less",
+    "default/global-styles.less",
     "lib/bootstrap/less/alerts.less",
     "lib/bootstrap/less/badges.less",
     "lib/bootstrap/less/bootstrap.less",
