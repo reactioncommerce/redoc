@@ -60,7 +60,7 @@
 
     box-shadow: 0 0 30px rgba(0,0,0,.15);
 
-    z-index: 100;
+    z-index: @zindex-popover;
   }
 
   .redoc.sidebar.visible {
@@ -99,10 +99,10 @@
   }
 }
 
-.redoc.sidebar .menu .guide-nav-item {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid @border-color;
+.redoc.sidebar .menu ul .guide-nav-item {
+  margin-top: 3rem;
+  // padding-top: 1rem;
+  // border-top: 1px solid @border-color;
   margin-bottom: 10px;
   // margin-top: 50px;
   // text-transform: uppercase;
@@ -116,10 +116,25 @@
     border-top: none;
   }
 
+  &:first-child {
+    margin-top: 0;
+  }
+
   a {
     text-transform: uppercase;
     color: @black;
+    width: 100%;
     font-weight: 600;
+  }
+}
+
+.redoc.sidebar .menu ul .guide-nav-item-0 {
+  margin-top: 0;
+
+  @media screen and (max-width: @screen-xs-max) {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid @border-color;
   }
 }
 
@@ -157,9 +172,13 @@
 .redoc.sidebar .menu .guide-sub-nav-item a {
   color: @black;
   font-size: 0.9rem;
+  width: 100%;
+  padding: 0.2rem 0.4rem;
+
   &:hover {
     color: @black;
-    text-decoration: underline;
+    background: @light-blue-color;
+    text-decoration: none;
   }
 }
 

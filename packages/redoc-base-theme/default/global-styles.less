@@ -1,0 +1,132 @@
+// Global stylesheet
+// -------------------------------------------------------------------------------
+// Define all site-wide styles, typography, classes, and styles
+// -------------------------------------------------------------------------------
+/* CSS declarations go here */
+@import "//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css";
+@import url('https://fonts.googleapis.com/css?family=Overpass+Mono');
+
+// Fonts
+// --------------------------------------
+
+.museo-sans-100 {
+  font-weight: 300;
+}
+.museo-sans-300 {
+  font-weight: 300;
+}
+.museo-sans-500 {
+  font-weight: 500;
+}
+.museo-sans-700 {
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'PostGrotesk';
+  src: url('/fonts/post-grotesk/PostGrotesk-Light.eot'); /* IE9 Compat Modes */
+  src: url('/fonts/post-grotesk/PostGrotesk-Light.woff') format('woff'),
+       url('/fonts/post-grotesk/PostGrotesk-Light.svg') format('svg');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'PostGrotesk';
+  src: url('/fonts/post-grotesk/PostGrotesk-Medium.eot'); /* IE9 Compat Modes */
+  src: url('/fonts/post-grotesk/PostGrotesk-Medium.woff') format('woff'),
+       url('/fonts/post-grotesk/PostGrotesk-Medium.svg') format('svg');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'PostGrotesk';
+  src: url('/fonts/post-grotesk/PostGrotesk-Bold.eot'); /* IE9 Compat Modes */
+  src: url('/fonts/post-grotesk/PostGrotesk-Bold.woff') format('woff'),
+       url('/fonts/post-grotesk/PostGrotesk-Bold.svg') format('svg');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'PostGrotesk';
+  src: url('/fonts/post-grotesk/PostGrotesk-Book.eot'); /* IE9 Compat Modes */
+  src: url('/fonts/post-grotesk/PostGrotesk-Book.woff') format('woff'),
+       url('/fonts/post-grotesk/PostGrotesk-Book.svg') format('svg');
+  font-weight: 800;
+}
+
+// Variables
+// --------------------------------------
+//== Colors
+// Brand
+@brand-primary-color: @reaction-primary-color; // Vivid Violet
+@brand-secondary-color: #4aa5bd; // Pelorous (Teal-ish)
+@brand-light-color: #e3e3e3; // Platinum (Light gray)
+@brand-dark-color: #414141; // Charcoal (Dark gray)
+@brand-vivid-color: #00dcdd; // Bright Turqouise
+@brand-muted-color: #abe2e7; // Powder Blue
+@green: #57b268;
+@white: #fff;
+@black: #030303;
+@dark-gray: #2b2b2b;
+@middle-gray: #afafaf;
+@light-gray: #e6eef4;
+@border-gray: #d5d5d5; // container border color
+@container-gray: #f9fafe; // container background color
+@navbar-default-bg: @brand-dark-color;
+
+@gutter-desktop: 40px;
+@gutter-mobile: 20px;
+
+@feature-inner-padding-v: 6rem;
+@content-width: 1200px;
+
+// Animation durations
+@transition-in: .12s;
+@transition-out: .24s;
+
+// Sizing
+
+// body {
+//   font-family: 'PostGrotesk', sans-serif;
+// }
+
+// General site-wide styles
+// Based off Bootstrap
+// http://getbootstrap.com/customize/
+// --------------------------------------
+// @btn-primary-bg: @brand-primary-color;
+@input-border-radius: 0;
+@input-border-focus: @brand-muted-color;
+@border-radius-base: 0;
+
+.btn {
+  transition: all .7s;
+
+  border: none;
+
+  &:hover {
+    // background-color: darken(@brand-primary, 10%);
+    // box-shadow: 1px 2px 3px 1px rgba(0, 0, 0, .35);
+    border: none;
+    border-radius: 2px;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.btn-lg {
+  border-radius: 0;
+  min-height   : 46px;
+}
+
+.form-control {
+  border-radius   : 0;
+  border          : none;
+  background-color: #f4f4f4;
+  font-size       : 14px;
+  margin-right    : 10px;
+  .museo-sans-300;
+  .box-shadow(0 0 0);
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="22px" viewBox="0 0 26 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>chat-icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M12,17 L26,17 L26,0 L0,0 L0,17 L7,17 L7,22 L12,17 Z" id="path-1"></path>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="26" height="22" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-2" transform="translate(-217.000000, -563.000000)">
+            <g id="Group-14-Copy-3" transform="translate(217.000000, 563.000000)">
+                <g id="Group-15">
+                    <use id="Combined-Shape" stroke="#052A4E" mask="url(#mask-2)" stroke-width="4" stroke-linecap="square" xlink:href="#path-1"></use>
+                    <rect id="Rectangle-6" fill="#052A4E" x="5" y="7" width="3" height="3" rx="1.5"></rect>
+                    <rect id="Rectangle-6-Copy-2" fill="#052A4E" x="11" y="7" width="3" height="3" rx="1.5"></rect>
+                    <rect id="Rectangle-6-Copy-3" fill="#052A4E" x="17" y="7" width="3" height="3" rx="1.5"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
