@@ -2,6 +2,7 @@ import React from "react";
 import SearchField from "./search";
 import BranchSelect from "../containers/branchSelect";
 import Avatar from "meteor/reactioncommerce:redoc-core/components/avatar";
+import classnames from "classnames";
 
 const DocView = React.createClass({
   contextTypes: {
@@ -9,6 +10,13 @@ const DocView = React.createClass({
   },
 
   mixins: [ReactMeteorData],
+
+  getInitialState() {
+    return {
+      showNavDropdown: false,
+      showMobileNavigation: false
+    }
+  },
 
   getMeteorData() {
     Meteor.subscribe("TOC");
@@ -71,25 +79,27 @@ const DocView = React.createClass({
     }
   },
 
-  render() {
+  handleShowMobileNavigation() {
+    this.setState({
+      showMobileNavigation: !this.state.showMobileNavigation
+    })
+  },
+
+  handleShowNavDropdown() {
+    this.setState({
+      showNavDropdown: !this.state.showNavDropdown
+    })
+  },
+
+  renderToolbar() {
     return (
       <div className="redoc header">
-
-        <div className="navigation">
-          {this.renderMainNavigationLinks("Docs")}
-        </div>
-
         <div className="main-header">
           <div className="navbar-item brand">
             <button className="redoc menu-button" onClick={this.handleMenuToggle}>
               <i className="fa fa-bars"></i>
             </button>
-            <a className="title" href={Meteor.settings.public.redoc.logo.link.href}>
-              <img className="logo" src={Meteor.settings.public.redoc.logo.image} />
-              {Meteor.settings.public.redoc.logo.link.value}
-            </a>
           </div>
-
           <div className="navbar-item filters">
             <div className="item">
               <BranchSelect
@@ -102,11 +112,111 @@ const DocView = React.createClass({
               <SearchField />
             </div>
           </div>
-
-          {this.renderSignedInUser()}
         </div>
       </div>
     );
+  },
+
+  render() {
+    const dropDownClassName = classnames({
+      "reaction-nav-dropdown-links": true,
+      "active": this.state.showNavDropdown
+    })
+
+    const dropDownToggleClassName = classnames({
+      "reaction-nav-link": true,
+      "reaction-nav-dropdown-toggle": true,
+      "flipped": this.state.showNavDropdown
+    })
+
+    const navLinksClassName = classnames({
+      "reaction-nav-group": true,
+      "reaction-nav-links": true,
+      "reaction-nav-links-show": this.state.showMobileNavigation
+    })
+
+    const menuToggleClassName = classnames({
+      "reaction-nav-toggle": true,
+      "active": this.state.showMobileNavigation
+    })
+
+    return (
+      <div className="header">
+        <nav className="reaction-nav" role="navigation">
+          <div className="reaction-nav-group reaction-nav-header">
+            <a href="/" className="reaction-nav-item">
+              <img src="/images/logo.png" alt="Reaction" />
+              <span>Reaction Commerce</span>
+            </a>
+          </div>
+
+          <div className={navLinksClassName}>
+            <div className="nav-links-left">
+              <a href="https://reactioncommerce.com/features" className="reaction-nav-link">Features</a>
+              <div className="reaction-nav-dropdown">
+                <a href="#" className={dropDownToggleClassName}
+                   data-event-action="showNavDropdown" onClick={this.handleShowNavDropdown}>
+                  Developers
+                </a>
+                <ul className={dropDownClassName}>
+                  <li>
+                    <a href="https://github.com/reactioncommerce/reaction">
+                      <img src="/images/header/download-icon.svg" />
+                      Download
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://docs.reactioncommerce.com/reaction-docs/master/tutorial">
+                      <img src="/images/header/customize-icon.svg" />
+                      Customize
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://docs.reactioncommerce.com/reaction-docs/master/contributing-to-reaction">
+                      <img src="/images/header/fork-icon.svg" />
+                      Contribute
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://docs.reactioncommerce.com">
+                      <img src="/images/header/docs-icon.svg" />
+                      Documentation
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://forums.reactioncommerce.com/">
+                      <img src="/images/header/forum-icon.svg" />
+                      Forums
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://gitter.im/reactioncommerce/reaction">
+                      <img src="/images/header/chat-icon.svg" />
+                      Chat
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <a href="https://docs.reactioncommerce.com" className="reaction-nav-link reaction-nav-link-docs">
+              <img src="/images/header/docs-icon.svg" height="22px" />
+              Docs
+            </a>
+            <a className="reaction-btn" href="https://reactioncommerce.com/features#get-a-demo">
+              Get a demo
+              <div className="btn__arrow"></div>
+            </a>
+          </div>
+
+          <div className="reaction-nav-group reaction-nav-final">
+            <button type="button" className={menuToggleClassName} data-event-action="showMobileNavigation" onClick={this.handleShowMobileNavigation}>
+              Menu
+            </button>
+          </div>
+        </nav>
+        {this.renderToolbar()}
+      </div>
+    )
   }
 });
 
