@@ -144,7 +144,7 @@ const DocView = React.createClass({
       <div className="header">
         <nav className="reaction-nav" role="navigation">
           <div className="reaction-nav-group reaction-nav-header">
-            <a href="/" className="reaction-nav-item">
+            <a href="https://reactioncommerce.com" className="reaction-nav-item">
               <img src="/images/logo.png" alt="Reaction" />
               <span>Reaction Commerce</span>
             </a>
