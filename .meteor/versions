@@ -89,6 +89,7 @@ react-meteor-data@0.2.9
 reactioncommerce:redoc-base-theme@1.0.0
 reactioncommerce:redoc-core@0.0.2
 reactioncommerce:redoc-default-theme@1.0.0
+reactioncommerce:redoc-github-stars@0.0.1
 reactioncommerce:redoc-gitter@0.0.1
 reactive-dict@1.1.8
 reactive-var@1.0.11

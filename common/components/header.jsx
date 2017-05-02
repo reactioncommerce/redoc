@@ -198,6 +198,9 @@ const DocView = React.createClass({
                 </ul>
               </div>
             </div>
+            <div className="github-stars-link">
+              <a className="reaction-nav-link github-button" href="https://github.com/reactioncommerce/reaction" data-show-count="true" aria-label="Star reactioncommerce/reaction on GitHub">Star</a>
+            </div>
             <a href="https://docs.reactioncommerce.com" className="reaction-nav-link reaction-nav-link-docs">
               <img src="/images/header/docs-icon.svg" height="22px" />
               Docs
