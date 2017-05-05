@@ -161,7 +161,8 @@ export function updateRepoData() {
               release: releaseData.data,
               branches: branchesData.data,
               defaultBranch: remoteRepoData.data.default_branch,
-              contentsUrl: remoteRepoData.data.contents_url
+              contentsUrl: remoteRepoData.data.contents_url,
+              githubStars: remoteRepoData.data.stargazers_count
             }
           });
         }
@@ -328,4 +329,21 @@ export function cachePrimaryDocs() {
       }
     }
   }
+}
+
+/**
+ * Get Repo Stargazers
+ * @return {number} Stargazers count
+ */
+export function getStargazers() {
+  const apiUrl = "https://api.github.com/repos/reactioncommerce/reaction";
+
+  // get repo urls ands stats
+  remoteRepoData = Meteor.http.get(apiUrl + authString, {
+    headers: {
+      "User-Agent": "ReDoc/1.0"
+    }
+  });
+
+  return remoteRepoData.data.stargazers_count;
 }

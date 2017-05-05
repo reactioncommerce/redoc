@@ -57,6 +57,11 @@ ReDoc.Schemas.Repos = new SimpleSchema({
     type: Boolean,
     optional: true,
     defaultValue: false
+  },
+  githubStars: {
+    type: String,
+    optional: true,
+    defaultValue: "1337"
   }
 });
 

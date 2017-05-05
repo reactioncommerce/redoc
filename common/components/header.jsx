@@ -33,6 +33,18 @@ const DocView = React.createClass({
     return data;
   },
 
+  getStargazersCount() {
+    Meteor.call("github/getStargazers", function (error, result) {
+      if (error) {
+        Session.set("stargazers", "Star Us!");
+      }
+      Session.set("stargazers", result);
+    });
+
+    const stargazers = Session.get("stargazers");
+    return stargazers;
+  },
+
   handleBranchSelect(selectedBranch) {
     if (this.context.router) {
       const branch = selectedBranch || this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
@@ -199,7 +211,10 @@ const DocView = React.createClass({
               </div>
             </div>
             <div className="github-stars-link">
-              <a className="reaction-nav-link github-button" href="https://github.com/reactioncommerce/reaction" data-show-count="true" aria-label="Star reactioncommerce/reaction on GitHub">Star</a>
+              <a className="github-link" href="https://github.com/reactioncommerce/reaction/stargazers">
+                <span className="github-icon"><i className="fa fa-github fa-2x" aria-hidden="true"></i></span>
+                <span className="github-star-number"><i className="fa fa-star-o" aria-hidden="true"></i> {this.getStargazersCount()}</span>
+              </a>
             </div>
             <a href="https://docs.reactioncommerce.com" className="reaction-nav-link reaction-nav-link-docs">
               <img src="/images/header/docs-icon.svg" height="22px" />
