@@ -34,14 +34,18 @@ const DocView = React.createClass({
   },
 
   getStargazersCount() {
-    Meteor.call("github/getStargazers", function (error, result) {
-      if (error) {
-        Session.set("stargazers", "Star Us!");
-      }
-      Session.set("stargazers", result);
-    });
+    let stargazers = "Star Us!";
+    if (Meteor.isClient) {
+      Meteor.call("github/getStargazers", function (error, result) {
+        if (error) {
+          Session.set("stargazers", "Star Us!");
+        }
+        Session.set("stargazers", result);
+      });
 
-    const stargazers = Session.get("stargazers");
+      stargazers = Session.get("stargazers");
+    }
+
     return stargazers;
   },
 
