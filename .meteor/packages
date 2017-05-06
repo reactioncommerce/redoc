@@ -39,7 +39,6 @@ reactioncommerce:redoc-base-theme
 reactioncommerce:redoc-core
 reactioncommerce:redoc-default-theme
 reactioncommerce:redoc-gitter
-reactioncommerce:redoc-github-stars
 
 # ReDoc admin
 alanning:roles
@@ -53,3 +52,4 @@ ongoworks:security
 # practicalmeteor:sinon
 # tmeasday:acceptance-test-driver
 # xolvio:cleaner
+browser-policy

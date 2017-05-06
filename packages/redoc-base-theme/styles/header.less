@@ -321,6 +321,36 @@ a.reaction-nav-link {
   text-decoration: none;
 }
 
+.github-link {
+  color: @header-text-color;
+  cursor: pointer;
+
+  .github-icon {
+  }
+
+  .github-star-number {
+    border: 2px solid @header-text-color;
+    border-radius: 35px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin-left: 5px;
+    position: relative;
+    top: -4px;
+
+  }
+
+  &:hover, &:focus {
+    color: @header-text-color;
+    text-decoration: none;
+
+    .github-star-number {
+      background: @aqua-color;
+    }
+  }
+}
+
 .reaction-nav-dropdown {
 	position: relative;
 }
