@@ -20,7 +20,7 @@ To run tests:
 
 **redoc** is the application used for the [Reaction](https://reactioncommerce.com) documentation.
 
-**redoc** is using `meteor 1.3`, with imported [npm](https://www.npmjs.com/) dependencies. It also uses [react](https://facebook.github.io/react/) and [react-router](https://github.com/rackt/react-router) to render HTML server-side for the docs.
+**redoc** is using `meteor 1.4`, with imported [npm](https://www.npmjs.com/) dependencies. It also uses [react](https://facebook.github.io/react/) and [react-router](https://github.com/rackt/react-router) to render HTML server-side for the docs.
 
 Since we use this project to generate docs for [Reaction Commerce](https://reactioncommerce.com/), we've included our `settings.json` and `redoc.json` that we use to generate our documentation as an example.
 
