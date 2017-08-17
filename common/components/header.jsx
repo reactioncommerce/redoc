@@ -213,6 +213,7 @@ const DocView = React.createClass({
                   </li>
                 </ul>
               </div>
+              <a href="https://blog.reactioncommerce.com" className="reaction-nav-link">Blog</a>
             </div>
             <div className="github-stars-link">
               <a className="github-link" href="https://github.com/reactioncommerce/reaction/stargazers">
