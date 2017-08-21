@@ -1,0 +1,21 @@
+version: 2
+
+jobs:
+  build:
+    working_directory: /home/redoc
+
+    docker:
+      - image: docker:latest
+
+    steps:
+      - setup_remote_docker
+      - checkout
+
+      # install OS dependencies
+      - run: apk update && apk upgrade && apk add --no-cache bash git openssh py-pip && pip install docker-compose
+
+      # run build test
+      - run: .circleci/build.sh
+
+      # deploy the build (if on a deployment branch)
+      - run: .circleci/deploy.sh
