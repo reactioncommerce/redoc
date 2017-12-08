@@ -1,16 +1,17 @@
+# Usage:
+# docker-compose up -d
 
 redoc:
+  container_name: redoc
   image: reactioncommerce/redoc:latest
-  ports:
-    - 3000:3000
   links:
     - mongo
-  restart: always
+  ports:
+    - "3000:3000"
   environment:
-    ROOT_URL: "http://example.com"
+    ROOT_URL: "http://localhost"
     MONGO_URL: "mongodb://mongo:27017/redoc"
 
 mongo:
   image: mongo:latest
-  restart: always
   command: mongod --storageEngine=wiredTiger
