@@ -161,8 +161,7 @@ const DocView = React.createClass({
         <nav className="reaction-nav" role="navigation">
           <div className="reaction-nav-group reaction-nav-header">
             <a href="https://reactioncommerce.com" className="reaction-nav-item">
-              <img src="/images/logo.png" alt="Reaction" />
-              <span>Reaction Commerce</span>
+              <img src="/images/header/reaction-commerce-logo-and-name.svg" alt="Reaction Commerce" />
             </a>
           </div>
 
@@ -213,6 +212,7 @@ const DocView = React.createClass({
                   </li>
                 </ul>
               </div>
+              <a href="https://blog.reactioncommerce.com" className="reaction-nav-link">Blog</a>
             </div>
             <div className="github-stars-link">
               <a className="github-link" href="https://github.com/reactioncommerce/reaction/stargazers">
