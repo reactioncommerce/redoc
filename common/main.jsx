@@ -7,7 +7,6 @@ import { default as ReactCookie } from "react-cookie";
 import { RedocAdmin } from "meteor/reactioncommerce:redoc-core/components/admin";
 import createHistory from "history/createBrowserHistory";
 
-const analytics = analytics || null;
 
 const AppRoutes = (
   <Route component={Layout} path="/">
