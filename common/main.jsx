@@ -17,7 +17,7 @@ const AppRoutes = (
   </Route>
 );
 
-let clientOptions = {
+const clientOptions = {
   props: {
     onUpdate() {
       if (analytics) {
@@ -37,7 +37,7 @@ let clientOptions = {
 };
 
 function getBasename() {
-  let el = document.createElement("a");
+  const el = document.createElement("a");
   el.href = __meteor_runtime_config__.ROOT_URL; // eslint-disable-line camelcase
   if (el.pathname.substr(-1) !== "/") {
     return el.pathname + "/";
@@ -46,7 +46,7 @@ function getBasename() {
 }
 
 if (Meteor.isClient) {
-  let history = useRouterHistory(createHistory)({
+  const history = useRouterHistory(createHistory)({
     basename: getBasename()
   });
 
