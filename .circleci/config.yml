@@ -9,10 +9,11 @@ jobs:
 
     steps:
       - setup_remote_docker
-      - checkout
 
       # install OS dependencies
       - run: apk update && apk upgrade && apk add --no-cache bash git openssh py-pip && pip install docker-compose
+
+      - checkout
 
       # run build test
       - run: .circleci/build.sh

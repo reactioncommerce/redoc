@@ -3,7 +3,7 @@
 set -e
 
 # build new base and app images
-docker build -t reactioncommerce/redoc:latest .
+docker build --build-arg NODE_VERSION=4.8.7 -t reactioncommerce/redoc:latest .
 
 # run the container and wait for it to boot
 docker-compose -f .circleci/docker-compose.yml up -d
